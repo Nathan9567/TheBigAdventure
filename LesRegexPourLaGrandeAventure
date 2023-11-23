@@ -1,0 +1,25 @@
+Split en deux :
+
+\[grid\]((?>.|\n)+?)\[element\]((?>.|\n)+)
+
+Split les elements :
+
+\[element\](?>.|\n)+?(?=\[|\Z)
+
+L'encoding :
+
+encodings:((.|\n)+?)(?=.+:)
+
+Le contenu de l'encoding :
+
+\s*(.+?)\((.+?)\)
+
+Le data :
+
+data: \"\"\"((?>.|\n)+)\"\"\"
+
+Tous les trucs d'elements :
+
+(.+):\s*(.+)
+
+
