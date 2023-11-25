@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.skin.entity;
+package fr.uge.thebigadventure.skin.entities;
 
 public enum Intermittent {
     BUBBLE, DUST
