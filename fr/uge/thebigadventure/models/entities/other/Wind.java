@@ -1,4 +1,4 @@
 package fr.uge.thebigadventure.models.entities.other;
 
-public class Wind extends SpecialEntity {
+public class Wind implements SpecialEntity {
 }
