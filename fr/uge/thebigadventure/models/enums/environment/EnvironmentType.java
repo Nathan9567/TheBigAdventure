@@ -2,6 +2,7 @@ package fr.uge.thebigadventure.models.enums.environment;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -21,4 +22,18 @@ public sealed interface EnvironmentType permits BiomeType, DecorationType, Obsta
       return res;
     throw new IllegalArgumentException("Invalid environment type " + string);
   }
+
+  String name();
+
+  default String getImagePath() {
+    String type;
+    switch (this) {
+      case BiomeType b -> type = "biomes";
+      case DecorationType d -> type = "decorations";
+      case ObstacleType o -> type = "obstacles";
+    }
+    return "resources/img/" + type + "/" + name().toLowerCase(Locale.ROOT) +
+        ".png";
+  }
+
 }
