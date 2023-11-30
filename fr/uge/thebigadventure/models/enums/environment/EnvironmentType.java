@@ -1,5 +1,7 @@
 package fr.uge.thebigadventure.models.enums.environment;
 
+import fr.uge.thebigadventure.models.enums.ElementType;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -7,7 +9,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public sealed interface EnvironmentType permits BiomeType, DecorationType, ObstacleType {
+public sealed interface EnvironmentType extends ElementType permits BiomeType,
+    DecorationType,
+    ObstacleType {
 
   Map<String, EnvironmentType> nameToTypeMap = new HashMap<>();
 

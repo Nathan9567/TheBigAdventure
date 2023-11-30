@@ -1,21 +1,11 @@
 package fr.uge.thebigadventure.models.entities.inventory;
 
+import fr.uge.thebigadventure.models.entities.Entity;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
-public class InventoryItem {
+public interface InventoryItem extends Entity {
 
-    private final InventoryItemType itemType;
-    protected String name;
+  @Override
+  InventoryItemType skin();
 
-    public InventoryItem(InventoryItemType itemType) {
-        this.itemType = itemType;
-    }
-
-    public InventoryItemType getItemType() {
-        return itemType;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

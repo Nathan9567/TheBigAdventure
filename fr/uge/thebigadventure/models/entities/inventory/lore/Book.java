@@ -2,8 +2,10 @@ package fr.uge.thebigadventure.models.entities.inventory.lore;
 
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
-public class Book extends LoreItem {
-    public Book(String dialog) {
-        super(InventoryItemType.BOOK, dialog);
-    }
+public record Book(String name, String text) implements LoreItem {
+
+  @Override
+  public InventoryItemType skin() {
+    return InventoryItemType.BOOK;
+  }
 }

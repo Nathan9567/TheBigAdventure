@@ -48,13 +48,17 @@ public class TheBigAdventure {
 ////                graphics2D.draw(new Rectangle2D.Float(0, 0, width, height));
 //            });
 
+//      context.renderFrame(graphics2D -> {
+//        graphics2D.setColor(new Color(113, 94, 68, 255));
+//        graphics2D.fill(rectangle2D);
+//        MapView.drawMap(gameMap, graphics2D, (int) cell);
+//      });
+
       while (true) {
         context.renderFrame(graphics2D -> {
           graphics2D.setColor(new Color(113, 94, 68, 255));
           graphics2D.fill(rectangle2D);
           MapView.drawMap(gameMap, graphics2D, (int) cell);
-//                graphics2D.drawString("TA GROSSE MERE LA GENTILLE", 50, 50);
-//                graphics2D.draw(new Rectangle2D.Float(0, 0, width, height));
         });
 
         Event event = context.pollOrWaitEvent(10);

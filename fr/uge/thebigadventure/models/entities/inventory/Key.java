@@ -4,10 +4,14 @@ import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
 import java.util.Objects;
 
-public class Key extends InventoryItem {
-    public Key(String name) {
-        super(InventoryItemType.KEY);
-        Objects.requireNonNull(name);
-        this.name = name;
-    }
+public record Key(String name) implements InventoryItem {
+
+  public Key {
+    Objects.requireNonNull(name);
+  }
+
+  public InventoryItemType skin() {
+    return InventoryItemType.KEY;
+  }
+
 }
