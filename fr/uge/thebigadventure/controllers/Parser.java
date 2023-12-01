@@ -2,8 +2,8 @@ package fr.uge.thebigadventure.controllers;
 
 import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.GameMap;
-import fr.uge.thebigadventure.models.enums.environment.EnvironmentType;
-import fr.uge.thebigadventure.models.interpreter.Size;
+import fr.uge.thebigadventure.models.Size;
+import fr.uge.thebigadventure.models.enums.entities.EntityType;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,9 +36,9 @@ public class Parser {
 
   private static GameMap parseGrid(String group) {
     Size size = parseSize(group);
-    Map<String, EnvironmentType> encodingMap = parseEncoding(group);
-    Map<Coord, EnvironmentType> dataMap = parseDataMap(group, size, encodingMap);
-    return new GameMap(size, dataMap);
+    Map<String, EntityType> encodingMap = parseEncoding(group);
+    Map<Coord, EntityType> dataMap = parseDataMap(group, size, encodingMap);
+    return new GameMap(size, dataMap, null);
   }
 
 
@@ -53,7 +53,7 @@ public class Parser {
         Integer.parseInt(matcher.group(2)));
   }
 
-  private static Map<String, EnvironmentType> parseEncoding(String line) {
+  private static Map<String, EntityType> parseEncoding(String line) {
     Pattern globalPattern = Pattern.compile("encodings\\s*:((.|\\n)+?)(?=.+:)");
     var globalMatcher = globalPattern.matcher(line);
     if (!globalMatcher.find()) {
@@ -61,22 +61,22 @@ public class Parser {
     }
     Pattern pattern = Pattern.compile("\\s*(.+?)\\s*\\((.+?)\\)");
     var matcher = pattern.matcher(globalMatcher.group(1));
-    var encodingMap = new HashMap<String, EnvironmentType>();
+    var encodingMap = new HashMap<String, EntityType>();
     while (matcher.find()) {
       encodingMap.put(matcher.group(2),
-          EnvironmentType.fromString(matcher.group(1)));
+          EntityType.fromString(matcher.group(1)));
     }
     return Map.copyOf(encodingMap);
   }
 
-  private static Map<Coord, EnvironmentType> parseDataMap(
-      String line, Size size, Map<String, EnvironmentType> encodingMap) {
+  private static Map<Coord, EntityType> parseDataMap(
+      String line, Size size, Map<String, EntityType> encodingMap) {
     Pattern pattern = Pattern.compile("data: \"\"\"\\s*\\n((?>.|\\n)+)\\n([ " +
         "]*)\"\"\"");
     var matcher = pattern.matcher(line);
     if (!matcher.find())
       throw new IllegalArgumentException("Invalid data map");
-    HashMap<Coord, EnvironmentType> map = new HashMap<>();
+    HashMap<Coord, EntityType> map = new HashMap<>();
     var y = 0;
     for (var lineMap : matcher.group(1).split("\n")) {
       var x = -matcher.group(2).length();

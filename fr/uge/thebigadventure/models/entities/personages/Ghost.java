@@ -1,9 +1,9 @@
 package fr.uge.thebigadventure.models.entities.personages;
 
 import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.entities.obstacles.Obstacle;
+import fr.uge.thebigadventure.models.enums.entities.ObstacleType;
 import fr.uge.thebigadventure.models.enums.entities.PersonageType;
-import fr.uge.thebigadventure.models.enums.environment.ObstacleType;
-import fr.uge.thebigadventure.models.environments.obstacles.Obstacle;
 
 import java.util.List;
 
@@ -28,12 +28,12 @@ public class Ghost implements PersonageInterface {
   }
 
   @Override
-  public PersonageType skin() {
+  public PersonageType getSkin() {
     return null;
   }
 
   @Override
-  public Coord Position() {
+  public Coord getPosition() {
     return null;
   }
 }

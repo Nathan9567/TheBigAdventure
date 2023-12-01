@@ -1,10 +1,10 @@
 package fr.uge.thebigadventure.models.enums.entities;
 
-public enum EffectType implements EntityType {
-  BUBBLE, DUST;
+public enum BiomeType implements EntityType {
+  ICE, LAVA, WATER;
 
   @Override
   public String folder() {
-    return "effects";
+    return "biomes";
   }
 }

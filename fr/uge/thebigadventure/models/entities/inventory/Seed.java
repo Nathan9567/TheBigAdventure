@@ -5,7 +5,7 @@ import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 public record Seed(String name) implements InventoryItem {
 
   @Override
-  public InventoryItemType skin() {
+  public InventoryItemType getSkin() {
     return InventoryItemType.SEED;
   }
 

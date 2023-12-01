@@ -1,11 +1,11 @@
-package fr.uge.thebigadventure.views.environment;
+package fr.uge.thebigadventure.views.entities;
 
 import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.views.MapView;
 
 import java.awt.*;
 
-public class EnvironmentView {
+public class EntityView {
 
   public static void drawEnvironmentTile(Graphics2D graphics2D,
                                          String environmentTilePath,

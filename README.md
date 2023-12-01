@@ -19,3 +19,8 @@
 - getLocked -> Obstacle
 - getTeleportMap -> Obstacle
 - getFlow -> Biome + WIND
+
+## Images
+
+Missing clock in items
+Missing rocket in transport

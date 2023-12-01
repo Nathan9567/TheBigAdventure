@@ -1,8 +1,13 @@
 package fr.uge.thebigadventure.models.enums.entities;
 
-public enum TransportType implements EntitiesType {
+public enum TransportType implements EntityType {
   PLANE, ROCKET, UFO,
   CAR,
-  TRAIN, CART,
-  BOAT
+  CART, TRAIN,
+  BOAT;
+
+  @Override
+  public String folder() {
+    return "transports";
+  }
 }

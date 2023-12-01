@@ -1,8 +1,8 @@
 package fr.uge.thebigadventure.models.entities.weapons;
 
 import fr.uge.thebigadventure.models.entities.Entity;
-import fr.uge.thebigadventure.models.enums.ElementType;
-import fr.uge.thebigadventure.models.enums.entities.WeaponType;
+import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
+import fr.uge.thebigadventure.models.enums.utils.WeaponType;
 
 public class Weapon implements Entity {
   private final int damage;
@@ -33,7 +33,7 @@ public class Weapon implements Entity {
   }
 
   @Override
-  public ElementType skin() {
+  public InventoryItemType getSkin() {
     return null;
   }
 }

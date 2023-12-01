@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.models.entities.other;
 
-import fr.uge.thebigadventure.models.enums.entities.SpecialType;
+import fr.uge.thebigadventure.models.enums.entities.OtherType;
 
 public class Lever implements SpecialEntity {
   @Override
@@ -9,7 +9,7 @@ public class Lever implements SpecialEntity {
   }
 
   @Override
-  public SpecialType skin() {
+  public OtherType getSkin() {
     return null;
   }
 }

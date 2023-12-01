@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.models.entities.other;
 
-import fr.uge.thebigadventure.models.enums.entities.SpecialType;
+import fr.uge.thebigadventure.models.enums.entities.OtherType;
 
 public class Bucket implements SpecialEntity {
 
@@ -29,7 +29,7 @@ public class Bucket implements SpecialEntity {
   }
 
   @Override
-  public SpecialType skin() {
-    return SpecialType.BUCKET;
+  public OtherType getSkin() {
+    return OtherType.BUCKET;
   }
 }
