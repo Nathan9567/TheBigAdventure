@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure;
 
-import fr.uge.thebigadventure.controllers.Parser;
+import fr.uge.thebigadventure.controllers.MapParser;
 import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.views.MapView;
 import fr.umlv.zen5.Application;
@@ -29,7 +29,7 @@ public class TheBigAdventure {
       stringBuilder.append("\n");
     }
     reader.close();
-    GameMap gameMap = Parser.parse(stringBuilder.toString());
+    GameMap gameMap = MapParser.parse(stringBuilder.toString());
     Application.run(Color.BLACK, context -> {
 
       // get the size of the screen
