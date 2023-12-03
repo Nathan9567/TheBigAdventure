@@ -3,6 +3,7 @@ package fr.uge.thebigadventure.controllers;
 import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.models.Size;
+import fr.uge.thebigadventure.models.Zone;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
 
 import java.io.BufferedReader;
@@ -19,9 +20,11 @@ public class MapParser {
   private static Pattern SECTIONS_PATTERN = Pattern.compile("\\[(\\w+)\\](.+?)(?=\\[|\\z)", Pattern.DOTALL);
   private static Pattern ATTRIBUTES_PATTERN = Pattern.compile("\\s*(\\w+)\\s*:\\s*(.+?)(?=\\s*\\w*\\s*:|\\z)", Pattern.DOTALL);
   private static Pattern SIZE_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
+  private static Pattern COORD_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*");
+  private static Pattern ZONE_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
   private static Pattern ENCODINGS_PATTERN = Pattern.compile("\\s*(\\w+?)\\s*\\(\\s*(\\w)\\s*\\)\\s*");
   private static Pattern GRID_DATA_PATTERN = Pattern.compile("\\\"\\\"\\\"\\s*\\n(.+)\\n([ ]*)\\\"\\\"\\\"", Pattern.DOTALL);
-  private static Pattern BOOLEAN_PATTERN = Pattern.compile("^[Tt][Rr][Uu][Ee]$");
+  private static Pattern BOOLEAN_PATTERN = Pattern.compile("^true$", Pattern.CASE_INSENSITIVE);
   
   public MapParser(String text) {
     this.text = text;
@@ -32,7 +35,7 @@ public class MapParser {
     var matcher = SECTIONS_PATTERN.matcher(text);
     var pointer = 0;
     while (matcher.find()) {
-      parseSection(matcher.group(1), matcher.group(2));
+      parseSection(matcher.group(1), matcher.group(2).trim());
       if (matcher.start() != pointer) {
         throw new IllegalArgumentException("Invalid map : garbage between character " + pointer + " and " + matcher.start() + ".");
       }
@@ -133,6 +136,11 @@ public class MapParser {
       case "skin" -> parseElementAttributeSkin(content);
       case "player" -> parseElementAttributePlayer(content);
       case "position" -> parseElementAttributePosition(content);
+      case "health" -> parseElementAttributeHealth(content);
+      case "kind" -> parseElementAttributeKind(content);
+      case "zone" -> parseElementAttributeZone(content);
+      case "behavior" -> parseElementAttributeBehavior(content);
+      case "damage" -> parseElementAttributeDamage(content);
       default -> {
         System.out.println("unknown attribute " + name + " skipping.");
         // throw new IllegalArgumentException("Invalid map : element attribute " + name + " doest not exists.");
@@ -154,6 +162,46 @@ public class MapParser {
   }
   
   private void parseElementAttributePosition(String content) {
+    var matcher = COORD_PATTERN.matcher(content);
+    if (!matcher.matches()) {
+      throw new IllegalArgumentException("Invalid position");
+    }
+    builder.elementBuilder.setPosition(new Coord(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
+  }
+
+  private void parseElementAttributeHealth(String content) {
+    builder.elementBuilder.setHealth(Integer.parseInt(content));
+  }
+  
+  private void parseElementAttributeKind(String content) {
+    builder.elementBuilder.setKind(content);
+  }
+
+  private void parseElementAttributeZone(String content) {
+    var matcher = ZONE_PATTERN.matcher(content);
+    if (!matcher.matches()) {
+      throw new IllegalArgumentException("Invalid position");
+    }
+    builder.elementBuilder.setZone(
+        new Zone(
+            new Coord(
+                Integer.parseInt(matcher.group(1)),
+                Integer.parseInt(matcher.group(2))
+                ),
+            new Size(
+                Integer.parseInt(matcher.group(3)),
+                Integer.parseInt(matcher.group(4))
+                )
+            )
+        );
+  }
+  
+  private void parseElementAttributeBehavior(String content) {
+    builder.elementBuilder.setBehavior(content);
+  }
+
+  private void parseElementAttributeDamage(String content) {
+    builder.elementBuilder.setDamage(Integer.parseInt(content));
   }
 
   public static void main(String[] args) throws IOException {
