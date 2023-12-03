@@ -16,11 +16,11 @@ public class Player implements PersonageInterface {
 
   public Player(PersonageType skin, String name, Coord position, int health) {
     Objects.requireNonNull(skin, "Skin cannot be null");
-    PlayerSkinType isPlayerSkin = Arrays.stream(PlayerSkinType.values())
-        .filter(playerSkinType -> playerSkinType.name().equals(skin.name()))
-        .findFirst()
-        .orElse(null);
-    Objects.requireNonNull(isPlayerSkin, "Skin must be a valid PlayerSkinType");
+    boolean isPlayerSkin = Arrays.stream(PlayerSkinType.values())
+        .anyMatch(playerSkinType -> playerSkinType.name().equals(skin.name()));
+    if (!isPlayerSkin) {
+      throw new IllegalArgumentException("Skin must be a valid PlayerSkinType");
+    }
     this.skin = skin;
     Objects.requireNonNull(position, "Position cannot be null");
     this.name = name;
@@ -37,7 +37,6 @@ public class Player implements PersonageInterface {
     this.position = position;
   }
 
-  @Override
   public int getHealth() {
     return health;
   }
