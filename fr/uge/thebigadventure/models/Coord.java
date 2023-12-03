@@ -17,4 +17,12 @@ public record Coord(int x, int y) {
       case EAST -> new Coord(x + 1, y);
     };
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Coord coord)) {
+      return false;
+    }
+    return coord.x == x && coord.y == y;
+  }
 }

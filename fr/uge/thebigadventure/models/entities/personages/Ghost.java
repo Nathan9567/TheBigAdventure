@@ -19,7 +19,7 @@ public class Ghost implements PersonageInterface {
 //  }
 
   public boolean canThroughObstacle(Obstacle obstacle) {
-    return obstacleList.contains(obstacle.getObstacleType());
+    return obstacleList.contains(obstacle.skin());
   }
 
   @Override
@@ -28,12 +28,16 @@ public class Ghost implements PersonageInterface {
   }
 
   @Override
-  public PersonageType getSkin() {
+  public PersonageType skin() {
     return null;
   }
 
   @Override
   public Coord getPosition() {
     return null;
+  }
+
+  @Override
+  public void setPosition(Coord position) {
   }
 }

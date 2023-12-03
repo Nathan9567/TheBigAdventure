@@ -33,7 +33,7 @@ public class Weapon implements Entity {
   }
 
   @Override
-  public InventoryItemType getSkin() {
+  public InventoryItemType skin() {
     return null;
   }
 }

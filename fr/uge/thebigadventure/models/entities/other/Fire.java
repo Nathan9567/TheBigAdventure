@@ -9,7 +9,7 @@ public class Fire implements SpecialEntity {
   }
 
   @Override
-  public OtherType getSkin() {
+  public OtherType skin() {
     return null;
   }
 }

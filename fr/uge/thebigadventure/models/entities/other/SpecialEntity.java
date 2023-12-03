@@ -5,5 +5,5 @@ import fr.uge.thebigadventure.models.enums.entities.OtherType;
 
 public interface SpecialEntity extends Entity {
   @Override
-  OtherType getSkin();
+  OtherType skin();
 }

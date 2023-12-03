@@ -32,7 +32,7 @@ public class Ally implements PersonageInterface {
   }
 
   @Override
-  public PersonageType getSkin() {
+  public PersonageType skin() {
     return skin;
   }
 

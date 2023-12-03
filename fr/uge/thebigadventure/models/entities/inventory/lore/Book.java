@@ -5,7 +5,7 @@ import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 public record Book(String name, String text) implements LoreItem {
 
   @Override
-  public InventoryItemType getSkin() {
+  public InventoryItemType skin() {
     return InventoryItemType.BOOK;
   }
 }

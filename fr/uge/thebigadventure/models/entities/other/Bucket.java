@@ -29,7 +29,7 @@ public class Bucket implements SpecialEntity {
   }
 
   @Override
-  public OtherType getSkin() {
+  public OtherType skin() {
     return OtherType.BUCKET;
   }
 }

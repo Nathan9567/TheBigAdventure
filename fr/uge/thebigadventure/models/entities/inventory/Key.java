@@ -10,7 +10,7 @@ public record Key(String name) implements InventoryItem {
     Objects.requireNonNull(name);
   }
 
-  public InventoryItemType getSkin() {
+  public InventoryItemType skin() {
     return InventoryItemType.KEY;
   }
 

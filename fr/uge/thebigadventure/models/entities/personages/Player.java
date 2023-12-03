@@ -2,6 +2,7 @@ package fr.uge.thebigadventure.models.entities.personages;
 
 import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.enums.entities.PersonageType;
+import fr.uge.thebigadventure.models.enums.utils.Direction;
 import fr.uge.thebigadventure.models.enums.utils.PlayerSkinType;
 
 import java.util.Arrays;
@@ -13,6 +14,7 @@ public class Player implements PersonageInterface {
   private final String name;
   private final int health;
   private Coord position;
+  private Direction direction;
 
   public Player(PersonageType skin, String name, Coord position, int health) {
     Objects.requireNonNull(skin, "Skin cannot be null");
@@ -26,6 +28,7 @@ public class Player implements PersonageInterface {
     this.name = name;
     this.position = position;
     this.health = health;
+    this.direction = null;
   }
 
   @Override
@@ -45,7 +48,15 @@ public class Player implements PersonageInterface {
     return name;
   }
 
-  public PersonageType getSkin() {
+  public PersonageType skin() {
     return skin;
+  }
+
+  public Direction getDirection() {
+    return direction;
+  }
+
+  public void setDirection(Direction direction) {
+    this.direction = direction;
   }
 }

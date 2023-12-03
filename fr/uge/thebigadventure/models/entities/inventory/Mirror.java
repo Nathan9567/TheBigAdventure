@@ -9,7 +9,7 @@ public record Mirror(String name) implements InventoryItem {
   }
 
   @Override
-  public InventoryItemType getSkin() {
+  public InventoryItemType skin() {
     return InventoryItemType.MIRROR;
   }
 

@@ -50,7 +50,7 @@ public class Enemy implements PersonageInterface {
   }
 
   @Override
-  public PersonageType getSkin() {
+  public PersonageType skin() {
     return skin;
   }
 

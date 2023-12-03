@@ -16,9 +16,7 @@ public class MapView {
 
   public static void drawMap(GameMap gameMap, Graphics2D graphics2D,
                              int cellSize) {
-    gameMap.data().forEach((coord, environmentType) -> {
-      EntityView.drawEnvironmentTile(graphics2D,
-          environmentType.getImagePath(), coord, cellSize);
-    });
+    gameMap.data().forEach((coord, environmentType) -> EntityView.drawEntityTile(graphics2D,
+        environmentType.getImagePath(), coord, cellSize));
   }
 }

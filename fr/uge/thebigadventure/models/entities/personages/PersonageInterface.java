@@ -6,7 +6,7 @@ import fr.uge.thebigadventure.models.enums.entities.PersonageType;
 
 public interface PersonageInterface extends Entity {
   @Override
-  PersonageType getSkin();
+  PersonageType skin();
 
   Coord getPosition();
 
