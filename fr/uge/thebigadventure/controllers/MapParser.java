@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 public class MapParser {
@@ -21,6 +21,7 @@ public class MapParser {
   private static Pattern SIZE_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
   private static Pattern ENCODINGS_PATTERN = Pattern.compile("\\s*(\\w+?)\\s*\\(\\s*(\\w)\\s*\\)\\s*");
   private static Pattern GRID_DATA_PATTERN = Pattern.compile("\\\"\\\"\\\"\\s*\\n(.+)\\n([ ]*)\\\"\\\"\\\"", Pattern.DOTALL);
+  private static Pattern BOOLEAN_PATTERN = Pattern.compile("^[Tt][Rr][Uu][Ee]$");
   
   public MapParser(String text) {
     this.text = text;
@@ -33,41 +34,36 @@ public class MapParser {
     while (matcher.find()) {
       parseSection(matcher.group(1), matcher.group(2));
       if (matcher.start() != pointer) {
-        throw new IllegalArgumentException(
-            "Invalid map : garbage between character " + pointer + " and " + matcher.start() + ".");
+        throw new IllegalArgumentException("Invalid map : garbage between character " + pointer + " and " + matcher.start() + ".");
       }
       pointer = matcher.end();
     }
     if (pointer != text.length()) {
-      throw new IllegalArgumentException(
-          "Invalid map : stop reading at character " + pointer + ".");
+      throw new IllegalArgumentException("Invalid map : stop reading at character " + pointer + ".");
     }
     return builder;
   }
 
   private void parseSection(String name, String content) {
     switch (name) {
-      case "grid" -> parseGrid(content);
+      case "grid" -> parseAttributes(content, this::parseGridAttributes);
       case "element" -> parseElement(content);
-      default -> throw new IllegalArgumentException(
-          "Invalid map : " + name + " doesn't exist");
+      default -> throw new IllegalArgumentException("Invalid map : " + name + " doesn't exist");
     }
   }
 
-  private void parseGrid(String content) {
+  private void parseAttributes(String content, BiConsumer<String, String> attributeParser) {
     var matcher = ATTRIBUTES_PATTERN.matcher(content);
     var pointer = 0;
     while (matcher.find()) {
-      parseGridAttributes(matcher.group(1), matcher.group(2));
+      attributeParser.accept(matcher.group(1), matcher.group(2));
       if (matcher.start() != pointer) {
-        throw new IllegalArgumentException(
-            "Invalid map : bad grids attributes.");
+        throw new IllegalArgumentException("Invalid map : bad attributes.");
       }
       pointer = matcher.end();
     }
     if (pointer != content.length()) {
-      throw new IllegalArgumentException(
-          "Invalid map : stop reading grids attributes.");
+      throw new IllegalArgumentException("Invalid map : stopped reading attributes.");
     }
   }
 
@@ -126,8 +122,38 @@ public class MapParser {
     builder.setData(map);
   }
   
-  private void parseElement(String group) {
-    builder.setElements(Map.of());
+  private void parseElement(String content) {
+    parseAttributes(content, this::parseElementAttributes);
+    builder.pushElementBuilder();
+  }
+
+  private void parseElementAttributes(String name, String content) {
+    switch (name) {
+      case "name" -> parseElementAttributeName(content);
+      case "skin" -> parseElementAttributeSkin(content);
+      case "player" -> parseElementAttributePlayer(content);
+      case "position" -> parseElementAttributePosition(content);
+      default -> {
+        System.out.println("unknown attribute " + name + " skipping.");
+        // throw new IllegalArgumentException("Invalid map : element attribute " + name + " doest not exists.");
+      }
+    }
+  }
+
+  private void parseElementAttributeName(String content) {
+    builder.elementBuilder.setName(content);
+  }
+  
+  private void parseElementAttributeSkin(String content) {
+    builder.elementBuilder.setSkin(EntityType.fromString(content));
+  }
+  
+  private void parseElementAttributePlayer(String content) {
+    var matcher = BOOLEAN_PATTERN.matcher(content);
+    builder.elementBuilder.setPlayer(matcher.matches());
+  }
+  
+  private void parseElementAttributePosition(String content) {
   }
 
   public static void main(String[] args) throws IOException {

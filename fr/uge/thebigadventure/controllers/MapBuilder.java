@@ -1,5 +1,7 @@
 package fr.uge.thebigadventure.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -15,6 +17,8 @@ public class MapBuilder {
   private Map<String, EntityType> encodings;
   private Map<Coord, Character> data;
   private Map<Coord, Entity> elements;
+  private List<Entity> entities = new ArrayList<>();
+  public ElementBuilder elementBuilder = new ElementBuilder();
 
   public void setSize(Size size) {
     this.size = size;
@@ -28,11 +32,17 @@ public class MapBuilder {
     this.data = data;
   }
 
+  public void pushElementBuilder() {
+    entities.add(elementBuilder.toEntity());
+    elementBuilder = new ElementBuilder();
+  }
+  
   public void setElements(Map<Coord, Entity> elements) {
     this.elements = elements;
   }
   
   public GameMap toGameMap() {
+    System.out.println(entities);
     var mapData = data.entrySet().stream().collect(Collectors.toMap(Entry::getKey, entry -> {
       var env = encodings.get(String.valueOf(entry.getValue()));
       Objects.requireNonNull(env, "Invalid encoding");
