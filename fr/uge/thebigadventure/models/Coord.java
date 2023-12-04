@@ -5,7 +5,7 @@ import fr.uge.thebigadventure.models.enums.utils.Direction;
 public record Coord(int x, int y) {
   public Coord {
     if (x < 0 || y < 0) {
-      throw new IllegalArgumentException("Invalid coord");
+      throw new IllegalArgumentException("Invalid coord : " + x + ", " + y);
     }
   }
 

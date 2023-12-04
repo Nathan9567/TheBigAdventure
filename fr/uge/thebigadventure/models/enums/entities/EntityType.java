@@ -34,6 +34,14 @@ public sealed interface EntityType permits EffectType,
 
   String folder();
 
+  default boolean isObstacle() {
+    return switch (this) {
+      case ObstacleType ignored -> true;
+      case BiomeType ignored -> true;
+      default -> false;
+    };
+  }
+
   default String getImagePath() {
     return "resources/img/" + folder() + "/" + name().toLowerCase(Locale.ROOT) +
         ".png";

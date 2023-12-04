@@ -15,20 +15,38 @@ import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 public class MapParser {
+  private static final Pattern SECTIONS_PATTERN = Pattern.compile("\\[(\\w+)](.+?)(?=\\[|\\z)", Pattern.DOTALL);
+  private static final Pattern ATTRIBUTES_PATTERN = Pattern.compile("\\s*(\\w+)\\s*:\\s*(.+?)(?=\\s*\\w*\\s*:|\\z)", Pattern.DOTALL);
+  private static final Pattern SIZE_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
+  private static final Pattern COORD_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*");
+  private static final Pattern ZONE_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
+  private static final Pattern ENCODINGS_PATTERN = Pattern.compile("\\s*(\\w+?)\\s*\\(\\s*(\\w)\\s*\\)\\s*");
+  private static final Pattern GRID_DATA_PATTERN = Pattern.compile("\"\"\"\\s*\\n(.+)\\n([ ]*)\"\"\"", Pattern.DOTALL);
+  private static final Pattern BOOLEAN_PATTERN = Pattern.compile("^true$", Pattern.CASE_INSENSITIVE);
   private final String text;
   private final MapBuilder builder;
-  private static Pattern SECTIONS_PATTERN = Pattern.compile("\\[(\\w+)\\](.+?)(?=\\[|\\z)", Pattern.DOTALL);
-  private static Pattern ATTRIBUTES_PATTERN = Pattern.compile("\\s*(\\w+)\\s*:\\s*(.+?)(?=\\s*\\w*\\s*:|\\z)", Pattern.DOTALL);
-  private static Pattern SIZE_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
-  private static Pattern COORD_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*");
-  private static Pattern ZONE_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
-  private static Pattern ENCODINGS_PATTERN = Pattern.compile("\\s*(\\w+?)\\s*\\(\\s*(\\w)\\s*\\)\\s*");
-  private static Pattern GRID_DATA_PATTERN = Pattern.compile("\\\"\\\"\\\"\\s*\\n(.+)\\n([ ]*)\\\"\\\"\\\"", Pattern.DOTALL);
-  private static Pattern BOOLEAN_PATTERN = Pattern.compile("^true$", Pattern.CASE_INSENSITIVE);
-  
+
   public MapParser(String text) {
     this.text = text;
     this.builder = new MapBuilder();
+  }
+
+  public static void main(String[] args) throws IOException {
+    File file = new File("resources/test.map");
+    BufferedReader reader = new BufferedReader(new FileReader(file));
+    StringBuilder stringBuilder = new StringBuilder();
+    String line;
+    while ((line = reader.readLine()) != null) {
+      stringBuilder.append(line);
+      stringBuilder.append("\n");
+    }
+    reader.close();
+
+    var parser = new MapParser(stringBuilder.toString());
+    var mapBuilder = parser.parse();
+    GameMap gameMap = mapBuilder.toGameMap();
+    System.out.println(gameMap.size());
+    System.out.println(gameMap.data());
   }
 
   public MapBuilder parse() {
@@ -51,7 +69,8 @@ public class MapParser {
     switch (name) {
       case "grid" -> parseAttributes(content, this::parseGridAttributes);
       case "element" -> parseElement(content);
-      default -> throw new IllegalArgumentException("Invalid map : " + name + " doesn't exist");
+      default ->
+          throw new IllegalArgumentException("Invalid map : " + name + " doesn't exist");
     }
   }
 
@@ -75,7 +94,8 @@ public class MapParser {
       case "size" -> parseGridAttributeSize(content);
       case "encodings" -> parseGridAttributeEncodings(content);
       case "data" -> parseGridAttributeData(content);
-      default -> throw new IllegalArgumentException("Invalid map : grid attribute " + name + " doest not exists.");
+      default ->
+          throw new IllegalArgumentException("Invalid map : grid attribute " + name + " doest not exists.");
     }
   }
 
@@ -124,7 +144,7 @@ public class MapParser {
     }
     builder.setData(map);
   }
-  
+
   private void parseElement(String content) {
     parseAttributes(content, this::parseElementAttributes);
     builder.pushElementBuilder();
@@ -151,16 +171,16 @@ public class MapParser {
   private void parseElementAttributeName(String content) {
     builder.elementBuilder.setName(content);
   }
-  
+
   private void parseElementAttributeSkin(String content) {
     builder.elementBuilder.setSkin(EntityType.fromString(content));
   }
-  
+
   private void parseElementAttributePlayer(String content) {
     var matcher = BOOLEAN_PATTERN.matcher(content);
     builder.elementBuilder.setPlayer(matcher.matches());
   }
-  
+
   private void parseElementAttributePosition(String content) {
     var matcher = COORD_PATTERN.matcher(content);
     if (!matcher.matches()) {
@@ -172,7 +192,7 @@ public class MapParser {
   private void parseElementAttributeHealth(String content) {
     builder.elementBuilder.setHealth(Integer.parseInt(content));
   }
-  
+
   private void parseElementAttributeKind(String content) {
     builder.elementBuilder.setKind(content);
   }
@@ -187,38 +207,20 @@ public class MapParser {
             new Coord(
                 Integer.parseInt(matcher.group(1)),
                 Integer.parseInt(matcher.group(2))
-                ),
+            ),
             new Size(
                 Integer.parseInt(matcher.group(3)),
                 Integer.parseInt(matcher.group(4))
-                )
             )
-        );
+        )
+    );
   }
-  
+
   private void parseElementAttributeBehavior(String content) {
     builder.elementBuilder.setBehavior(content);
   }
 
   private void parseElementAttributeDamage(String content) {
     builder.elementBuilder.setDamage(Integer.parseInt(content));
-  }
-
-  public static void main(String[] args) throws IOException {
-    File file = new File("resources/test.map");
-    BufferedReader reader = new BufferedReader(new FileReader(file));
-    StringBuilder stringBuilder = new StringBuilder();
-    String line;
-    while ((line = reader.readLine()) != null) {
-      stringBuilder.append(line);
-      stringBuilder.append("\n");
-    }
-    reader.close();
-    
-    var parser = new MapParser(stringBuilder.toString());
-    var mapBuilder = parser.parse();
-    GameMap gameMap = mapBuilder.toGameMap();
-    System.out.println(gameMap.size());
-    System.out.println(gameMap.data());
   }
 }
