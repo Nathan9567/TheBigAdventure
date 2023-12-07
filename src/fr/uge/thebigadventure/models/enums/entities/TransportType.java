@@ -4,10 +4,5 @@ public enum TransportType implements EntityType {
   PLANE, ROCKET, UFO,
   CAR,
   CART, TRAIN,
-  BOAT;
-
-  @Override
-  public String folder() {
-    return "transports";
-  }
+  BOAT
 }

@@ -44,12 +44,6 @@ public class TheBigAdventure {
 
       context.renderFrame(graphics2D -> {
         MapView.drawMap(gameMap, graphics2D, (int) cell, bkgdColor);
-        try {
-          EntityView.drawEntityTile(graphics2D,
-              player.skin().getImagePath(), player.position(), (int) cell, null);
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
         graphics2D.dispose();
       });
 
@@ -78,7 +72,7 @@ public class TheBigAdventure {
           context.renderFrame(graphics2D -> {
             try {
               EntityView.drawEntityTile(graphics2D,
-                  player.skin().getImagePath(), player.position(), (int) cell, null);
+                  player.skin(), player.position(), (int) cell, null);
             } catch (IOException e) {
               throw new RuntimeException(e);
             }
@@ -92,7 +86,7 @@ public class TheBigAdventure {
             if (entityType != null) {
               try {
                 EntityView.drawEntityTile(graphics2D,
-                    entityType.getImagePath(), lastPlayerPosition, (int) cell, null);
+                    entityType, lastPlayerPosition, (int) cell, null);
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }

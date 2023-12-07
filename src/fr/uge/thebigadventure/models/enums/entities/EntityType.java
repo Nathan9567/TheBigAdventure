@@ -2,7 +2,6 @@ package fr.uge.thebigadventure.models.enums.entities;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,18 +31,11 @@ public sealed interface EntityType permits EffectType,
 
   String name();
 
-  String folder();
-
   default boolean isObstacle() {
     return switch (this) {
       case ObstacleType ignored -> true;
       case BiomeType ignored -> true;
       default -> false;
     };
-  }
-
-  default String getImagePath() {
-    return "/resources/img/" + folder() + "/" + name().toLowerCase(Locale.ROOT) +
-        ".png";
   }
 }

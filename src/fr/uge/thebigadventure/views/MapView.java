@@ -31,7 +31,7 @@ public class MapView {
     gameMap.data().forEach((coord, entityType) -> {
       try {
         EntityView.drawEntityTile(graphics2D,
-            entityType.getImagePath(), coord, cellSize, bkgdColor);
+            entityType, coord, cellSize, bkgdColor);
       } catch (IOException e) {
         throw new IllegalArgumentException("Cannot load image " + entityType);
       }
@@ -45,7 +45,7 @@ public class MapView {
       try {
         if (entity.position() != null) {
           EntityView.drawEntityTile(graphics2D,
-              entity.skin().getImagePath(), entity.position(), cellSize, null);
+              entity.skin(), entity.position(), cellSize, null);
         }
       } catch (IOException e) {
         throw new IllegalArgumentException("Cannot load image " + entity);
