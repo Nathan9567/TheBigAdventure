@@ -6,6 +6,7 @@ import fr.uge.thebigadventure.models.Size;
 import fr.uge.thebigadventure.models.Zone;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
 import fr.uge.thebigadventure.models.enums.utils.Behavior;
+import fr.uge.thebigadventure.models.enums.utils.Direction;
 import fr.uge.thebigadventure.models.enums.utils.Kind;
 
 import java.io.IOException;
@@ -73,7 +74,7 @@ public class MapParser {
       if (matcher.start() != pointer) {
         System.err.println("Error while parsing map : can't read attributes text between character #" + (globalOffset + pointer) + " and #" + (globalOffset + matcher.start()) + ".");
       }
-      attributeParser.accept(matcher.group(1), matcher.group(2));
+      attributeParser.accept(matcher.group(1), matcher.group(2).trim());
       pointer = matcher.end();
     }
     if (pointer != content.length()) {
@@ -147,7 +148,10 @@ public class MapParser {
       case "zone" -> parseElementAttributeZone(content);
       case "behavior" -> parseElementAttributeBehavior(content);
       case "damage" -> parseElementAttributeDamage(content);
-      default -> { System.err.println("Error while parsing map : unknown attribute " + name + " skipping."); }
+      case "phantomized" -> parseElementAttributePhantomized(content);
+      case "teleport" -> parseElementAttributeTeleport(content);
+      case "flow" -> parseElementAttributeFlow(content);
+      default -> System.err.println("Error while parsing map : unknown attribute " + name + " skipping.");
     }
   }
 
@@ -207,5 +211,18 @@ public class MapParser {
 
   private void parseElementAttributeDamage(String content) {
     builder.elementBuilder.setDamage(Integer.parseInt(content));
+  }
+
+  private void parseElementAttributeFlow(String content) {
+    builder.elementBuilder.setFlow(Direction.valueOf(content));
+  }
+
+  private void parseElementAttributePhantomized(String content) {
+    var matcher = BOOLEAN_PATTERN.matcher(content);
+    builder.elementBuilder.setPhantomized(matcher.matches());
+  }
+
+  private void parseElementAttributeTeleport(String content) {
+    builder.elementBuilder.setTeleport(content);
   }
 }

@@ -14,8 +14,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MapBuilder {
-  private final List<Entity> elements = new ArrayList<>();
   public ElementBuilder elementBuilder = new ElementBuilder();
+  private final List<ElementBuilder> elementBuilders = new ArrayList<>();
   private Size size;
   private Map<String, EntityType> encodings;
   private Map<Coord, Character> data;
@@ -33,11 +33,12 @@ public class MapBuilder {
   }
 
   public void pushElementBuilder() {
-    elements.add(elementBuilder.toEntity());
+    elementBuilders.add(elementBuilder);
     elementBuilder = new ElementBuilder();
   }
 
   public GameMap toGameMap() {
+    var elements = elementBuilders.stream().map(e -> e.toEntity()).toList(); 
     System.out.println(elements);
     var mapData = data.entrySet().stream().collect(Collectors.toMap(Entry::getKey, entry -> {
       var env = encodings.get(String.valueOf(entry.getValue()));

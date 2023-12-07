@@ -15,6 +15,7 @@ import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 import fr.uge.thebigadventure.models.enums.entities.ObstacleType;
 import fr.uge.thebigadventure.models.enums.entities.PersonageType;
 import fr.uge.thebigadventure.models.enums.utils.Behavior;
+import fr.uge.thebigadventure.models.enums.utils.Direction;
 import fr.uge.thebigadventure.models.enums.utils.Kind;
 
 import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.*;
@@ -33,12 +34,11 @@ public class ElementBuilder {
 //  private List<String> steal;
 //  private List<Trade> trade;
 //  private Lock locked;
-//  private Direction flow;
-//  private boolean phantomized;
-//  private String teleport;
+  private Direction flow = null;
+  private boolean phantomized = false;
+  private String teleport = null;
 
-  public ElementBuilder() {
-  }
+  public ElementBuilder() {}
 
   public void setName(String name) {
     this.name = name;
@@ -78,6 +78,18 @@ public class ElementBuilder {
 
   public void setText(String text) {
     this.text = text;
+  }
+
+  public void setFlow(Direction flow) {
+    this.flow = flow;
+  }
+
+  public void setPhantomized(boolean phantomized) {
+    this.phantomized = phantomized;
+  }
+  
+  public void setTeleport(String teleport) {
+    this.teleport = teleport;
   }
 
   // If health != 0, then it's a personage
