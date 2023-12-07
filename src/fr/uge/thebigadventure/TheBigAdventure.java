@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class TheBigAdventure {
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws IllegalAccessException {
     // Number of tiles to show :
     int nb_tiles = 40;
     String mapPath = "resources/test.map";
@@ -48,7 +48,7 @@ public class TheBigAdventure {
       });
 
       while (true) {
-        Event event = context.pollOrWaitEvent(200);
+        Event event = context.pollOrWaitEvent(100);
         System.out.println("event: " + event);
         if (event == null) {
           continue;
@@ -100,15 +100,10 @@ public class TheBigAdventure {
   private static void move(Player player, GameMap gameMap,
                            Direction playerDirection) {
     player.setDirection(playerDirection);
-    if (player.position().x() == 0 && playerDirection == Direction.WEST
-        || player.position().x() == gameMap.size().width() - 1
-        && playerDirection == Direction.EAST
-        || player.position().y() == 0 && playerDirection == Direction.NORTH
-        || player.position().y() == gameMap.size().height() - 1
-        && playerDirection == Direction.SOUTH) {
+    var newPosition = player.position().move(playerDirection);
+    if (!newPosition.inBounds(gameMap.size())) {
       return;
     }
-    var newPosition = player.position().move(playerDirection);
     EntityType entityType = gameMap.data().get(newPosition);
     if (entityType != null && entityType.isObstacle()) {
       return;

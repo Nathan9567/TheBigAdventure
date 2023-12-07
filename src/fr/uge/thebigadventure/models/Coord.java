@@ -3,11 +3,6 @@ package fr.uge.thebigadventure.models;
 import fr.uge.thebigadventure.models.enums.utils.Direction;
 
 public record Coord(int x, int y) {
-  public Coord {
-    if (x < 0 || y < 0) {
-      throw new IllegalArgumentException("Invalid coord : " + x + ", " + y);
-    }
-  }
 
   public Coord move(Direction direction) {
     return switch (direction) {
@@ -16,6 +11,10 @@ public record Coord(int x, int y) {
       case WEST -> new Coord(x - 1, y);
       case EAST -> new Coord(x + 1, y);
     };
+  }
+
+  public boolean inBounds(Size size) {
+    return 0 <= x && 0 <= y && x < size.width() && y < size.height();
   }
 
   @Override

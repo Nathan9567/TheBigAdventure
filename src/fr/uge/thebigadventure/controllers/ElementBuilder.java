@@ -1,32 +1,11 @@
 package fr.uge.thebigadventure.controllers;
 
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.BOLT;
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.BOOK;
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.BOX;
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.KEY;
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.MIRROR;
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.PAPER;
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.SEED;
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.SHOVEL;
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.STICK;
-import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.SWORD;
-
 import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.Zone;
 import fr.uge.thebigadventure.models.entities.Entity;
-import fr.uge.thebigadventure.models.entities.inventory.BasicItem;
-import fr.uge.thebigadventure.models.entities.inventory.Box;
-import fr.uge.thebigadventure.models.entities.inventory.InventoryItem;
-import fr.uge.thebigadventure.models.entities.inventory.Key;
-import fr.uge.thebigadventure.models.entities.inventory.LoreItem;
-import fr.uge.thebigadventure.models.entities.inventory.Mirror;
-import fr.uge.thebigadventure.models.entities.inventory.Seed;
+import fr.uge.thebigadventure.models.entities.inventory.*;
 import fr.uge.thebigadventure.models.entities.obstacles.Obstacle;
-import fr.uge.thebigadventure.models.entities.personages.Ally;
-import fr.uge.thebigadventure.models.entities.personages.Enemy;
-import fr.uge.thebigadventure.models.entities.personages.Ghost;
-import fr.uge.thebigadventure.models.entities.personages.Personage;
-import fr.uge.thebigadventure.models.entities.personages.Player;
+import fr.uge.thebigadventure.models.entities.personages.*;
 import fr.uge.thebigadventure.models.entities.weapons.Bolt;
 import fr.uge.thebigadventure.models.entities.weapons.Shovel;
 import fr.uge.thebigadventure.models.entities.weapons.Stick;
@@ -37,6 +16,8 @@ import fr.uge.thebigadventure.models.enums.entities.ObstacleType;
 import fr.uge.thebigadventure.models.enums.entities.PersonageType;
 import fr.uge.thebigadventure.models.enums.utils.Behavior;
 import fr.uge.thebigadventure.models.enums.utils.Kind;
+
+import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.*;
 
 public class ElementBuilder {
   private String name = null;
@@ -101,8 +82,7 @@ public class ElementBuilder {
 
   // If health != 0, then it's a personage
   // TODO: add strealableItems in enemy constructor
-  private Personage toPersonageEntity() {
-    PersonageType personageType = (PersonageType) skin;
+  private Personage toPersonageEntity(PersonageType personageType) {
     if (skin.name().equals("GHOST"))
       return new Ghost();
     if (player)
@@ -115,8 +95,8 @@ public class ElementBuilder {
   }
 
   // TODO : add locked at "item to unlock" in obstacle constructor
-  private Obstacle toObstacleEntity() {
-    return new Obstacle((ObstacleType) skin, name, position, null);
+  private Obstacle toObstacleEntity(ObstacleType obstacleType) {
+    return new Obstacle(obstacleType, name, position, null);
   }
 
   private InventoryItem toWeaponEntity() {
@@ -129,31 +109,40 @@ public class ElementBuilder {
     };
   }
 
-  private InventoryItem toItemEntity() {
-    return switch (skin) {
+  private InventoryItem toItemEntity(InventoryItemType item) {
+    return switch (item) {
       // TODO: direction for box
-      case BOX -> new Box((InventoryItemType) skin, name, position, null);
+      case BOLT, SHOVEL, STICK, SWORD -> toWeaponEntity();
+      case BOX -> new Box(item, name, position, null);
       case KEY -> new Key(name);
       case MIRROR -> new Mirror();
       case SEED -> new Seed(name);
-      case BOOK, PAPER -> new LoreItem((InventoryItemType) skin, name, text);
-      default -> new BasicItem((InventoryItemType) skin, name);
+      case BOOK, PAPER -> new LoreItem(item, name, text);
+      default -> new BasicItem(item, name);
     };
   }
 
   public Entity toEntity() {
-    if (skin == null)
-      return null;
-    if (health != 0)
-      return toPersonageEntity();
-    if (kind.equals(Kind.OBSTACLE))
-      return toObstacleEntity();
-    if (kind.equals(Kind.ITEM)) {
-      return switch (skin) {
-        case BOLT, SHOVEL, STICK, SWORD -> toWeaponEntity();
-        default -> toItemEntity();
-      };
-    }
-    return null;
+    return switch (skin) {
+      case null -> null;
+      case PersonageType personageType -> toPersonageEntity(personageType);
+      case ObstacleType obstacleType -> toObstacleEntity(obstacleType);
+      case InventoryItemType inventoryItemType ->
+          toItemEntity(inventoryItemType);
+      default -> throw new IllegalStateException("Unexpected value: " + skin);
+    };
+//    if (skin == null)
+//      return null;
+//    if (health != 0)
+//      return toPersonageEntity();
+//    if (kind.equals(Kind.OBSTACLE))
+//      return toObstacleEntity();
+//    if (kind.equals(Kind.ITEM)) {
+//      return switch (skin) {
+//        case BOLT, SHOVEL, STICK, SWORD -> toWeaponEntity();
+//        default -> toItemEntity();
+//      };
+//    }
+//    return null;
   }
 }
