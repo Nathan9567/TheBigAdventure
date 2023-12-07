@@ -8,7 +8,7 @@ import fr.uge.thebigadventure.models.enums.utils.PlayerSkinType;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class Player implements PersonageInterface {
+public class Player implements Personage {
 
   private final PersonageType skin;
   private final String name;

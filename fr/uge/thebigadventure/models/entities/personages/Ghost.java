@@ -7,7 +7,7 @@ import fr.uge.thebigadventure.models.enums.entities.PersonageType;
 
 import java.util.List;
 
-public class Ghost implements PersonageInterface {
+public class Ghost implements Personage {
 
   List<ObstacleType> obstacleList = List.of(
       ObstacleType.BED, ObstacleType.BRICK, ObstacleType.DOOR, ObstacleType.FENCE, ObstacleType.GATE,

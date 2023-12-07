@@ -1,9 +1,15 @@
 package fr.uge.thebigadventure.models.entities.weapons;
 
-import fr.uge.thebigadventure.models.enums.utils.WeaponType;
+import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
-public class Bolt extends Weapon {
-  public Bolt(int damage) {
-    super(WeaponType.BOLT, damage);
+public record Bolt(String name, int damage) implements WeaponInterface {
+
+  public Bolt {
+    new Weapon(InventoryItemType.BOLT, name, damage);
+  }
+
+  @Override
+  public InventoryItemType skin() {
+    return InventoryItemType.BOLT;
   }
 }

@@ -20,6 +20,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 
 public class TheBigAdventure {
 
@@ -53,14 +54,16 @@ public class TheBigAdventure {
       Player player = new Player(PersonageType.BABA, "bababa", new Coord(5, 5),
           10);
 
-      for (int i = 0; i < 4; i++) {
-        context.renderFrame(graphics2D -> {
-          MapView.drawMap(gameMap,
-              graphics2D, (int) cell);
+      context.renderFrame(graphics2D -> {
+        MapView.drawMap(gameMap, graphics2D, (int) cell, bkgdColor);
+        try {
           EntityView.drawEntityTile(graphics2D,
-              player.skin().getImagePath(), player.getPosition(), (int) cell);
-        });
-      }
+              player.skin().getImagePath(), player.getPosition(), (int) cell, null);
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+        graphics2D.dispose();
+      });
 
       while (true) {
         Event event = context.pollOrWaitEvent(200);
@@ -85,8 +88,12 @@ public class TheBigAdventure {
             }
           }
           context.renderFrame(graphics2D -> {
-            EntityView.drawEntityTile(graphics2D,
-                player.skin().getImagePath(), player.getPosition(), (int) cell);
+            try {
+              EntityView.drawEntityTile(graphics2D,
+                  player.skin().getImagePath(), player.getPosition(), (int) cell, null);
+            } catch (IOException e) {
+              throw new RuntimeException(e);
+            }
             var entityType = gameMap.data().get(lastPlayerPosition);
             if (lastPlayerPosition.equals(player.getPosition())) {
               return;
@@ -95,8 +102,12 @@ public class TheBigAdventure {
             graphics2D.fill(new Rectangle2D.Float(lastPlayerPosition.x() * (int) cell,
                 lastPlayerPosition.y() * (int) cell, (int) cell, (int) cell));
             if (entityType != null) {
-              EntityView.drawEntityTile(graphics2D,
-                  entityType.getImagePath(), lastPlayerPosition, (int) cell);
+              try {
+                EntityView.drawEntityTile(graphics2D,
+                    entityType.getImagePath(), lastPlayerPosition, (int) cell, null);
+              } catch (IOException e) {
+                throw new RuntimeException(e);
+              }
             }
           });
         }

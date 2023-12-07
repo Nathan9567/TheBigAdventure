@@ -43,7 +43,7 @@ public sealed interface EntityType permits EffectType,
   }
 
   default String getImagePath() {
-    return "resources/img/" + folder() + "/" + name().toLowerCase(Locale.ROOT) +
+    return "/resources/img/" + folder() + "/" + name().toLowerCase(Locale.ROOT) +
         ".png";
   }
 }

@@ -1,9 +1,17 @@
 package fr.uge.thebigadventure.models.entities.weapons;
 
-import fr.uge.thebigadventure.models.enums.utils.WeaponType;
+import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
-public class Shovel extends Weapon {
-  public Shovel(int damage) {
-    super(WeaponType.SHOVEL, damage);
+public record Shovel(String name,
+                     int damage) implements WeaponInterface {
+
+  public Shovel {
+    new Weapon(InventoryItemType.SHOVEL, name, damage);
+  }
+
+
+  @Override
+  public InventoryItemType skin() {
+    return InventoryItemType.SHOVEL;
   }
 }

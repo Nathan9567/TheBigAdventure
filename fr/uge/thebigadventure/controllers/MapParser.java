@@ -5,6 +5,8 @@ import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.models.Size;
 import fr.uge.thebigadventure.models.Zone;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
+import fr.uge.thebigadventure.models.enums.utils.Behavior;
+import fr.uge.thebigadventure.models.enums.utils.Kind;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -194,7 +196,7 @@ public class MapParser {
   }
 
   private void parseElementAttributeKind(String content) {
-    builder.elementBuilder.setKind(content);
+    builder.elementBuilder.setKind(Kind.valueOf(content.toUpperCase()));
   }
 
   private void parseElementAttributeZone(String content) {
@@ -217,7 +219,7 @@ public class MapParser {
   }
 
   private void parseElementAttributeBehavior(String content) {
-    builder.elementBuilder.setBehavior(content);
+    builder.elementBuilder.setBehavior(Behavior.valueOf(content.toUpperCase()));
   }
 
   private void parseElementAttributeDamage(String content) {
