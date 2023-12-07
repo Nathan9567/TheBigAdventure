@@ -107,6 +107,9 @@ public class MapParser {
       if (matcher.start() != pointer) {
         System.err.println("Error while parsing map : error in encodings before " + matcher.group(1) + "(" + matcher.group(2) + ").");
       }
+      if (encodingMap.containsKey(matcher.group(2))) {
+        System.err.println("Error while parsing map : error in encodings, letter \'" + matcher.group(2) + "\' is already associated with a skin.");
+      }
       encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
       pointer = matcher.end();
     }
@@ -122,8 +125,9 @@ public class MapParser {
       System.err.println("Error while parsing map : grid data invalid.");
     HashMap<Coord, Character> map = new HashMap<>();
     var y = 0;
+    var x = 0;
     for (var lineMap : matcher.group(1).split("\n")) {
-      var x = -matcher.group(2).length();
+      x = -matcher.group(2).length();
       for (var charMap : lineMap.toCharArray()) {
         if (charMap == ' ') {
           x++;
@@ -134,6 +138,7 @@ public class MapParser {
       }
       y++;
     }
+    builder.setEffectiveSize(new Size(x, y));
     builder.setData(map);
   }
 
