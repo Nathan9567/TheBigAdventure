@@ -32,7 +32,7 @@ public class Player implements Personage {
   }
 
   @Override
-  public Coord getPosition() {
+  public Coord position() {
     return position;
   }
 

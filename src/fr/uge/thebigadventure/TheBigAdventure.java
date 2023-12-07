@@ -1,11 +1,8 @@
 package fr.uge.thebigadventure;
 
-import fr.uge.thebigadventure.controllers.MapParser;
-import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.models.entities.personages.Player;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
-import fr.uge.thebigadventure.models.enums.entities.PersonageType;
 import fr.uge.thebigadventure.models.enums.utils.Direction;
 import fr.uge.thebigadventure.views.MapView;
 import fr.uge.thebigadventure.views.entities.EntityView;
@@ -17,29 +14,21 @@ import fr.umlv.zen5.ScreenInfo;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 public class TheBigAdventure {
 
   public static void main(String[] args) throws Exception {
     // Number of tiles to show :
-    int nb_tiles = 50;
+    int nb_tiles = 40;
+    String mapPath = "resources/test.map";
 
-    File file = new File("resources/test.map");
-    BufferedReader reader = new BufferedReader(new FileReader(file));
-    StringBuilder stringBuilder = new StringBuilder();
-    String line;
-    while ((line = reader.readLine()) != null) {
-      stringBuilder.append(line);
-      stringBuilder.append("\n");
+    GameMap gameMap;
+    try {
+      gameMap = GameMap.load(mapPath);
+    } catch (IOException e) {
+      throw new IllegalAccessException("Cannot load map from " + mapPath);
     }
-    reader.close();
-    var parser = new MapParser(stringBuilder.toString());
-    var mapBuilder = parser.parse();
-    GameMap gameMap = mapBuilder.toGameMap();
 
     Color bkgdColor = new Color(113, 94, 68, 255);
     Application.run(bkgdColor, context -> {
@@ -51,14 +40,13 @@ public class TheBigAdventure {
       System.out.println("size of the screen (" + width + " x " + height + ")");
       float cell = width / nb_tiles;
 
-      Player player = new Player(PersonageType.BABA, "bababa", new Coord(5, 5),
-          10);
+      Player player = gameMap.getPlayer();
 
       context.renderFrame(graphics2D -> {
         MapView.drawMap(gameMap, graphics2D, (int) cell, bkgdColor);
         try {
           EntityView.drawEntityTile(graphics2D,
-              player.skin().getImagePath(), player.getPosition(), (int) cell, null);
+              player.skin().getImagePath(), player.position(), (int) cell, null);
         } catch (IOException e) {
           throw new RuntimeException(e);
         }
@@ -76,7 +64,7 @@ public class TheBigAdventure {
         Action action = event.getAction();
         if (action == Action.KEY_PRESSED) {
           KeyboardKey key = event.getKey();
-          var lastPlayerPosition = player.getPosition();
+          var lastPlayerPosition = player.position();
           switch (key) {
             case RIGHT -> move(player, gameMap, Direction.EAST);
             case LEFT -> move(player, gameMap, Direction.WEST);
@@ -90,12 +78,12 @@ public class TheBigAdventure {
           context.renderFrame(graphics2D -> {
             try {
               EntityView.drawEntityTile(graphics2D,
-                  player.skin().getImagePath(), player.getPosition(), (int) cell, null);
+                  player.skin().getImagePath(), player.position(), (int) cell, null);
             } catch (IOException e) {
               throw new RuntimeException(e);
             }
             var entityType = gameMap.data().get(lastPlayerPosition);
-            if (lastPlayerPosition.equals(player.getPosition())) {
+            if (lastPlayerPosition.equals(player.position())) {
               return;
             }
             graphics2D.setColor(bkgdColor);
@@ -118,15 +106,15 @@ public class TheBigAdventure {
   private static void move(Player player, GameMap gameMap,
                            Direction playerDirection) {
     player.setDirection(playerDirection);
-    if (player.getPosition().x() == 0 && playerDirection == Direction.WEST
-        || player.getPosition().x() == gameMap.size().width() - 1
+    if (player.position().x() == 0 && playerDirection == Direction.WEST
+        || player.position().x() == gameMap.size().width() - 1
         && playerDirection == Direction.EAST
-        || player.getPosition().y() == 0 && playerDirection == Direction.NORTH
-        || player.getPosition().y() == gameMap.size().height() - 1
+        || player.position().y() == 0 && playerDirection == Direction.NORTH
+        || player.position().y() == gameMap.size().height() - 1
         && playerDirection == Direction.SOUTH) {
       return;
     }
-    var newPosition = player.getPosition().move(playerDirection);
+    var newPosition = player.position().move(playerDirection);
     EntityType entityType = gameMap.data().get(newPosition);
     if (entityType != null && entityType.isObstacle()) {
       return;

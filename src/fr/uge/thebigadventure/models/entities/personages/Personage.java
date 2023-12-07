@@ -8,7 +8,8 @@ public interface Personage extends Entity {
   @Override
   PersonageType skin();
 
-  Coord getPosition();
+  @Override
+  Coord position();
 
   void setPosition(Coord position);
 

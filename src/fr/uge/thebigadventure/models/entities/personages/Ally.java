@@ -37,7 +37,7 @@ public class Ally implements Personage {
   }
 
   @Override
-  public Coord getPosition() {
+  public Coord position() {
     return position;
   }
 

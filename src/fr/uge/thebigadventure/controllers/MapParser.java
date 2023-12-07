@@ -8,9 +8,6 @@ import fr.uge.thebigadventure.models.enums.entities.EntityType;
 import fr.uge.thebigadventure.models.enums.utils.Behavior;
 import fr.uge.thebigadventure.models.enums.utils.Kind;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
@@ -34,19 +31,7 @@ public class MapParser {
   }
 
   public static void main(String[] args) throws IOException {
-    File file = new File("resources/test.map");
-    BufferedReader reader = new BufferedReader(new FileReader(file));
-    StringBuilder stringBuilder = new StringBuilder();
-    String line;
-    while ((line = reader.readLine()) != null) {
-      stringBuilder.append(line);
-      stringBuilder.append("\n");
-    }
-    reader.close();
-
-    var parser = new MapParser(stringBuilder.toString());
-    var mapBuilder = parser.parse();
-    GameMap gameMap = mapBuilder.toGameMap();
+    GameMap gameMap = GameMap.load("resources/test.map");
     System.out.println(gameMap.size());
     System.out.println(gameMap.data());
   }

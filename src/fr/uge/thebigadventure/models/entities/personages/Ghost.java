@@ -33,7 +33,7 @@ public class Ghost implements Personage {
   }
 
   @Override
-  public Coord getPosition() {
+  public Coord position() {
     return null;
   }
 
