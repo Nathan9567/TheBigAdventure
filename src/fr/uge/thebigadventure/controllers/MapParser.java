@@ -23,11 +23,11 @@ public class MapParser {
   private static final Pattern GRID_DATA_PATTERN = Pattern.compile("\"\"\"\\s*\\n(.+)\\n([ ]*)\"\"\"", Pattern.DOTALL);
   private static final Pattern BOOLEAN_PATTERN = Pattern.compile("^true$", Pattern.CASE_INSENSITIVE);
   private final String text;
-  private final MapBuilder builder;
+  private final MapBuilder builder  = new MapBuilder();
+  private int globalOffset = 0;
 
   public MapParser(String text) {
     this.text = text;
-    this.builder = new MapBuilder();
   }
 
   public static void main(String[] args) throws IOException {
@@ -40,14 +40,15 @@ public class MapParser {
     var matcher = SECTIONS_PATTERN.matcher(text);
     var pointer = 0;
     while (matcher.find()) {
-      parseSection(matcher.group(1), matcher.group(2).trim());
       if (matcher.start() != pointer) {
-        throw new IllegalArgumentException("Invalid map : garbage between character " + pointer + " and " + matcher.start() + ".");
+        System.err.println("Error while parsing map : can't read section text between character #" + pointer + " and #" + matcher.start() + ".");
       }
+      globalOffset = matcher.start();
+      parseSection(matcher.group(1), matcher.group(2).trim());
       pointer = matcher.end();
     }
     if (pointer != text.length()) {
-      throw new IllegalArgumentException("Invalid map : stop reading at character " + pointer + ".");
+      System.err.println("Error while parsing map : can't read section text after character #" + pointer + ".");
     }
     return builder;
   }
@@ -56,23 +57,27 @@ public class MapParser {
     switch (name) {
       case "grid" -> parseAttributes(content, this::parseGridAttributes);
       case "element" -> parseElement(content);
-      default ->
-          throw new IllegalArgumentException("Invalid map : " + name + " doesn't exist");
+      default -> { System.err.println("Error while parsing map : section \"" + name + "\" unknown at character #" + globalOffset + "."); }
     }
   }
 
+  private void parseElement(String content) {
+    parseAttributes(content, this::parseElementAttributes);
+    builder.pushElementBuilder();
+  }
+  
   private void parseAttributes(String content, BiConsumer<String, String> attributeParser) {
     var matcher = ATTRIBUTES_PATTERN.matcher(content);
     var pointer = 0;
     while (matcher.find()) {
-      attributeParser.accept(matcher.group(1), matcher.group(2));
       if (matcher.start() != pointer) {
-        throw new IllegalArgumentException("Invalid map : bad attributes.");
+        System.err.println("Error while parsing map : can't read attributes text between character #" + (globalOffset + pointer) + " and #" + (globalOffset + matcher.start()) + ".");
       }
+      attributeParser.accept(matcher.group(1), matcher.group(2));
       pointer = matcher.end();
     }
     if (pointer != content.length()) {
-      throw new IllegalArgumentException("Invalid map : stopped reading attributes.");
+      System.err.println("Error while parsing map : can't read attributes text after character #" + (globalOffset + pointer) + ".");
     }
   }
 
@@ -81,15 +86,14 @@ public class MapParser {
       case "size" -> parseGridAttributeSize(content);
       case "encodings" -> parseGridAttributeEncodings(content);
       case "data" -> parseGridAttributeData(content);
-      default ->
-          throw new IllegalArgumentException("Invalid map : grid attribute " + name + " doest not exists.");
+      default -> { System.err.println("Error while parsing map : grid attribute \"" + name + "\"."); }
     }
   }
 
   private void parseGridAttributeSize(String content) {
     var matcher = SIZE_PATTERN.matcher(content);
     if (!matcher.matches()) {
-      throw new IllegalArgumentException("Invalid size");
+      System.err.println("Error while parsing map : invalid size.");
     }
     builder.setSize(new Size(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
   }
@@ -99,14 +103,14 @@ public class MapParser {
     var matcher = ENCODINGS_PATTERN.matcher(content);
     var pointer = 0;
     while (matcher.find()) {
-      encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
       if (matcher.start() != pointer) {
-        throw new IllegalArgumentException("Invalid map : bad grid encodings.");
+        System.err.println("Error while parsing map : error in encodings before " + matcher.group(1) + "(" + matcher.group(2) + ").");
       }
+      encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
       pointer = matcher.end();
     }
     if (pointer != content.length()) {
-      throw new IllegalArgumentException("Invalid map : bad grid encodings.");
+      System.err.println("Error while parsing map : can't finish to read encodings.");
     }
     builder.setEncodings(encodingMap);
   }
@@ -114,7 +118,7 @@ public class MapParser {
   private void parseGridAttributeData(String content) {
     var matcher = GRID_DATA_PATTERN.matcher(content);
     if (!matcher.find())
-      throw new IllegalArgumentException("Invalid data map");
+      System.err.println("Error while parsing map : grid data invalid.");
     HashMap<Coord, Character> map = new HashMap<>();
     var y = 0;
     for (var lineMap : matcher.group(1).split("\n")) {
@@ -132,11 +136,6 @@ public class MapParser {
     builder.setData(map);
   }
 
-  private void parseElement(String content) {
-    parseAttributes(content, this::parseElementAttributes);
-    builder.pushElementBuilder();
-  }
-
   private void parseElementAttributes(String name, String content) {
     switch (name) {
       case "name" -> parseElementAttributeName(content);
@@ -148,10 +147,7 @@ public class MapParser {
       case "zone" -> parseElementAttributeZone(content);
       case "behavior" -> parseElementAttributeBehavior(content);
       case "damage" -> parseElementAttributeDamage(content);
-      default -> {
-        System.out.println("unknown attribute " + name + " skipping.");
-        // throw new IllegalArgumentException("Invalid map : element attribute " + name + " doest not exists.");
-      }
+      default -> { System.err.println("Error while parsing map : unknown attribute " + name + " skipping."); }
     }
   }
 
@@ -171,7 +167,8 @@ public class MapParser {
   private void parseElementAttributePosition(String content) {
     var matcher = COORD_PATTERN.matcher(content);
     if (!matcher.matches()) {
-      throw new IllegalArgumentException("Invalid position");
+      System.err.println("Error while parsing map : invalid position.");
+      return;
     }
     builder.elementBuilder.setPosition(new Coord(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
   }
@@ -187,7 +184,8 @@ public class MapParser {
   private void parseElementAttributeZone(String content) {
     var matcher = ZONE_PATTERN.matcher(content);
     if (!matcher.matches()) {
-      throw new IllegalArgumentException("Invalid position");
+      System.err.println("Error while parsing map : invalid zone.");
+      return;
     }
     builder.elementBuilder.setZone(
         new Zone(
