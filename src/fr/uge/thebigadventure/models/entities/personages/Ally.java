@@ -6,7 +6,7 @@ import fr.uge.thebigadventure.models.enums.entities.PersonageType;
 
 import java.util.Objects;
 
-public class Ally implements Personage {
+public final class Ally implements NPC {
 
   private final PersonageType skin;
   private final String name;

@@ -84,7 +84,7 @@ public class ElementBuilder {
   /*public void setLocked(String group, String group2) {
     this.locked = 
   }*/
-  
+
   public void setFlow(Direction flow) {
     this.flow = flow;
   }
@@ -142,10 +142,9 @@ public class ElementBuilder {
   public Entity toEntity() {
     return switch (skin) {
       case null -> null;
-      case PersonageType personageType -> toPersonageEntity(personageType);
       case ObstacleType obstacleType -> toObstacleEntity(obstacleType);
-      case InventoryItemType inventoryItemType ->
-          toItemEntity(inventoryItemType);
+      case InventoryItemType inventoryItemType -> toItemEntity(inventoryItemType);
+      case PersonageType personageType -> toPersonageEntity(personageType);
       default -> throw new IllegalStateException("Unexpected value: " + skin);
     };
   }

@@ -2,6 +2,7 @@ package fr.uge.thebigadventure.models;
 
 import fr.uge.thebigadventure.controllers.MapParser;
 import fr.uge.thebigadventure.models.entities.Entity;
+import fr.uge.thebigadventure.models.entities.personages.Personage;
 import fr.uge.thebigadventure.models.entities.personages.Player;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
 
@@ -9,11 +10,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public record GameMap(Size size, Map<Coord, EntityType> data,
-                      Map<Coord, Entity> elements) {
+                      Map<Coord, Entity> elements,
+                      List<Personage> personages) {
   public GameMap {
     Objects.requireNonNull(size, "Size cannot be null");
     if (size.width() <= 0 || size.height() <= 0) {
@@ -37,13 +40,13 @@ public record GameMap(Size size, Map<Coord, EntityType> data,
     return mapBuilder.toGameMap();
   }
 
-
   // TODO: remove cast to Player
   public Player getPlayer() {
-    for (var entry : elements.entrySet()) {
-      if (entry.getValue() instanceof Player) {
-        return (Player) entry.getValue();
-      }
+    var playerSearch = personages.stream()
+            .filter(personage -> personage instanceof Player)
+            .findFirst();
+    if (playerSearch.isPresent()) {
+      return (Player) playerSearch.get();
     }
     System.err.println("No player found in map");
     return null;

@@ -15,18 +15,18 @@ public class EntityView {
                                     Color color) throws IOException {
     Image image = MapView.getImage(getImagePath(skin));
     graphics2D.drawImage(image, coord.x() * tileSize,
-        coord.y() * tileSize, tileSize, tileSize, color, null);
+            coord.y() * tileSize, tileSize, tileSize, color, null);
   }
 
   public static void drawEntityTile(Graphics2D graphics2D,
                                     EntityType skin, Coord coord, int tileSize)
-      throws IOException {
+          throws IOException {
     drawEntityTile(graphics2D, skin, coord, tileSize, null);
   }
 
   public static void clearTile(Graphics2D graphics2D, Coord coord, int tileSize) {
     graphics2D.clearRect(coord.x() * tileSize, coord.y() * tileSize,
-        tileSize, tileSize);
+            tileSize, tileSize);
   }
 
   private static String getImagePath(EntityType skin) {
@@ -41,7 +41,7 @@ public class EntityView {
       case TransportType ignored -> "transports";
     };
     return "/img/" + folder + "/" + skin.name().toLowerCase(Locale.ROOT) +
-        ".png";
+            ".png";
   }
 
 }

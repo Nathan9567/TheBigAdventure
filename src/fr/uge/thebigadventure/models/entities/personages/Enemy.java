@@ -11,7 +11,7 @@ import fr.uge.thebigadventure.models.enums.utils.Kind;
 import java.util.List;
 import java.util.Objects;
 
-public class Enemy implements Personage {
+public final class Enemy implements NPC {
 
   private final PersonageType skin;
   private final String name;

@@ -2,6 +2,8 @@ package fr.uge.thebigadventure.models;
 
 import fr.uge.thebigadventure.models.enums.utils.Direction;
 
+import java.util.Objects;
+
 public record Coord(int x, int y) {
 
   public Coord move(Direction direction) {
@@ -15,6 +17,11 @@ public record Coord(int x, int y) {
 
   public boolean inBounds(Size size) {
     return 0 <= x && 0 <= y && x < size.width() && y < size.height();
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(x, y);
   }
 
   @Override

@@ -4,6 +4,7 @@ import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.models.Size;
 import fr.uge.thebigadventure.models.entities.Entity;
+import fr.uge.thebigadventure.models.entities.personages.Personage;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
 
 import java.util.ArrayList;
@@ -58,11 +59,15 @@ public class MapBuilder {
 
   public GameMap toGameMap() {
     validateState();
-    Map<Coord, Entity> elements = elementBuilders.stream()
-        .map(ElementBuilder::toEntity)
-        .filter(entity -> entity.position() != null)
-        .collect(Collectors.toMap(Entity::position, element -> element));
+    var elements = elementBuilders.stream()
+            .map(ElementBuilder::toEntity)
+            .filter(entity -> entity.position() != null)
+            .collect(Collectors.toMap(Entity::position, element -> element));
+    var personages = elements.values().stream().filter(entity -> entity instanceof Personage)
+            .map(entity -> (Personage) entity).toList();
+    elements.values().removeAll(personages);
     System.out.println(elements);
+    System.out.println(personages);
     var mapData = data.entrySet().stream().collect(Collectors.toMap(Entry::getKey, entry -> {
       var env = encodings.get(String.valueOf(entry.getValue()));
       if (env == null) {
@@ -70,7 +75,7 @@ public class MapBuilder {
       }
       return env;
     }));
-    return new GameMap(size, mapData, elements);
+    return new GameMap(size, mapData, elements, personages);
   }
 
 }
