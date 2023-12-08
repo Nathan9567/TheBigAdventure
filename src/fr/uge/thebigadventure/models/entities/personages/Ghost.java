@@ -14,10 +14,6 @@ public class Ghost implements Personage {
       ObstacleType.PILLAR, ObstacleType.PIPE, ObstacleType.STATUE, ObstacleType.TABLE, ObstacleType.WALL
   );
 
-//  public Ghost() {
-//    super(PersonageType.GHOST);
-//  }
-
   public boolean canThroughObstacle(Obstacle obstacle) {
     return obstacleList.contains(obstacle.skin());
   }

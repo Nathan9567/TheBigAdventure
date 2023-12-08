@@ -45,6 +45,7 @@ public record GameMap(Size size, Map<Coord, EntityType> data,
         return (Player) entry.getValue();
       }
     }
-    throw new IllegalStateException("No player found in map");
+    System.err.println("No player found in map");
+    return null;
   }
 }

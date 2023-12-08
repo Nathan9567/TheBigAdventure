@@ -42,6 +42,8 @@ public class TheBigAdventure {
       return;
     }
 
+    Player player = gameMap.getPlayer();
+
     Color bkgdColor = new Color(113, 94, 68, 255);
     Application.run(bkgdColor, context -> {
 
@@ -50,8 +52,7 @@ public class TheBigAdventure {
       float width = screenInfo.getWidth();
       float cell = width / nb_tiles;
 
-      Player player = gameMap.getPlayer();
-
+      // Print map
       context.renderFrame(graphics2D -> {
         MapView.drawMap(gameMap, graphics2D, (int) cell, bkgdColor);
         graphics2D.dispose();
@@ -69,11 +70,14 @@ public class TheBigAdventure {
           KeyboardKey key = event.getKey();
           var lastPlayerPosition = player.position();
           switch (key) {
-            case RIGHT -> move(player, gameMap, Direction.EAST);
-            case LEFT -> move(player, gameMap, Direction.WEST);
             case UP -> move(player, gameMap, Direction.NORTH);
             case DOWN -> move(player, gameMap, Direction.SOUTH);
-            default -> {
+            case RIGHT -> move(player, gameMap, Direction.EAST);
+            case LEFT -> move(player, gameMap, Direction.WEST);
+            case SPACE -> {
+              // TODO: interact with entity or environment
+            }
+            case Q -> {
               context.exit(0);
               return;
             }
@@ -93,10 +97,18 @@ public class TheBigAdventure {
             EntityView.clearTile(graphics2D, lastPlayerPosition, (int) cell);
             // Print tile at last player position
             var entityType = gameMap.data().get(lastPlayerPosition);
+            var entity = gameMap.elements().get(lastPlayerPosition);
             if (entityType != null) {
               try {
                 EntityView.drawEntityTile(graphics2D,
                     entityType, lastPlayerPosition, (int) cell);
+              } catch (IOException e) {
+                throw new RuntimeException(e);
+              }
+            } else if (entity != null) {
+              try {
+                EntityView.drawEntityTile(graphics2D,
+                    entity.skin(), lastPlayerPosition, (int) cell);
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }

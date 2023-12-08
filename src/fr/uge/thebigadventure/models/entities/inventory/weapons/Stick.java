@@ -44,4 +44,9 @@ public class Stick implements WeaponInterface {
   public void setIgnite(boolean ignite) {
     isIgnite = ignite;
   }
+
+  @Override
+  public String toString() {
+    return weapon.toString();
+  }
 }

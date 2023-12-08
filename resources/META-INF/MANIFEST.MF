@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: fr.uge.thebigadventure.TheBigAdventure
+Created-By: Nathan CHAPELAIN, Florian BAUDIN
+
