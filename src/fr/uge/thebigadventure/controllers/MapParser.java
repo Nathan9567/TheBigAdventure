@@ -11,6 +11,7 @@ import fr.uge.thebigadventure.models.enums.utils.Kind;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
@@ -32,6 +33,7 @@ public class MapParser {
       Pattern.compile("\"\"\"\\s*\\n(.+)\\n( *)\"\"\"", Pattern.DOTALL);
   private static final Pattern BOOLEAN_PATTERN =
       Pattern.compile("^true$", Pattern.CASE_INSENSITIVE);
+  private static final Pattern LOCK_PATTERN = Pattern.compile("(KEY|LEVER)\\s*(.+)");
   private final String text;
   private final MapBuilder builder = new MapBuilder();
   private int globalOffset = 0;
@@ -134,7 +136,11 @@ public class MapParser {
             "letter '" + matcher.group(2) + "' " +
             "is already associated with a skin.");
       }
-      encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
+      try {
+        encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
+      } catch (IllegalArgumentException e) {
+        System.err.println("Error while parsing map : unknown skin \"" + matcher.group(1) + "\" in encodings.");
+      }
       pointer = matcher.end();
     }
     if (pointer != content.length()) {
@@ -192,11 +198,16 @@ public class MapParser {
   }
 
   private void parseElementAttributeSkin(String content) {
-    builder.elementBuilder.setSkin(EntityType.fromString(content));
+    try {
+      builder.elementBuilder.setSkin(EntityType.fromString(content));
+    } catch (IllegalArgumentException e) {
+      System.err.println("Error while parsing map : unknown skin \"" + content + "\".");
+    }
   }
 
   private void parseElementAttributePlayer(String content) {
     var matcher = BOOLEAN_PATTERN.matcher(content);
+    // TODO : test plus en profondeur
     builder.elementBuilder.setPlayer(matcher.matches());
   }
 
@@ -207,15 +218,25 @@ public class MapParser {
       return;
     }
     builder.elementBuilder.setPosition(new Coord(
-        Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
+        Integer.parseInt(matcher.group(1)),
+        Integer.parseInt(matcher.group(2))
+        ));
   }
 
   private void parseElementAttributeHealth(String content) {
-    builder.elementBuilder.setHealth(Integer.parseInt(content));
+    try {
+      builder.elementBuilder.setHealth(Integer.parseInt(content));
+    } catch (NumberFormatException e) {
+      System.err.println("Error while parsing map : health \"" + content + "\" is not a number.");
+    }
   }
 
   private void parseElementAttributeKind(String content) {
-    builder.elementBuilder.setKind(Kind.valueOf(content.toUpperCase()));
+    try {
+      builder.elementBuilder.setKind(Kind.valueOf(content.toUpperCase(Locale.ROOT)));
+    } catch (IllegalArgumentException e) {
+      System.err.println("Error while parsing map : invalid kind \"" + content.toUpperCase(Locale.ROOT) + "\".");
+    }
   }
 
   private void parseElementAttributeZone(String content) {
@@ -239,19 +260,38 @@ public class MapParser {
   }
 
   private void parseElementAttributeBehavior(String content) {
-    builder.elementBuilder.setBehavior(Behavior.valueOf(content.toUpperCase()));
+    try {      
+      builder.elementBuilder.setBehavior(Behavior.valueOf(content.toUpperCase(Locale.ROOT)));
+    } catch (IllegalArgumentException e) {
+      System.err.println("Error while parsing map : invalid behavior \"" + content.toUpperCase(Locale.ROOT) + "\".");
+    }
   }
 
   private void parseElementAttributeDamage(String content) {
-    builder.elementBuilder.setDamage(Integer.parseInt(content));
+    try {      
+      builder.elementBuilder.setDamage(Integer.parseInt(content));
+    } catch (NumberFormatException e) {
+      System.err.println("Error while parsing map : damage \"" + content + "\" is not a number.");
+    }
   }
 
+  /*private void parseElementAttributeLocked(String content) {
+    var matcher = LOCK_PATTERN.matcher(content);
+    matcher.matches();
+    builder.elementBuilder.setLocked(matcher.group(1), matcher.group(2));
+  }*/
+  
   private void parseElementAttributeFlow(String content) {
-    builder.elementBuilder.setFlow(Direction.valueOf(content));
+    try {      
+      builder.elementBuilder.setFlow(Direction.valueOf(content));
+    } catch (IllegalArgumentException e) {
+      System.err.println("Error while parsing map : invalid flow \"" + content + "\".");
+    }
   }
 
   private void parseElementAttributePhantomized(String content) {
     var matcher = BOOLEAN_PATTERN.matcher(content);
+    // TODO : test plus en profondeur
     builder.elementBuilder.setPhantomized(matcher.matches());
   }
 

@@ -33,7 +33,7 @@ public class ElementBuilder {
   private String text = null;
   //  private List<String> steal;
 //  private List<Trade> trade;
-//  private Lock locked;
+  // private Something locked;
   private Direction flow = null;
   private boolean phantomized = false;
   private String teleport = null;
@@ -81,6 +81,10 @@ public class ElementBuilder {
     this.text = text;
   }
 
+  /*public void setLocked(String group, String group2) {
+    this.locked = 
+  }*/
+  
   public void setFlow(Direction flow) {
     this.flow = flow;
   }
