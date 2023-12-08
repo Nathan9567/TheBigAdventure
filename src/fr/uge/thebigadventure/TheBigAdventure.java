@@ -1,5 +1,6 @@
 package fr.uge.thebigadventure;
 
+import fr.uge.thebigadventure.controllers.CommandLineParser;
 import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.models.entities.personages.Player;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
@@ -20,13 +21,25 @@ public class TheBigAdventure {
   public static void main(String[] args) throws IllegalAccessException {
     // Number of tiles to show :
     int nb_tiles = 70;
-    String mapPath = "resources/test.map";
+
+    var commandParser = new CommandLineParser(args);
+    commandParser.parse();
+    var mapPath = commandParser.getMapPath();
 
     GameMap gameMap;
     try {
       gameMap = GameMap.load(mapPath);
     } catch (IOException e) {
       throw new IllegalAccessException("Cannot load map from " + mapPath);
+    }
+
+    if (commandParser.isValidate()) {
+      return;
+    }
+
+    if (commandParser.isDryRun()) {
+      System.out.println("Not implemented yet");
+      return;
     }
 
     Color bkgdColor = new Color(113, 94, 68, 255);
