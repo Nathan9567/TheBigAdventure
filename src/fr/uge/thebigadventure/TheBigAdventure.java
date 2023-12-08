@@ -13,14 +13,13 @@ import fr.umlv.zen5.KeyboardKey;
 import fr.umlv.zen5.ScreenInfo;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
 public class TheBigAdventure {
 
   public static void main(String[] args) throws IllegalAccessException {
     // Number of tiles to show :
-    int nb_tiles = 40;
+    int nb_tiles = 70;
     String mapPath = "resources/test.map";
 
     GameMap gameMap;
@@ -36,8 +35,6 @@ public class TheBigAdventure {
       // get the size of the screen
       ScreenInfo screenInfo = context.getScreenInfo();
       float width = screenInfo.getWidth();
-      float height = screenInfo.getHeight();
-      System.out.println("size of the screen (" + width + " x " + height + ")");
       float cell = width / nb_tiles;
 
       Player player = gameMap.getPlayer();
@@ -48,8 +45,7 @@ public class TheBigAdventure {
       });
 
       while (true) {
-        Event event = context.pollOrWaitEvent(100);
-        System.out.println("event: " + event);
+        Event event = context.pollOrWaitEvent(500);
         if (event == null) {
           continue;
         }
@@ -70,23 +66,24 @@ public class TheBigAdventure {
             }
           }
           context.renderFrame(graphics2D -> {
+            // Print player
             try {
               EntityView.drawEntityTile(graphics2D,
-                  player.skin(), player.position(), (int) cell, null);
+                  player.skin(), player.position(), (int) cell);
             } catch (IOException e) {
               throw new RuntimeException(e);
             }
-            var entityType = gameMap.data().get(lastPlayerPosition);
+            // Clear last player position
             if (lastPlayerPosition.equals(player.position())) {
               return;
             }
-            graphics2D.setColor(bkgdColor);
-            graphics2D.fill(new Rectangle2D.Float(lastPlayerPosition.x() * (int) cell,
-                lastPlayerPosition.y() * (int) cell, (int) cell, (int) cell));
+            EntityView.clearTile(graphics2D, lastPlayerPosition, (int) cell);
+            // Print tile at last player position
+            var entityType = gameMap.data().get(lastPlayerPosition);
             if (entityType != null) {
               try {
                 EntityView.drawEntityTile(graphics2D,
-                    entityType, lastPlayerPosition, (int) cell, null);
+                    entityType, lastPlayerPosition, (int) cell);
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }

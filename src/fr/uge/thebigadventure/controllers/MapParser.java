@@ -15,16 +15,25 @@ import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
 public class MapParser {
-  private static final Pattern SECTIONS_PATTERN = Pattern.compile("\\[(\\w+)](.+?)(?=\\[|\\z)", Pattern.DOTALL);
-  private static final Pattern ATTRIBUTES_PATTERN = Pattern.compile("\\s*(\\w+)\\s*:\\s*(.+?)(?=\\s*\\w*\\s*:|\\z)", Pattern.DOTALL);
-  private static final Pattern SIZE_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
-  private static final Pattern COORD_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*");
-  private static final Pattern ZONE_PATTERN = Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
-  private static final Pattern ENCODINGS_PATTERN = Pattern.compile("\\s*(\\w+?)\\s*\\(\\s*(\\w)\\s*\\)\\s*");
-  private static final Pattern GRID_DATA_PATTERN = Pattern.compile("\"\"\"\\s*\\n(.+)\\n([ ]*)\"\"\"", Pattern.DOTALL);
-  private static final Pattern BOOLEAN_PATTERN = Pattern.compile("^true$", Pattern.CASE_INSENSITIVE);
+  private static final Pattern SECTIONS_PATTERN =
+      Pattern.compile("\\[(\\w+)](.+?)(?=\\[|\\z)", Pattern.DOTALL);
+  private static final Pattern ATTRIBUTES_PATTERN =
+      Pattern.compile("\\s*(\\w+)\\s*:\\s*(.+?)(?=\\s*\\w*\\s*:|\\z)",
+          Pattern.DOTALL);
+  private static final Pattern SIZE_PATTERN =
+      Pattern.compile("\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
+  private static final Pattern COORD_PATTERN =
+      Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*");
+  private static final Pattern ZONE_PATTERN =
+      Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
+  private static final Pattern ENCODINGS_PATTERN =
+      Pattern.compile("\\s*(\\w+?)\\s*\\(\\s*(\\w)\\s*\\)\\s*");
+  private static final Pattern GRID_DATA_PATTERN =
+      Pattern.compile("\"\"\"\\s*\\n(.+)\\n( *)\"\"\"", Pattern.DOTALL);
+  private static final Pattern BOOLEAN_PATTERN =
+      Pattern.compile("^true$", Pattern.CASE_INSENSITIVE);
   private final String text;
-  private final MapBuilder builder  = new MapBuilder();
+  private final MapBuilder builder = new MapBuilder();
   private int globalOffset = 0;
 
   public MapParser(String text) {
@@ -42,14 +51,17 @@ public class MapParser {
     var pointer = 0;
     while (matcher.find()) {
       if (matcher.start() != pointer) {
-        System.err.println("Error while parsing map : can't read section text between character #" + pointer + " and #" + matcher.start() + ".");
+        System.err.println("Error while parsing map : can't read section " +
+            "text between character #" + pointer + " and #"
+            + matcher.start() + ".");
       }
       globalOffset = matcher.start();
       parseSection(matcher.group(1), matcher.group(2).trim());
       pointer = matcher.end();
     }
     if (pointer != text.length()) {
-      System.err.println("Error while parsing map : can't read section text after character #" + pointer + ".");
+      System.err.println("Error while parsing map : can't read section text " +
+          "after character #" + pointer + ".");
     }
     return builder;
   }
@@ -58,7 +70,9 @@ public class MapParser {
     switch (name) {
       case "grid" -> parseAttributes(content, this::parseGridAttributes);
       case "element" -> parseElement(content);
-      default -> { System.err.println("Error while parsing map : section \"" + name + "\" unknown at character #" + globalOffset + "."); }
+      default ->
+          System.err.println("Error while parsing map : section \"" + name +
+              "\" unknown at character #" + globalOffset + ".");
     }
   }
 
@@ -66,19 +80,23 @@ public class MapParser {
     parseAttributes(content, this::parseElementAttributes);
     builder.pushElementBuilder();
   }
-  
-  private void parseAttributes(String content, BiConsumer<String, String> attributeParser) {
+
+  private void parseAttributes(String content,
+                               BiConsumer<String, String> attributeParser) {
     var matcher = ATTRIBUTES_PATTERN.matcher(content);
     var pointer = 0;
     while (matcher.find()) {
       if (matcher.start() != pointer) {
-        System.err.println("Error while parsing map : can't read attributes text between character #" + (globalOffset + pointer) + " and #" + (globalOffset + matcher.start()) + ".");
+        System.err.println("Error while parsing map : can't read attributes " +
+            "text between character #" + (globalOffset + pointer) + " and #" +
+            (globalOffset + matcher.start()) + ".");
       }
       attributeParser.accept(matcher.group(1), matcher.group(2).trim());
       pointer = matcher.end();
     }
     if (pointer != content.length()) {
-      System.err.println("Error while parsing map : can't read attributes text after character #" + (globalOffset + pointer) + ".");
+      System.err.println("Error while parsing map : can't read attributes " +
+          "text after character #" + (globalOffset + pointer) + ".");
     }
   }
 
@@ -87,7 +105,9 @@ public class MapParser {
       case "size" -> parseGridAttributeSize(content);
       case "encodings" -> parseGridAttributeEncodings(content);
       case "data" -> parseGridAttributeData(content);
-      default -> { System.err.println("Error while parsing map : grid attribute \"" + name + "\"."); }
+      default ->
+          System.err.println("Error while parsing map : grid attribute \"" +
+              name + "\".");
     }
   }
 
@@ -96,7 +116,8 @@ public class MapParser {
     if (!matcher.matches()) {
       System.err.println("Error while parsing map : invalid size.");
     }
-    builder.setSize(new Size(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
+    builder.setSize(new Size(Integer.parseInt(matcher.group(1)),
+        Integer.parseInt(matcher.group(2))));
   }
 
   private void parseGridAttributeEncodings(String content) {
@@ -105,16 +126,20 @@ public class MapParser {
     var pointer = 0;
     while (matcher.find()) {
       if (matcher.start() != pointer) {
-        System.err.println("Error while parsing map : error in encodings before " + matcher.group(1) + "(" + matcher.group(2) + ").");
+        System.err.println("Error while parsing map : error in encodings " +
+            "before " + matcher.group(1) + "(" + matcher.group(2) + ").");
       }
       if (encodingMap.containsKey(matcher.group(2))) {
-        System.err.println("Error while parsing map : error in encodings, letter \'" + matcher.group(2) + "\' is already associated with a skin.");
+        System.err.println("Error while parsing map : error in encodings, " +
+            "letter '" + matcher.group(2) + "' " +
+            "is already associated with a skin.");
       }
       encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
       pointer = matcher.end();
     }
     if (pointer != content.length()) {
-      System.err.println("Error while parsing map : can't finish to read encodings.");
+      System.err.println("Error while parsing map : can't finish " +
+          "to read encodings.");
     }
     builder.setEncodings(encodingMap);
   }
@@ -156,7 +181,9 @@ public class MapParser {
       case "phantomized" -> parseElementAttributePhantomized(content);
       case "teleport" -> parseElementAttributeTeleport(content);
       case "flow" -> parseElementAttributeFlow(content);
-      default -> System.err.println("Error while parsing map : unknown attribute " + name + " skipping.");
+      default ->
+          System.err.println("Error while parsing map : unknown attribute "
+              + name + " skipping.");
     }
   }
 
@@ -179,7 +206,8 @@ public class MapParser {
       System.err.println("Error while parsing map : invalid position.");
       return;
     }
-    builder.elementBuilder.setPosition(new Coord(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
+    builder.elementBuilder.setPosition(new Coord(
+        Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2))));
   }
 
   private void parseElementAttributeHealth(String content) {

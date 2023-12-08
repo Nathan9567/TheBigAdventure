@@ -1,5 +1,6 @@
 package fr.uge.thebigadventure.views;
 
+import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.models.entities.Entity;
 import fr.uge.thebigadventure.views.entities.EntityView;
@@ -9,7 +10,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class MapView {
 
@@ -39,17 +40,17 @@ public class MapView {
     drawElements(gameMap.elements(), graphics2D, cellSize);
   }
 
-  private static void drawElements(List<Entity> element, Graphics2D graphics2D,
+  private static void drawElements(Map<Coord, Entity> element, Graphics2D graphics2D,
                                    int cellSize) {
-    element.forEach(entity -> {
-      try {
-        if (entity.position() != null) {
-          EntityView.drawEntityTile(graphics2D,
-              entity.skin(), entity.position(), cellSize, null);
-        }
-      } catch (IOException e) {
-        throw new IllegalArgumentException("Cannot load image " + entity);
-      }
-    });
+    element.values().stream()
+        .filter(entity -> entity.position() != null)
+        .forEach(entity -> {
+          try {
+            EntityView.drawEntityTile(graphics2D,
+                entity.skin(), entity.position(), cellSize);
+          } catch (IOException e) {
+            throw new IllegalArgumentException("Cannot load image " + entity);
+          }
+        });
   }
 }

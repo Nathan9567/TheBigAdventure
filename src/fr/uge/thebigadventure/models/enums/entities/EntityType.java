@@ -35,6 +35,7 @@ public sealed interface EntityType permits EffectType,
     return switch (this) {
       case ObstacleType ignored -> true;
       case BiomeType ignored -> true;
+      case PersonageType ignored -> true;
       default -> false;
     };
   }

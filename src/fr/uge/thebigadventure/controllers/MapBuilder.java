@@ -10,12 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MapBuilder {
-  public ElementBuilder elementBuilder = new ElementBuilder();
   private final List<ElementBuilder> elementBuilders = new ArrayList<>();
+  public ElementBuilder elementBuilder = new ElementBuilder();
   private Size size = null;
   private Map<String, EntityType> encodings = null;
   private Map<Coord, Character> data = null;
@@ -56,10 +55,13 @@ public class MapBuilder {
       System.err.println("Grid data does not match the size provided !");
     }
   }
-  
+
   public GameMap toGameMap() {
     validateState();
-    var elements = elementBuilders.stream().map(e -> e.toEntity()).toList(); 
+    Map<Coord, Entity> elements = elementBuilders.stream()
+        .map(ElementBuilder::toEntity)
+        .filter(entity -> entity.position() != null)
+        .collect(Collectors.toMap(Entity::position, element -> element));
     System.out.println(elements);
     var mapData = data.entrySet().stream().collect(Collectors.toMap(Entry::getKey, entry -> {
       var env = encodings.get(String.valueOf(entry.getValue()));

@@ -6,7 +6,7 @@ import fr.uge.thebigadventure.models.enums.utils.Direction;
 
 import java.util.Objects;
 
-public record Box(InventoryItemType skin, String name, Coord coord,
+public record Box(InventoryItemType skin, String name, Coord position,
                   Direction direction) implements InventoryItem {
   public Box {
     Objects.requireNonNull(skin);

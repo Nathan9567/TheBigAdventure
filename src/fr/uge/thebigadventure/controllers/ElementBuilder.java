@@ -4,12 +4,12 @@ import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.Zone;
 import fr.uge.thebigadventure.models.entities.Entity;
 import fr.uge.thebigadventure.models.entities.inventory.*;
+import fr.uge.thebigadventure.models.entities.inventory.weapons.Bolt;
+import fr.uge.thebigadventure.models.entities.inventory.weapons.Shovel;
+import fr.uge.thebigadventure.models.entities.inventory.weapons.Stick;
+import fr.uge.thebigadventure.models.entities.inventory.weapons.Sword;
 import fr.uge.thebigadventure.models.entities.obstacles.Obstacle;
 import fr.uge.thebigadventure.models.entities.personages.*;
-import fr.uge.thebigadventure.models.entities.weapons.Bolt;
-import fr.uge.thebigadventure.models.entities.weapons.Shovel;
-import fr.uge.thebigadventure.models.entities.weapons.Stick;
-import fr.uge.thebigadventure.models.entities.weapons.Sword;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 import fr.uge.thebigadventure.models.enums.entities.ObstacleType;
@@ -31,14 +31,15 @@ public class ElementBuilder {
   private Behavior behavior = null;
   private int damage = 0;
   private String text = null;
-//  private List<String> steal;
+  //  private List<String> steal;
 //  private List<Trade> trade;
 //  private Lock locked;
   private Direction flow = null;
   private boolean phantomized = false;
   private String teleport = null;
 
-  public ElementBuilder() {}
+  public ElementBuilder() {
+  }
 
   public void setName(String name) {
     this.name = name;
@@ -87,13 +88,13 @@ public class ElementBuilder {
   public void setPhantomized(boolean phantomized) {
     this.phantomized = phantomized;
   }
-  
+
   public void setTeleport(String teleport) {
     this.teleport = teleport;
   }
 
   // If health != 0, then it's a personage
-  // TODO: add strealableItems in enemy constructor
+  // TODO: add stealableItems in enemy constructor
   private Personage toPersonageEntity(PersonageType personageType) {
     if (skin.name().equals("GHOST"))
       return new Ghost();
@@ -113,10 +114,10 @@ public class ElementBuilder {
 
   private InventoryItem toWeaponEntity() {
     return switch (skin) {
-      case BOLT -> new Bolt(name, damage);
-      case SHOVEL -> new Shovel(name, damage);
-      case STICK -> new Stick(name, damage);
-      case SWORD -> new Sword(name, damage);
+      case BOLT -> new Bolt(name, position, damage);
+      case SHOVEL -> new Shovel(name, position, damage);
+      case STICK -> new Stick(name, position, damage);
+      case SWORD -> new Sword(name, position, damage);
       default -> null;
     };
   }
@@ -126,11 +127,11 @@ public class ElementBuilder {
       // TODO: direction for box
       case BOLT, SHOVEL, STICK, SWORD -> toWeaponEntity();
       case BOX -> new Box(item, name, position, null);
-      case KEY -> new Key(name);
-      case MIRROR -> new Mirror();
-      case SEED -> new Seed(name);
-      case BOOK, PAPER -> new LoreItem(item, name, text);
-      default -> new BasicItem(item, name);
+      case KEY -> new Key(name, position);
+      case MIRROR -> new Mirror(name, position);
+      case SEED -> new Seed(name, position);
+      case BOOK, PAPER -> new LoreItem(item, name, text, position);
+      default -> new BasicItem(item, name, position);
     };
   }
 
@@ -143,18 +144,5 @@ public class ElementBuilder {
           toItemEntity(inventoryItemType);
       default -> throw new IllegalStateException("Unexpected value: " + skin);
     };
-//    if (skin == null)
-//      return null;
-//    if (health != 0)
-//      return toPersonageEntity();
-//    if (kind.equals(Kind.OBSTACLE))
-//      return toObstacleEntity();
-//    if (kind.equals(Kind.ITEM)) {
-//      return switch (skin) {
-//        case BOLT, SHOVEL, STICK, SWORD -> toWeaponEntity();
-//        default -> toItemEntity();
-//      };
-//    }
-//    return null;
   }
 }

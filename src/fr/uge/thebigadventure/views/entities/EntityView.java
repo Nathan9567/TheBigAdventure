@@ -18,6 +18,17 @@ public class EntityView {
         coord.y() * tileSize, tileSize, tileSize, color, null);
   }
 
+  public static void drawEntityTile(Graphics2D graphics2D,
+                                    EntityType skin, Coord coord, int tileSize)
+      throws IOException {
+    drawEntityTile(graphics2D, skin, coord, tileSize, null);
+  }
+
+  public static void clearTile(Graphics2D graphics2D, Coord coord, int tileSize) {
+    graphics2D.clearRect(coord.x() * tileSize, coord.y() * tileSize,
+        tileSize, tileSize);
+  }
+
   private static String getImagePath(EntityType skin) {
     var folder = switch (skin) {
       case BiomeType ignored -> "biomes";

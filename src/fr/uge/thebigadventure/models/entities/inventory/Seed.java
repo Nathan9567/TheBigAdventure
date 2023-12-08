@@ -1,8 +1,9 @@
 package fr.uge.thebigadventure.models.entities.inventory;
 
+import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
-public record Seed(String name) implements InventoryItem {
+public record Seed(String name, Coord position) implements InventoryItem {
 
   @Override
   public InventoryItemType skin() {

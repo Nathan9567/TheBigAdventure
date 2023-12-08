@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.models.entities.weapons;
+package fr.uge.thebigadventure.models.entities.inventory.weapons;
 
 import fr.uge.thebigadventure.models.entities.inventory.InventoryItem;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;

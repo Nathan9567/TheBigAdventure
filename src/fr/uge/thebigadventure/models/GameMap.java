@@ -9,12 +9,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public record GameMap(Size size, Map<Coord, EntityType> data,
-                      List<Entity> elements) {
+                      Map<Coord, Entity> elements) {
   public GameMap {
     Objects.requireNonNull(size, "Size cannot be null");
     if (size.width() <= 0 || size.height() <= 0) {
@@ -38,11 +37,14 @@ public record GameMap(Size size, Map<Coord, EntityType> data,
     return mapBuilder.toGameMap();
   }
 
-  public Player getPlayer() {
-    return (Player) elements.stream()
-        .filter(entity -> entity instanceof Player)
-        .findFirst()
-        .orElseThrow(() -> new IllegalStateException("No player found"));
-  }
 
+  // TODO: remove cast to Player
+  public Player getPlayer() {
+    for (var entry : elements.entrySet()) {
+      if (entry.getValue() instanceof Player) {
+        return (Player) entry.getValue();
+      }
+    }
+    throw new IllegalStateException("No player found in map");
+  }
 }

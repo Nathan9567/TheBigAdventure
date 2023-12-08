@@ -1,15 +1,19 @@
-package fr.uge.thebigadventure.models.entities.weapons;
+package fr.uge.thebigadventure.models.entities.inventory.weapons;
 
+import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
-public class Stick implements WeaponInterface {
+public class Sword implements WeaponInterface {
 
   private final Weapon weapon;
-
   private boolean isIgnite;
 
-  public Stick(String name, int damage) {
-    weapon = new Weapon(InventoryItemType.STICK, name, damage);
+  public Sword(String name, Coord position, int damage) {
+    weapon = new Weapon(InventoryItemType.SWORD, name, position, damage);
+  }
+
+  public Sword(String name, int damage) {
+    this(name, null, damage);
   }
 
   @Override
@@ -20,6 +24,11 @@ public class Stick implements WeaponInterface {
   @Override
   public InventoryItemType skin() {
     return weapon.skin();
+  }
+
+  @Override
+  public Coord position() {
+    return weapon.position();
   }
 
   @Override
