@@ -33,7 +33,7 @@ public class NPCController {
   private boolean isValidMove(Direction direction, GameMap gameMap) {
     var newPosition = npc.position().move(direction);
     if (!newPosition.inBounds(gameMap.size()) ||
-            !npc.getZone().contains(newPosition)) {
+        !npc.getZone().contains(newPosition)) {
       return false;
     }
     var entityType = gameMap.data().get(newPosition);
@@ -47,7 +47,8 @@ public class NPCController {
       case 1 -> Direction.SOUTH;
       case 2 -> Direction.EAST;
       case 3 -> Direction.WEST;
-      default -> throw new IllegalArgumentException("Unexpected value: " + random.nextInt());
+      default ->
+          throw new IllegalArgumentException("Unexpected value: " + random.nextInt());
     };
     if (!isValidMove(direction, gameMap)) {
       move(gameMap);
@@ -56,4 +57,7 @@ public class NPCController {
     npc.setPosition(npc.position().move(direction));
   }
 
+  public NPCView getNpcView() {
+    return npcView;
+  }
 }

@@ -10,7 +10,7 @@ public class NPCView {
 
   public void renderNPC(Graphics2D graphics2D, Personage npc, int cellSize) throws Exception {
     EntityView.drawEntityTile(graphics2D,
-            npc.skin(), npc.position(), cellSize);
+        npc.skin(), npc.position(), cellSize);
   }
 
   public void clearNPC(Graphics2D graphics2D, Coord lastPosition, int cellSize) {
