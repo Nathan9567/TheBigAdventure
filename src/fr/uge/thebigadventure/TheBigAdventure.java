@@ -2,19 +2,24 @@ package fr.uge.thebigadventure;
 
 import fr.uge.thebigadventure.controllers.CommandLineParser;
 import fr.uge.thebigadventure.controllers.KeyboardController;
+import fr.uge.thebigadventure.controllers.NPCController;
 import fr.uge.thebigadventure.models.Coord;
 import fr.uge.thebigadventure.models.GameMap;
+import fr.uge.thebigadventure.models.entities.personages.NPC;
 import fr.uge.thebigadventure.models.entities.personages.Player;
 import fr.uge.thebigadventure.views.MapView;
-import fr.uge.thebigadventure.views.entities.EntityView;
+import fr.uge.thebigadventure.views.entities.NPCView;
 import fr.uge.thebigadventure.views.entities.PlayerView;
 import fr.umlv.zen5.Application;
+import fr.umlv.zen5.ApplicationContext;
 import fr.umlv.zen5.Event;
 import fr.umlv.zen5.Event.Action;
 import fr.umlv.zen5.ScreenInfo;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TheBigAdventure {
 
@@ -58,29 +63,18 @@ public class TheBigAdventure {
         graphics2D.dispose();
       });
 
+      var npcControllerHashMap = new HashMap<NPC, NPCController>();
+      gameMap.personages().stream().filter(personage -> personage instanceof NPC)
+              .forEach(npc -> npcControllerHashMap.put((NPC) npc, new NPCController((NPC) npc, new NPCView())));
+
       while (true) {
-        var time = System.currentTimeMillis();
         Event event = context.pollOrWaitEvent(50);
+
+        renderNPCFrame(context, npcControllerHashMap, gameMap, (int) cell);
+
         if (event == null) {
           continue;
         }
-
-        // TODO : NPC movement
-//        gameMap.personages().stream()
-//                .filter(personage -> personage instanceof NPC)
-//                .forEach(npc -> {
-//                  var npcView = new NPCView();
-//                  var npcController = new NPCController((NPC) npc, npcView);
-//                  if (npcController.update(gameMap)) {
-//                    context.renderFrame(graphics2D -> {
-//                      try {
-//                        npcView.renderNPC(graphics2D, npc, (int) cell);
-//                      } catch (Exception e) {
-//                        throw new IllegalStateException("Cannot render frame");
-//                      }
-//                    });
-//                  }
-//                });
 
         // Quit application on key pressed or released
         Action action = event.getAction();
@@ -90,7 +84,7 @@ public class TheBigAdventure {
             KeyboardController.handlePlayerControl(event, player, gameMap);
             context.renderFrame(graphics2D -> {
               try {
-                renderFrame(graphics2D, gameMap, player, cell, lastPlayerPosition);
+                renderPlayerFrame(graphics2D, gameMap, player, cell, lastPlayerPosition);
               } catch (Exception e) {
                 throw new IllegalStateException("Cannot render frame");
               }
@@ -104,13 +98,13 @@ public class TheBigAdventure {
     });
   }
 
-  private static void renderFrame(Graphics2D graphics2D, GameMap gameMap,
-                                  Player player, float cell, Coord lastPlayerPosition) throws Exception {
+  private static void renderPlayerFrame(Graphics2D graphics2D, GameMap gameMap,
+                                        Player player, float cell, Coord lastPlayerPosition) throws Exception {
     PlayerView.renderPlayer(graphics2D, player, (int) cell);
     if (lastPlayerPosition.equals(player.position())) {
       return;
     }
-    EntityView.clearTile(graphics2D, lastPlayerPosition, (int) cell);
+    PlayerView.clearPlayer(graphics2D, lastPlayerPosition, (int) cell);
     var entityType = gameMap.data().get(lastPlayerPosition);
     var entity = gameMap.elements().get(lastPlayerPosition);
     if (entityType != null) {
@@ -122,4 +116,26 @@ public class TheBigAdventure {
               lastPlayerPosition, (int) cell);
     }
   }
+
+  private static void renderNPCFrame(ApplicationContext context, Map<NPC, NPCController> npcControllerMap,
+                                     GameMap gameMap, int cellSize) {
+    npcControllerMap.forEach((npc, npcController) -> {
+      var lastPosition = npc.position();
+      if (npcController.update(gameMap)) {
+        System.out.println("Last " + lastPosition);
+        context.renderFrame(graphics2D -> {
+          System.out.println("Actual " + npc.position());
+          var npcView = new NPCView();
+          try {
+            npcView.renderNPC(graphics2D, npc, cellSize);
+            npcView.clearNPC(graphics2D, lastPosition, cellSize);
+            npcView.restoreLastTileState(graphics2D, npc.skin(), lastPosition, cellSize);
+          } catch (Exception e) {
+            throw new IllegalStateException("Cannot render frame");
+          }
+        });
+      }
+    });
+  }
+
 }

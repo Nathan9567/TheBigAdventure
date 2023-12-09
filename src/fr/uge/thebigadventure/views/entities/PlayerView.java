@@ -14,8 +14,8 @@ public class PlayerView {
             player.skin(), player.position(), cellSize);
   }
 
-  public static void clearPlayer(Graphics2D graphics2D, Player player, int cellSize) {
-    EntityView.clearTile(graphics2D, player.position(), cellSize);
+  public static void clearPlayer(Graphics2D graphics2D, Coord lastPosition, int cellSize) {
+    EntityView.clearTile(graphics2D, lastPosition, cellSize);
   }
 
   public static void restoreLastTileState(Graphics2D graphics2D, EntityType tile,

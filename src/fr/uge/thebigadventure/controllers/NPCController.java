@@ -21,9 +21,10 @@ public class NPCController {
 
   public boolean update(GameMap gameMap) {
     long currentTime = System.currentTimeMillis();
-    if (currentTime - lastTime < delay) {
+    if (currentTime - lastTime <= delay) {
       return false;
     }
+    System.out.println("NPC update");
     lastTime = currentTime;
     move(gameMap);
     return true;
@@ -41,7 +42,6 @@ public class NPCController {
 
   private void move(GameMap gameMap) {
     Random random = new Random();
-    random.ints(0, 4);
     var direction = switch (random.nextInt(4)) {
       case 0 -> Direction.NORTH;
       case 1 -> Direction.SOUTH;
@@ -50,6 +50,7 @@ public class NPCController {
       default -> throw new IllegalArgumentException("Unexpected value: " + random.nextInt());
     };
     if (!isValidMove(direction, gameMap)) {
+      move(gameMap);
       return;
     }
     npc.setPosition(npc.position().move(direction));
