@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.controllers;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.Zone;
 import fr.uge.thebigadventure.models.entities.Entity;
 import fr.uge.thebigadventure.models.entities.inventory.*;
@@ -24,7 +24,7 @@ public class ElementBuilder {
   private String name = null;
   private EntityType skin = null;
   private boolean player = false;
-  private Coord position = null;
+  private Coordinates position = null;
   private int health = 0;
   private Kind kind = null;
   private Zone zone = null;
@@ -53,7 +53,7 @@ public class ElementBuilder {
     this.player = player;
   }
 
-  public void setPosition(Coord position) {
+  public void setPosition(Coordinates position) {
     this.position = position;
   }
 
@@ -143,7 +143,8 @@ public class ElementBuilder {
     return switch (skin) {
       case null -> null;
       case ObstacleType obstacleType -> toObstacleEntity(obstacleType);
-      case InventoryItemType inventoryItemType -> toItemEntity(inventoryItemType);
+      case InventoryItemType inventoryItemType ->
+          toItemEntity(inventoryItemType);
       case PersonageType personageType -> toPersonageEntity(personageType);
       default -> throw new IllegalStateException("Unexpected value: " + skin);
     };

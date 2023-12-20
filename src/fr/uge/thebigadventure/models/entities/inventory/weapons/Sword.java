@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.models.entities.inventory.weapons;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
 public class Sword implements WeaponInterface {
@@ -8,7 +8,7 @@ public class Sword implements WeaponInterface {
   private final Weapon weapon;
   private boolean isIgnite;
 
-  public Sword(String name, Coord position, int damage) {
+  public Sword(String name, Coordinates position, int damage) {
     weapon = new Weapon(InventoryItemType.SWORD, name, position, damage);
   }
 
@@ -27,7 +27,7 @@ public class Sword implements WeaponInterface {
   }
 
   @Override
-  public Coord position() {
+  public Coordinates position() {
     return weapon.position();
   }
 

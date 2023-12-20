@@ -32,7 +32,7 @@ public class NPCController {
 
   private boolean isValidMove(Direction direction, GameMap gameMap) {
     var newPosition = npc.position().move(direction);
-    if (!newPosition.inBounds(gameMap.size()) ||
+    if (newPosition.notInBounds(gameMap.size()) ||
         !npc.getZone().contains(newPosition)) {
       return false;
     }

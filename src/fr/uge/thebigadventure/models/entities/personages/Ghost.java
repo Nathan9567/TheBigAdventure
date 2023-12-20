@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.models.entities.personages;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.entities.obstacles.Obstacle;
 import fr.uge.thebigadventure.models.enums.entities.ObstacleType;
 import fr.uge.thebigadventure.models.enums.entities.PersonageType;
@@ -29,11 +29,11 @@ public class Ghost implements Personage {
   }
 
   @Override
-  public Coord position() {
+  public Coordinates position() {
     return null;
   }
 
   @Override
-  public void setPosition(Coord position) {
+  public void setPosition(Coordinates position) {
   }
 }

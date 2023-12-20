@@ -1,9 +1,9 @@
 package fr.uge.thebigadventure.models.entities.inventory.weapons;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
-public record Bolt(String name, Coord position,
+public record Bolt(String name, Coordinates position,
                    int damage) implements WeaponInterface {
 
   public Bolt {

@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.models.entities;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
 
 public interface Entity {
@@ -8,7 +8,7 @@ public interface Entity {
 
   EntityType skin();
 
-  default Coord position() {
+  default Coordinates position() {
     return null;
   }
 }

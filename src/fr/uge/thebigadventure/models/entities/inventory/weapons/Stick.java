@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.models.entities.inventory.weapons;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
 public class Stick implements WeaponInterface {
@@ -9,7 +9,7 @@ public class Stick implements WeaponInterface {
 
   private boolean isIgnite;
 
-  public Stick(String name, Coord position, int damage) {
+  public Stick(String name, Coordinates position, int damage) {
     weapon = new Weapon(InventoryItemType.STICK, name, position, damage);
   }
 
@@ -28,7 +28,7 @@ public class Stick implements WeaponInterface {
   }
 
   @Override
-  public Coord position() {
+  public Coordinates position() {
     return weapon.position();
   }
 

@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.models.entities.personages;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.Zone;
 import fr.uge.thebigadventure.models.enums.entities.PersonageType;
 
@@ -12,10 +12,10 @@ public final class Ally implements NPC {
   private final String name;
   private final String text;
   private final Zone zone;
-  private Coord position;
+  private Coordinates position;
 
   // TODO : Implement trade system
-  public Ally(PersonageType skin, String name, Coord position, Zone zone,
+  public Ally(PersonageType skin, String name, Coordinates position, Zone zone,
               String text) {
     Objects.requireNonNull(skin, "Skin cannot be null");
     this.skin = skin;
@@ -37,12 +37,12 @@ public final class Ally implements NPC {
   }
 
   @Override
-  public Coord position() {
+  public Coordinates position() {
     return position;
   }
 
   @Override
-  public void setPosition(Coord position) {
+  public void setPosition(Coordinates position) {
     this.position = position;
   }
 

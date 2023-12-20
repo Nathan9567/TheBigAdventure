@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.controllers;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.models.Size;
 import fr.uge.thebigadventure.models.Zone;
@@ -154,7 +154,7 @@ public class MapParser {
     var matcher = GRID_DATA_PATTERN.matcher(content);
     if (!matcher.find())
       System.err.println("Error while parsing map : grid data invalid.");
-    HashMap<Coord, Character> map = new HashMap<>();
+    HashMap<Coordinates, Character> map = new HashMap<>();
     var y = 0;
     var x = 0;
     for (var lineMap : matcher.group(1).split("\n")) {
@@ -164,7 +164,7 @@ public class MapParser {
           x++;
           continue;
         }
-        map.put(new Coord(x, y), charMap);
+        map.put(new Coordinates(x, y), charMap);
         x++;
       }
       y++;
@@ -217,10 +217,10 @@ public class MapParser {
       System.err.println("Error while parsing map : invalid position.");
       return;
     }
-    builder.elementBuilder.setPosition(new Coord(
+    builder.elementBuilder.setPosition(new Coordinates(
         Integer.parseInt(matcher.group(1)),
         Integer.parseInt(matcher.group(2))
-        ));
+    ));
   }
 
   private void parseElementAttributeHealth(String content) {
@@ -247,7 +247,7 @@ public class MapParser {
     }
     builder.elementBuilder.setZone(
         new Zone(
-            new Coord(
+            new Coordinates(
                 Integer.parseInt(matcher.group(1)),
                 Integer.parseInt(matcher.group(2))
             ),
@@ -260,7 +260,7 @@ public class MapParser {
   }
 
   private void parseElementAttributeBehavior(String content) {
-    try {      
+    try {
       builder.elementBuilder.setBehavior(Behavior.valueOf(content.toUpperCase(Locale.ROOT)));
     } catch (IllegalArgumentException e) {
       System.err.println("Error while parsing map : invalid behavior \"" + content.toUpperCase(Locale.ROOT) + "\".");
@@ -268,7 +268,7 @@ public class MapParser {
   }
 
   private void parseElementAttributeDamage(String content) {
-    try {      
+    try {
       builder.elementBuilder.setDamage(Integer.parseInt(content));
     } catch (NumberFormatException e) {
       System.err.println("Error while parsing map : damage \"" + content + "\" is not a number.");
@@ -280,9 +280,9 @@ public class MapParser {
     matcher.matches();
     builder.elementBuilder.setLocked(matcher.group(1), matcher.group(2));
   }*/
-  
+
   private void parseElementAttributeFlow(String content) {
-    try {      
+    try {
       builder.elementBuilder.setFlow(Direction.valueOf(content));
     } catch (IllegalArgumentException e) {
       System.err.println("Error while parsing map : invalid flow \"" + content + "\".");

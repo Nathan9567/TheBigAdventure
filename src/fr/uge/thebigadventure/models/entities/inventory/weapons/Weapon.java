@@ -1,13 +1,13 @@
 package fr.uge.thebigadventure.models.entities.inventory.weapons;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 import fr.uge.thebigadventure.models.enums.utils.WeaponType;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-public record Weapon(InventoryItemType skin, String name, Coord position,
+public record Weapon(InventoryItemType skin, String name, Coordinates position,
                      int damage) implements WeaponInterface {
 
   public Weapon {

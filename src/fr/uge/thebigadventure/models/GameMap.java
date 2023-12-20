@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public record GameMap(Size size, Map<Coord, EntityType> data,
-                      Map<Coord, Entity> elements,
+public record GameMap(Size size, Map<Coordinates, EntityType> data,
+                      Map<Coordinates, Entity> elements,
                       List<Personage> personages) {
   public GameMap {
     Objects.requireNonNull(size, "Size cannot be null");
@@ -43,8 +43,8 @@ public record GameMap(Size size, Map<Coord, EntityType> data,
   // TODO: remove cast to Player
   public Player getPlayer() {
     var playerSearch = personages.stream()
-            .filter(personage -> personage instanceof Player)
-            .findFirst();
+        .filter(personage -> personage instanceof Player)
+        .findFirst();
     if (playerSearch.isPresent()) {
       return (Player) playerSearch.get();
     }

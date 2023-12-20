@@ -1,7 +1,7 @@
 package fr.uge.thebigadventure.models.entities.personages;
 
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.Zone;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 import fr.uge.thebigadventure.models.enums.entities.PersonageType;
@@ -21,9 +21,9 @@ public final class Enemy implements NPC {
   private final int damage;
   private final List<InventoryItemType> stealableItems;
   private int health;
-  private Coord position;
+  private Coordinates position;
 
-  public Enemy(PersonageType skin, String name, Coord position, Kind kind,
+  public Enemy(PersonageType skin, String name, Coordinates position, Kind kind,
                int health, Behavior behavior, int damage, Zone zone,
                List<InventoryItemType> stealableItems) {
     Objects.requireNonNull(skin, "Skin cannot be null");
@@ -55,11 +55,11 @@ public final class Enemy implements NPC {
   }
 
   @Override
-  public Coord position() {
+  public Coordinates position() {
     return position;
   }
 
-  public void setPosition(Coord position) {
+  public void setPosition(Coordinates position) {
     this.position = position;
   }
 

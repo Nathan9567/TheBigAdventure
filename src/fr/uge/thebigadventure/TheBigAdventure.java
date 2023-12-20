@@ -3,12 +3,11 @@ package fr.uge.thebigadventure;
 import fr.uge.thebigadventure.controllers.CommandLineParser;
 import fr.uge.thebigadventure.controllers.KeyboardController;
 import fr.uge.thebigadventure.controllers.NPCController;
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.controllers.PlayerController;
 import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.models.entities.personages.NPC;
 import fr.uge.thebigadventure.models.entities.personages.Player;
 import fr.uge.thebigadventure.views.MapView;
-import fr.uge.thebigadventure.views.entities.NPCView;
 import fr.uge.thebigadventure.views.entities.PlayerView;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
@@ -17,7 +16,6 @@ import fr.umlv.zen5.ScreenInfo;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class TheBigAdventure {
@@ -56,22 +54,24 @@ public class TheBigAdventure {
       float width = screenInfo.getWidth();
       float cell = width / nb_tiles;
 
+      PlayerController playerController = new PlayerController(player, new PlayerView(player, (int) cell), gameMap);
       // Print map
+      MapView mapView = new MapView();
       context.renderFrame(graphics2D -> {
-        MapView.drawMap(gameMap, graphics2D, (int) cell, bkgdColor);
+        mapView.drawMap(gameMap, graphics2D, (int) cell, bkgdColor);
         graphics2D.dispose();
       });
 
-      var npcControllerHashMap = new HashMap<NPC, NPCController>();
-      gameMap.personages().stream().filter(personage -> personage instanceof NPC)
-          .forEach(npc -> npcControllerHashMap.put((NPC) npc, new NPCController((NPC) npc, new NPCView())));
+//      var npcControllerHashMap = new HashMap<NPC, NPCController>();
+//      gameMap.personages().stream().filter(personage -> personage instanceof NPC)
+//          .forEach(npc -> npcControllerHashMap.put((NPC) npc, new NPCController((NPC) npc, new NPCView())));
 
       while (true) {
         Event event = context.pollOrWaitEvent(50);
-        context.renderFrame(graphics2D -> {
-          renderNPCFrame(graphics2D, npcControllerHashMap, gameMap, (int) cell);
-          graphics2D.dispose();
-        });
+//        context.renderFrame(graphics2D -> {
+//          renderNPCFrame(graphics2D, npcControllerHashMap, gameMap, (int) cell);
+//          graphics2D.dispose();
+//        });
 
         if (event == null) {
           continue;
@@ -80,42 +80,24 @@ public class TheBigAdventure {
         // Quit application on key pressed or released
         Action action = event.getAction();
         if (action == Action.KEY_PRESSED) {
+          KeyboardController keyboardController = new KeyboardController(event.getKey());
           if (player != null) {
-            var lastPlayerPosition = player.position();
-            KeyboardController.handlePlayerControl(event, player, gameMap);
+            keyboardController.handlePlayerControl(playerController);
             context.renderFrame(graphics2D -> {
               try {
-                renderPlayerFrame(graphics2D, gameMap, player, cell, lastPlayerPosition);
+                mapView.drawMap(gameMap, graphics2D, (int) cell, bkgdColor);
+                playerController.getPlayerView().showPlayer(graphics2D);
               } catch (Exception e) {
                 throw new IllegalStateException("Cannot render frame");
               }
             });
           }
-          if (KeyboardController.handleQuitControl(context, event)) {
+          if (keyboardController.handleQuitControl(context)) {
             return;
           }
         }
       }
     });
-  }
-
-  private static void renderPlayerFrame(Graphics2D graphics2D, GameMap gameMap,
-                                        Player player, float cell, Coord lastPlayerPosition) throws Exception {
-    PlayerView.renderPlayer(graphics2D, player, (int) cell);
-    if (lastPlayerPosition.equals(player.position())) {
-      return;
-    }
-    PlayerView.clearPlayer(graphics2D, lastPlayerPosition, (int) cell);
-    var entityType = gameMap.data().get(lastPlayerPosition);
-    var entity = gameMap.elements().get(lastPlayerPosition);
-    if (entityType != null) {
-      PlayerView.restoreLastTileState(graphics2D, entityType,
-          lastPlayerPosition, (int) cell);
-    }
-    if (entity != null) {
-      PlayerView.restoreLastTileState(graphics2D, entity.skin(),
-          lastPlayerPosition, (int) cell);
-    }
   }
 
   private static void renderNPCFrame(Graphics2D graphics2D, Map<NPC, NPCController> npcControllerMap,

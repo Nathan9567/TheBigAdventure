@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.controllers;
 
-import fr.uge.thebigadventure.models.Coord;
+import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.GameMap;
 import fr.uge.thebigadventure.models.Size;
 import fr.uge.thebigadventure.models.entities.Entity;
@@ -18,7 +18,7 @@ public class MapBuilder {
   public ElementBuilder elementBuilder = new ElementBuilder();
   private Size size = null;
   private Map<String, EntityType> encodings = null;
-  private Map<Coord, Character> data = null;
+  private Map<Coordinates, Character> data = null;
   private Size effectiveSize;
 
   public void setSize(Size size) {
@@ -33,7 +33,7 @@ public class MapBuilder {
     this.encodings = encodings;
   }
 
-  public void setData(Map<Coord, Character> data) {
+  public void setData(Map<Coordinates, Character> data) {
     this.data = data;
   }
 
@@ -60,11 +60,11 @@ public class MapBuilder {
   public GameMap toGameMap() {
     validateState();
     var elements = elementBuilders.stream()
-            .map(ElementBuilder::toEntity)
-            .filter(entity -> entity.position() != null)
-            .collect(Collectors.toMap(Entity::position, element -> element));
+        .map(ElementBuilder::toEntity)
+        .filter(entity -> entity.position() != null)
+        .collect(Collectors.toMap(Entity::position, element -> element));
     var personages = elements.values().stream().filter(entity -> entity instanceof Personage)
-            .map(entity -> (Personage) entity).toList();
+        .map(entity -> (Personage) entity).toList();
     elements.values().removeAll(personages);
     System.out.println(elements);
     System.out.println(personages);
