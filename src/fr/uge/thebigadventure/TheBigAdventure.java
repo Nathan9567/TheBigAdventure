@@ -1,13 +1,9 @@
 package fr.uge.thebigadventure;
 
-import fr.uge.thebigadventure.controllers.CommandLineParser;
-import fr.uge.thebigadventure.controllers.KeyboardController;
-import fr.uge.thebigadventure.controllers.NPCController;
-import fr.uge.thebigadventure.controllers.PlayerController;
+import fr.uge.thebigadventure.controllers.*;
 import fr.uge.thebigadventure.models.GameMap;
-import fr.uge.thebigadventure.models.entities.personages.NPC;
 import fr.uge.thebigadventure.models.entities.personages.Player;
-import fr.uge.thebigadventure.views.MapView;
+import fr.uge.thebigadventure.views.entities.NPCView;
 import fr.uge.thebigadventure.views.entities.PlayerView;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
@@ -16,13 +12,12 @@ import fr.umlv.zen5.ScreenInfo;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.Map;
 
 public class TheBigAdventure {
 
   public static void main(String[] args) throws IllegalAccessException {
     // Number of tiles to show :
-    int nb_tiles = 70;
+    int nb_tiles = 30;
 
     var commandParser = new CommandLineParser(args);
     commandParser.parse();
@@ -48,6 +43,7 @@ public class TheBigAdventure {
 
     Color bkgdColor = new Color(113, 94, 68, 255);
     Application.run(bkgdColor, context -> {
+      boolean update = false;
 
       // get the size of the screen
       ScreenInfo screenInfo = context.getScreenInfo();
@@ -55,23 +51,21 @@ public class TheBigAdventure {
       float cell = width / nb_tiles;
 
       PlayerController playerController = new PlayerController(player, new PlayerView(player, (int) cell), gameMap);
+      var npcControllers = gameMap.getNpcs().stream().map(npc ->
+          new NPCController(npc, new NPCView(npc, (int) cell))).toList();
+      MapController mapController = new MapController(gameMap, playerController, npcControllers);
       // Print map
-      MapView mapView = new MapView();
       context.renderFrame(graphics2D -> {
-        mapView.drawMap(gameMap, graphics2D, (int) cell, bkgdColor);
+        try {
+          mapController.updateView(graphics2D, (int) cell);
+        } catch (IOException e) {
+          throw new IllegalStateException("Cannot render frame");
+        }
         graphics2D.dispose();
       });
 
-//      var npcControllerHashMap = new HashMap<NPC, NPCController>();
-//      gameMap.personages().stream().filter(personage -> personage instanceof NPC)
-//          .forEach(npc -> npcControllerHashMap.put((NPC) npc, new NPCController((NPC) npc, new NPCView())));
-
       while (true) {
-        Event event = context.pollOrWaitEvent(50);
-//        context.renderFrame(graphics2D -> {
-//          renderNPCFrame(graphics2D, npcControllerHashMap, gameMap, (int) cell);
-//          graphics2D.dispose();
-//        });
+        Event event = context.pollOrWaitEvent(30);
 
         if (event == null) {
           continue;
@@ -79,39 +73,30 @@ public class TheBigAdventure {
 
         // Quit application on key pressed or released
         Action action = event.getAction();
+        KeyboardController keyboardController = null;
         if (action == Action.KEY_PRESSED) {
-          KeyboardController keyboardController = new KeyboardController(event.getKey());
-          if (player != null) {
-            keyboardController.handlePlayerControl(playerController);
-            context.renderFrame(graphics2D -> {
-              try {
-                mapView.drawMap(gameMap, graphics2D, (int) cell, bkgdColor);
-                playerController.getPlayerView().showPlayer(graphics2D);
-              } catch (Exception e) {
-                throw new IllegalStateException("Cannot render frame");
-              }
-            });
-          }
-          if (keyboardController.handleQuitControl(context)) {
-            return;
+          keyboardController = new KeyboardController(event.getKey());
+        }
+        if (player != null && keyboardController != null) {
+          update = keyboardController.handlePlayerControl(playerController);
+        }
+        for (var npcController : npcControllers) {
+          if (npcController.update(gameMap)) {
+            update = true;
           }
         }
-      }
-    });
-  }
-
-  private static void renderNPCFrame(Graphics2D graphics2D, Map<NPC, NPCController> npcControllerMap,
-                                     GameMap gameMap, int cellSize) {
-    npcControllerMap.forEach((npc, npcController) -> {
-      var lastPosition = npc.position();
-      if (npcController.update(gameMap)) {
-        System.out.println("Last " + lastPosition);
-        try {
-          npcController.getNpcView().renderNPC(graphics2D, npc, cellSize);
-          npcController.getNpcView().clearNPC(graphics2D, lastPosition, cellSize);
-          npcController.getNpcView().restoreLastTileState(graphics2D, npc.skin(), lastPosition, cellSize);
-        } catch (Exception e) {
-          throw new IllegalStateException("Cannot render frame");
+        if (update) {
+          context.renderFrame(graphics2D -> {
+            try {
+              mapController.updateView(graphics2D, (int) cell);
+            } catch (IOException e) {
+              throw new IllegalStateException("Cannot render frame");
+            }
+            graphics2D.dispose();
+          });
+        }
+        if (keyboardController != null && keyboardController.handleQuitControl(context)) {
+          return;
         }
       }
     });

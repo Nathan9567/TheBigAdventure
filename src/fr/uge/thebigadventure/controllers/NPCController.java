@@ -5,11 +5,12 @@ import fr.uge.thebigadventure.models.entities.personages.NPC;
 import fr.uge.thebigadventure.models.enums.utils.Direction;
 import fr.uge.thebigadventure.views.entities.NPCView;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.Random;
 
 public class NPCController {
 
-  private final long delay = 1000;
   private final NPCView npcView;
   private final NPC npc;
   private long lastTime = 0;
@@ -20,13 +21,14 @@ public class NPCController {
   }
 
   public boolean update(GameMap gameMap) {
+    long delay = 1000;
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastTime <= delay) {
       return false;
     }
     System.out.println("NPC update");
     lastTime = currentTime;
-    move(gameMap);
+    randomMove(gameMap);
     return true;
   }
 
@@ -40,21 +42,34 @@ public class NPCController {
     return entityType == null || !entityType.isObstacle();
   }
 
-  private void move(GameMap gameMap) {
-    Random random = new Random();
-    var direction = switch (random.nextInt(4)) {
+  private Direction randomDirection() {
+    var random = new Random();
+    var randomInt = random.nextInt(5);
+    return switch (randomInt) {
       case 0 -> Direction.NORTH;
       case 1 -> Direction.SOUTH;
       case 2 -> Direction.EAST;
       case 3 -> Direction.WEST;
+      case 4 -> null;
       default ->
-          throw new IllegalArgumentException("Unexpected value: " + random.nextInt());
+          throw new IllegalStateException("Unexpected value: " + randomInt);
     };
+  }
+
+  private void randomMove(GameMap gameMap) {
+    var direction = randomDirection();
+    if (direction == null) {
+      return;
+    }
     if (!isValidMove(direction, gameMap)) {
-      move(gameMap);
+      randomMove(gameMap);
       return;
     }
     npc.setPosition(npc.position().move(direction));
+  }
+
+  public void updateView(Graphics2D graphics2D) throws IOException {
+    npcView.renderNPC(graphics2D);
   }
 
   public NPCView getNpcView() {

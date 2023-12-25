@@ -12,13 +12,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Player implements Personage {
+public final class Player implements Personage {
 
   private final PersonageType skin;
   private final String name;
   private final List<InventoryItem> inventory = new ArrayList<>();
+  private final int maxHealth;
+  private int currentHealth;
   private WeaponInterface weapon;
-  private int health;
   private Coordinates position;
   private Direction direction;
 
@@ -33,7 +34,8 @@ public class Player implements Personage {
     Objects.requireNonNull(position, "Position cannot be null");
     this.name = name;
     this.position = position;
-    this.health = health;
+    this.maxHealth = health;
+    this.currentHealth = health;
     this.direction = null;
   }
 
@@ -46,12 +48,8 @@ public class Player implements Personage {
     this.position = position;
   }
 
-  public int getHealth() {
-    return health;
-  }
-
-  public void setHealth(int health) {
-    this.health = health;
+  public int maxHealth() {
+    return maxHealth;
   }
 
   public String name() {
@@ -75,6 +73,7 @@ public class Player implements Personage {
   }
 
   public void addItemToInventory(InventoryItem item) {
+    Objects.requireNonNull(item, "Item cannot be null");
     inventory.add(item);
   }
 
@@ -83,6 +82,15 @@ public class Player implements Personage {
   }
 
   public void setWeapon(WeaponInterface weapon) {
+    Objects.requireNonNull(weapon, "Weapon cannot be null");
     this.weapon = weapon;
+  }
+
+  public int health() {
+    return currentHealth;
+  }
+
+  public void setCurrentHealth(int currentHealth) {
+    this.currentHealth = currentHealth;
   }
 }

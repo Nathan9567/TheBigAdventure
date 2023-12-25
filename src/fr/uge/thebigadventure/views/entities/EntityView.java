@@ -31,19 +31,12 @@ public class EntityView {
   }
 
   public void drawEntityTile(Graphics2D graphics2D,
-                             EntityType skin, Coordinates coordinates, int tileSize,
-                             Color color) throws IOException {
+                             EntityType skin, Coordinates coordinates, int tileSize) throws IOException {
     var imagePath = getImagePath(skin);
     var image = getImage(imagePath);
     var resizedImage = resizeImage(image, tileSize, tileSize);
     graphics2D.drawImage(resizedImage, coordinates.x() * tileSize,
-        coordinates.y() * tileSize, color, null);
-  }
-
-  public void drawEntityTile(Graphics2D graphics2D,
-                             EntityType skin, Coordinates coordinates, int tileSize)
-      throws IOException {
-    drawEntityTile(graphics2D, skin, coordinates, tileSize, null);
+        coordinates.y() * tileSize, null);
   }
 
   public void clearTile(Graphics2D graphics2D, Coordinates coordinates, int tileSize) {

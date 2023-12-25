@@ -106,7 +106,7 @@ public class ElementBuilder {
       return new Player(personageType, name, position, health);
     if (kind == Kind.ENEMY)
       return new Enemy(personageType, name, position, kind, health, behavior, damage, zone, null);
-    if (kind.equals(Kind.FRIEND))
+    if (kind == Kind.FRIEND)
       return new Ally(personageType, name, position, zone, text);
     return null;
   }

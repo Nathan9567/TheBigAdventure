@@ -14,15 +14,16 @@ public record KeyboardController(KeyboardKey keyboardKey) {
     return false;
   }
 
-  public void handlePlayerControl(PlayerController playerController) {
-    switch (keyboardKey) {
+  public boolean handlePlayerControl(PlayerController playerController) {
+    return switch (keyboardKey) {
       case UP -> playerController.movePlayer(Direction.NORTH);
       case DOWN -> playerController.movePlayer(Direction.SOUTH);
       case RIGHT -> playerController.movePlayer(Direction.EAST);
       case LEFT -> playerController.movePlayer(Direction.WEST);
-      case SPACE -> {
-        // TODO: Action controller
-      }
-    }
+//      case SPACE -> {
+//        // TODO: Action controller
+//      }
+      default -> false;
+    };
   }
 }
