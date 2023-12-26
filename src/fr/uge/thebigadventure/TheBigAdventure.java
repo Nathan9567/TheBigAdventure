@@ -15,9 +15,6 @@ import java.io.IOException;
 public class TheBigAdventure {
 
   public static void main(String[] args) throws IllegalAccessException {
-    // Number of tiles to show :
-    int nb_tiles = 30;
-
     var commandParser = new CommandLineParser(args);
     commandParser.parse();
     var mapPath = commandParser.getMapPath();
@@ -49,15 +46,20 @@ public class TheBigAdventure {
       while (true) {
         Event event = context.pollOrWaitEvent(30);
 
-        mapController.updateNpcControllers();
-        context.renderFrame(graphics2D -> {
-          try {
-            mapController.updateView(graphics2D);
-          } catch (IOException e) {
-            throw new IllegalStateException("Cannot render frame");
-          }
-          graphics2D.dispose();
-        });
+        if (mapController.updateNpcControllers()) {
+          update = true;
+        }
+        if (update) {
+          context.renderFrame(graphics2D -> {
+            try {
+              mapController.updateView(graphics2D);
+            } catch (IOException e) {
+              throw new IllegalStateException("Cannot render frame");
+            }
+            graphics2D.dispose();
+          });
+          update = false;
+        }
 
         if (event == null) {
           continue;
@@ -71,6 +73,7 @@ public class TheBigAdventure {
         }
         if (gameMap.getPlayer() != null && keyboardController != null) {
           mapController.updatePlayerController(keyboardController);
+          update = true;
         }
         if (keyboardController != null && keyboardController.handleQuitControl(context)) {
           return;

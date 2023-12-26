@@ -1,6 +1,7 @@
 package fr.uge.thebigadventure.controllers;
 
 import fr.uge.thebigadventure.models.GameMap;
+import fr.uge.thebigadventure.models.entities.inventory.weapons.WeaponInterface;
 import fr.uge.thebigadventure.models.entities.personages.Enemy;
 import fr.uge.thebigadventure.models.entities.personages.NPC;
 import fr.uge.thebigadventure.models.entities.personages.Player;
@@ -15,6 +16,8 @@ public class PlayerController {
   private final Player player;
   private final PlayerView playerView;
   private final GameMap map;
+
+  private boolean inventoryOpen = false;
 
   public PlayerController(Player player, PlayerView playerView, GameMap gameMap) {
     this.player = player;
@@ -53,7 +56,10 @@ public class PlayerController {
   }
 
   public void action() {
-    var weapon = player.getWeapon();
+    if (!player.inventory().mainHand().isWeapon()) {
+      return;
+    }
+    var weapon = (WeaponInterface) player.inventory().mainHand();
     if (weapon != null) {
       var targetPosition = player.position().move(player.getDirection());
       var target = map.getNpcs().stream()
@@ -72,5 +78,17 @@ public class PlayerController {
 
   public void updateView(Graphics2D graphics2D) throws IOException {
     playerView.renderPlayer(graphics2D);
+  }
+
+  public boolean isInventoryOpen() {
+    return inventoryOpen;
+  }
+
+  public void toggleInventory() {
+    inventoryOpen = !inventoryOpen;
+  }
+
+  public void renderInventory(Graphics2D graphics2D) throws IOException {
+    playerView.renderInventory(graphics2D);
   }
 }

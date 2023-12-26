@@ -1,6 +1,7 @@
 package fr.uge.thebigadventure.controllers;
 
 import fr.uge.thebigadventure.models.GameMap;
+import fr.uge.thebigadventure.models.entities.inventory.InventoryItem;
 import fr.uge.thebigadventure.views.MapView;
 import fr.uge.thebigadventure.views.entities.NPCView;
 import fr.uge.thebigadventure.views.entities.PlayerView;
@@ -28,24 +29,33 @@ public class MapController {
     this.cellSize = (int) (screenInfo.getWidth() / NB_TILES_WIDTH);
     int nbTilesHeight = (int) (screenInfo.getHeight() / cellSize) + 1;
     this.playerController = new PlayerController(gameMap.getPlayer(),
-        new PlayerView(gameMap.getPlayer(), cellSize), gameMap);
+        new PlayerView(gameMap.getPlayer(), cellSize, screenInfo), gameMap);
     this.npcControllers = gameMap.getNpcs().stream().map(npc ->
         new NPCController(npc, new NPCView(npc, cellSize))).toList();
     this.mapView = new MapView(gameMap, NB_TILES_WIDTH, nbTilesHeight, cellSize);
   }
 
-  public void updateNpcControllers() {
+  public boolean updateNpcControllers() {
+    var updated = false;
     for (var npcController : npcControllers) {
-      npcController.update(gameMap);
+      if (npcController.update(gameMap))
+        updated = true;
+    }
+    return updated;
+  }
+
+  private void pickupItem() {
+    var playerPosition = gameMap.getPlayer().position();
+    var element = gameMap.elements().get(playerPosition);
+    if (element instanceof InventoryItem inventoryItem) {
+      if (gameMap.getPlayer().inventory().addItem(inventoryItem))
+        gameMap.elements().remove(playerPosition);
     }
   }
 
   public void updatePlayerController(KeyboardController keyboardController) {
     keyboardController.handlePlayerControl(playerController);
-  }
-
-  public PlayerController getPlayerController() {
-    return playerController;
+    pickupItem();
   }
 
   public void updateView(Graphics2D graphics2D) throws IOException {
@@ -54,6 +64,9 @@ public class MapController {
     playerController.updateView(graphics2D);
     for (var npcController : npcControllers) {
       npcController.updateView(graphics2D);
+    }
+    if (playerController.isInventoryOpen()) {
+      playerController.renderInventory(graphics2D);
     }
   }
 }

@@ -3,7 +3,7 @@ package fr.uge.thebigadventure.models.entities.inventory.weapons;
 import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.enums.entities.InventoryItemType;
 
-public class Sword implements WeaponInterface {
+public final class Sword implements WeaponInterface {
 
   private final Weapon weapon;
   private boolean isIgnite;

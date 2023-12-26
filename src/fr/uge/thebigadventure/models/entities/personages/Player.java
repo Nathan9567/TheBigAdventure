@@ -1,25 +1,21 @@
 package fr.uge.thebigadventure.models.entities.personages;
 
 import fr.uge.thebigadventure.models.Coordinates;
-import fr.uge.thebigadventure.models.entities.inventory.InventoryItem;
-import fr.uge.thebigadventure.models.entities.inventory.weapons.WeaponInterface;
+import fr.uge.thebigadventure.models.entities.inventory.Inventory;
 import fr.uge.thebigadventure.models.enums.entities.PersonageType;
 import fr.uge.thebigadventure.models.enums.utils.Direction;
 import fr.uge.thebigadventure.models.enums.utils.PlayerSkinType;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 public final class Player implements Personage {
 
   private final PersonageType skin;
   private final String name;
-  private final List<InventoryItem> inventory = new ArrayList<>();
+  private final Inventory inventory = new Inventory();
   private final int maxHealth;
   private int currentHealth;
-  private WeaponInterface weapon;
   private Coordinates position;
   private Direction direction;
 
@@ -68,22 +64,8 @@ public final class Player implements Personage {
     this.direction = direction;
   }
 
-  public List<InventoryItem> getInventory() {
+  public Inventory inventory() {
     return inventory;
-  }
-
-  public void addItemToInventory(InventoryItem item) {
-    Objects.requireNonNull(item, "Item cannot be null");
-    inventory.add(item);
-  }
-
-  public WeaponInterface getWeapon() {
-    return weapon;
-  }
-
-  public void setWeapon(WeaponInterface weapon) {
-    Objects.requireNonNull(weapon, "Weapon cannot be null");
-    this.weapon = weapon;
   }
 
   public int health() {

@@ -11,4 +11,8 @@ public interface InventoryItem extends Entity {
 
   Coordinates position();
 
+  default boolean isWeapon() {
+    return false;
+  }
+
 }

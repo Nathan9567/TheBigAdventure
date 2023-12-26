@@ -20,14 +20,15 @@ public class NPCController {
     this.npcView = npcView;
   }
 
-  public void update(GameMap gameMap) {
+  public boolean update(GameMap gameMap) {
     long delay = 1000;
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastTime <= delay) {
-      return;
+      return false;
     }
     lastTime = currentTime;
     randomMove(gameMap);
+    return true;
   }
 
   private boolean isValidMove(Direction direction, GameMap gameMap) {

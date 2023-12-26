@@ -23,6 +23,10 @@ public record KeyboardController(KeyboardKey keyboardKey) {
 //      case SPACE -> {
 //        // TODO: Action controller
 //      }
+      case I -> {
+        playerController.toggleInventory();
+        yield true;
+      }
       default -> false;
     };
   }
