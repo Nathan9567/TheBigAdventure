@@ -20,16 +20,14 @@ public class NPCController {
     this.npcView = npcView;
   }
 
-  public boolean update(GameMap gameMap) {
+  public void update(GameMap gameMap) {
     long delay = 1000;
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastTime <= delay) {
-      return false;
+      return;
     }
-    System.out.println("NPC update");
     lastTime = currentTime;
     randomMove(gameMap);
-    return true;
   }
 
   private boolean isValidMove(Direction direction, GameMap gameMap) {
@@ -70,9 +68,5 @@ public class NPCController {
 
   public void updateView(Graphics2D graphics2D) throws IOException {
     npcView.renderNPC(graphics2D);
-  }
-
-  public NPCView getNpcView() {
-    return npcView;
   }
 }

@@ -1,10 +1,9 @@
 package fr.uge.thebigadventure;
 
-import fr.uge.thebigadventure.controllers.*;
+import fr.uge.thebigadventure.controllers.CommandLineParser;
+import fr.uge.thebigadventure.controllers.KeyboardController;
+import fr.uge.thebigadventure.controllers.MapController;
 import fr.uge.thebigadventure.models.GameMap;
-import fr.uge.thebigadventure.models.entities.personages.Player;
-import fr.uge.thebigadventure.views.entities.NPCView;
-import fr.uge.thebigadventure.views.entities.PlayerView;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
 import fr.umlv.zen5.Event.Action;
@@ -39,33 +38,26 @@ public class TheBigAdventure {
       return;
     }
 
-    Player player = gameMap.getPlayer();
-
     Color bkgdColor = new Color(113, 94, 68, 255);
     Application.run(bkgdColor, context -> {
       boolean update = false;
 
-      // get the size of the screen
+      // Create map controller
       ScreenInfo screenInfo = context.getScreenInfo();
-      float width = screenInfo.getWidth();
-      float cell = width / nb_tiles;
-
-      PlayerController playerController = new PlayerController(player, new PlayerView(player, (int) cell), gameMap);
-      var npcControllers = gameMap.getNpcs().stream().map(npc ->
-          new NPCController(npc, new NPCView(npc, (int) cell))).toList();
-      MapController mapController = new MapController(gameMap, playerController, npcControllers);
-      // Print map
-      context.renderFrame(graphics2D -> {
-        try {
-          mapController.updateView(graphics2D, (int) cell);
-        } catch (IOException e) {
-          throw new IllegalStateException("Cannot render frame");
-        }
-        graphics2D.dispose();
-      });
+      MapController mapController = new MapController(gameMap, screenInfo);
 
       while (true) {
         Event event = context.pollOrWaitEvent(30);
+
+        mapController.updateNpcControllers();
+        context.renderFrame(graphics2D -> {
+          try {
+            mapController.updateView(graphics2D);
+          } catch (IOException e) {
+            throw new IllegalStateException("Cannot render frame");
+          }
+          graphics2D.dispose();
+        });
 
         if (event == null) {
           continue;
@@ -77,23 +69,8 @@ public class TheBigAdventure {
         if (action == Action.KEY_PRESSED) {
           keyboardController = new KeyboardController(event.getKey());
         }
-        if (player != null && keyboardController != null) {
-          update = keyboardController.handlePlayerControl(playerController);
-        }
-        for (var npcController : npcControllers) {
-          if (npcController.update(gameMap)) {
-            update = true;
-          }
-        }
-        if (update) {
-          context.renderFrame(graphics2D -> {
-            try {
-              mapController.updateView(graphics2D, (int) cell);
-            } catch (IOException e) {
-              throw new IllegalStateException("Cannot render frame");
-            }
-            graphics2D.dispose();
-          });
+        if (gameMap.getPlayer() != null && keyboardController != null) {
+          mapController.updatePlayerController(keyboardController);
         }
         if (keyboardController != null && keyboardController.handleQuitControl(context)) {
           return;

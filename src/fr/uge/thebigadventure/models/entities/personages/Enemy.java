@@ -20,6 +20,7 @@ public final class Enemy implements NPC {
   private final Behavior behavior;
   private final int damage;
   private final List<InventoryItemType> stealableItems;
+  private final int maxHealth;
   private int health;
   private Coordinates position;
 
@@ -38,6 +39,7 @@ public final class Enemy implements NPC {
     this.position = position;
     this.kind = kind;
     this.health = health;
+    this.maxHealth = health;
     this.behavior = behavior;
     this.damage = damage;
     this.zone = zone;
@@ -89,5 +91,9 @@ public final class Enemy implements NPC {
 
   public List<InventoryItemType> getStealableItems() {
     return stealableItems;
+  }
+
+  public int maxHealth() {
+    return maxHealth;
   }
 }

@@ -73,8 +73,4 @@ public class PlayerController {
   public void updateView(Graphics2D graphics2D) throws IOException {
     playerView.renderPlayer(graphics2D);
   }
-
-  public void clearLastView(Graphics2D graphics2D) {
-    playerView.clearLastPlayerPosition(graphics2D);
-  }
 }

@@ -2,7 +2,6 @@ package fr.uge.thebigadventure.views.entities;
 
 import fr.uge.thebigadventure.models.Coordinates;
 import fr.uge.thebigadventure.models.enums.entities.*;
-import fr.uge.thebigadventure.views.MapView;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -20,7 +19,7 @@ public class EntityView {
     if (image != null) {
       return image;
     }
-    try (var input = MapView.class.getResourceAsStream(path)) {
+    try (var input = EntityView.class.getResourceAsStream(path)) {
       if (input == null) {
         throw new IOException("Cannot load resource " + path);
       }
