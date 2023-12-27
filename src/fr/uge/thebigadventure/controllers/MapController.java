@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class MapController {
 
-  private static final int NB_TILES_WIDTH = 45;
+  private static final int NB_TILES_WIDTH = 30;
 
   private final PlayerController playerController;
   private final List<NPCController> npcControllers;
@@ -27,7 +27,7 @@ public class MapController {
     Objects.requireNonNull(screenInfo, "Screen info cannot be null");
     this.gameMap = gameMap;
     this.cellSize = (int) (screenInfo.getWidth() / NB_TILES_WIDTH);
-    int nbTilesHeight = (int) (screenInfo.getHeight() / cellSize) + 1;
+    int nbTilesHeight = (int) (screenInfo.getHeight() / cellSize);
     this.playerController = new PlayerController(gameMap.getPlayer(),
         new PlayerView(gameMap.getPlayer(), cellSize, screenInfo), gameMap);
     this.npcControllers = gameMap.getNpcs().stream().map(npc ->

@@ -37,7 +37,7 @@ public class EntityView {
    *
    * @param graphics2D    the graphics2D to draw on
    * @param skin          the skin of the entity
-   * @param coordinates   the coordinates of the entity
+   * @param coordinates   the coordinates of the entity relative to the map
    * @param tileSize      the size of the tile
    * @param rotationAngle the angle of rotation of the entity
    * @throws IOException if the image cannot be loaded
@@ -64,6 +64,21 @@ public class EntityView {
         coordinates.y() * tileSize, null);
   }
 
+  /**
+   * Draw an entity tile on the given graphics2D at the given coordinates.
+   * The tile is resized to the given tile size.
+   * The coordinates are multiplied by the tile size to get the position
+   * of the tile on the graphics2D.
+   * If not set, the rotation angle is set to 0.
+   * The rotation angle must be a multiple of 90.
+   * All of these parameters cannot be null.
+   *
+   * @param graphics2D  the graphics2D to draw on
+   * @param skin        the skin of the entity
+   * @param coordinates the coordinates of the entity relative to the map
+   * @param tileSize    the size of the tile
+   * @throws IOException if the image cannot be loaded
+   */
   public void drawEntityTile(Graphics2D graphics2D,
                              EntityType skin, Coordinates coordinates, int tileSize) throws IOException {
     drawEntityTile(graphics2D, skin, coordinates, tileSize, 0);
