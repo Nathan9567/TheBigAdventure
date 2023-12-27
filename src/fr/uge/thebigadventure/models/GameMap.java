@@ -38,6 +38,9 @@ public class GameMap {
     this.data = data;
     this.elements = elements;
     splitPersonages();
+    if (player == null) {
+      System.err.println("No player found in map");
+    }
   }
 
   public static GameMap load(String mapPath) throws IOException {
@@ -65,9 +68,6 @@ public class GameMap {
   }
 
   public Player getPlayer() {
-    if (player == null) {
-      System.err.println("No player found in map");
-    }
     return player;
   }
 
