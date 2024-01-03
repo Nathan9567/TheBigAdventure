@@ -1,9 +1,9 @@
 package fr.uge.thebigadventure;
 
-import fr.uge.thebigadventure.controllers.CommandLineParser;
-import fr.uge.thebigadventure.controllers.KeyboardController;
-import fr.uge.thebigadventure.controllers.MapController;
-import fr.uge.thebigadventure.models.GameMap;
+import fr.uge.thebigadventure.controller.CommandLineParser;
+import fr.uge.thebigadventure.controller.KeyboardController;
+import fr.uge.thebigadventure.controller.MapController;
+import fr.uge.thebigadventure.model.GameMap;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
 import fr.umlv.zen5.Event.Action;
