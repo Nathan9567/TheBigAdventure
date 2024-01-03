@@ -1,0 +1,19 @@
+[grid]
+size : (10 x 10)
+encodings: WALL(W)
+data : """
+WWWWWWWWWW
+W
+W
+W
+W
+W        W
+W
+W
+W
+WWWWWWWWWW
+"""
+
+[element]
+position : (1, 5)
+skin: BALLE

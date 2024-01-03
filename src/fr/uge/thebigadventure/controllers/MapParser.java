@@ -10,6 +10,7 @@ import fr.uge.thebigadventure.models.enums.utils.Direction;
 import fr.uge.thebigadventure.models.enums.utils.Kind;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.function.BiConsumer;
@@ -50,7 +51,7 @@ public class MapParser {
   }
 
   private void errorLine(int pointer, String msg) {
-    var line = text.substring(0, pointer).split("\n").length + 1;
+    var line = text.substring(0, pointer).split("\n", -1).length;
     System.err.println("Error while parsing map at line " + line + " : " + msg);
   }
   
@@ -58,10 +59,10 @@ public class MapParser {
     var matcher = SECTIONS_PATTERN.matcher(text);
     var pointer = 0;
     while (matcher.find()) {
-      if (matcher.start() != pointer) {
-        errorLine(pointer, "Cannot parse a section here");
-      }
       sectionPointer = matcher.start();
+      if (matcher.start() != pointer) {
+        errorLine(sectionPointer, "Cannot parse a section until here");
+      }
       parseSection(matcher.group(1), matcher.group(2).trim());
       pointer = matcher.end();
     }
@@ -81,7 +82,13 @@ public class MapParser {
 
   private void parseElement(String content) {
     parseAttributes(content, this::parseElementAttributes);
-    builder.pushElementBuilder();
+    try {
+      builder.pushElementBuilder();
+    } catch (IllegalStateException e) { // TODO custom exception
+      errorLine(sectionPointer, "can't create element : " + e.getMessage());
+    } catch (NullPointerException e) {
+      errorLine(sectionPointer, "can't create element : " + e.getMessage());
+    }
   }
 
   private void parseAttributes(String content,
@@ -89,10 +96,10 @@ public class MapParser {
     var matcher = ATTRIBUTES_PATTERN.matcher(content);
     var pointer = 0;
     while (matcher.find()) {
-      if (matcher.start() != pointer) {
-        errorLine(sectionPointer + pointer, "Cannot parse an attribute here");
-      }
       attributePointer = sectionPointer + matcher.start();
+      if (matcher.start() != pointer) {
+        errorLine(attributePointer, "Cannot parse an attribute until here");
+      }
       attributeParser.accept(matcher.group(1), matcher.group(2).trim());
       pointer = matcher.end();
     }
@@ -125,20 +132,21 @@ public class MapParser {
     var pointer = 0;
     while (matcher.find()) {
       if (matcher.start() != pointer) {
-        errorLine(attributePointer + pointer, "Cannot parse an encoding here");
+        errorLine(attributePointer + pointer, "Cannot parse an encoding until here");
       }
       if (encodingMap.containsKey(matcher.group(2))) {
         errorLine(attributePointer + pointer, "Error in encodings, letter '" + matcher.group(2) + "' is already associated with a skin");
-      }
-      try {
-        encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
-      } catch (IllegalArgumentException e) {
-        errorLine(attributePointer + pointer, "Unknown skin \"" + matcher.group(1) + "\" in encodings");
+      } else {
+        try {
+            encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
+        } catch (IllegalArgumentException e) {
+          errorLine(attributePointer + pointer, "Unknown skin \"" + matcher.group(1) + "\" in encodings");
+        }
       }
       pointer = matcher.end();
     }
     if (pointer != content.length()) {
-      errorLine(attributePointer, "Cannot parse any encoding from here");
+      errorLine(attributePointer + pointer, "Cannot parse any encoding from here");
     }
     builder.setEncodings(encodingMap);
   }

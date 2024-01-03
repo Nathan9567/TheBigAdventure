@@ -20,6 +20,8 @@ import fr.uge.thebigadventure.models.enums.utils.Kind;
 
 import static fr.uge.thebigadventure.models.enums.entities.InventoryItemType.*;
 
+import java.util.Objects;
+
 public class ElementBuilder {
   private String name = null;
   private EntityType skin = null;
@@ -42,10 +44,12 @@ public class ElementBuilder {
   }
 
   public void setName(String name) {
+    Objects.requireNonNull(name);
     this.name = name;
   }
 
   public void setSkin(EntityType skin) {
+    Objects.requireNonNull(skin);
     this.skin = skin;
   }
 
@@ -54,30 +58,42 @@ public class ElementBuilder {
   }
 
   public void setPosition(Coordinates position) {
+    Objects.requireNonNull(position);
     this.position = position;
   }
 
   public void setHealth(int health) {
+    if (health < 0) {
+      throw new IllegalArgumentException("health < 0");
+    }
     this.health = health;
   }
 
   public void setKind(Kind kind) {
+    Objects.requireNonNull(kind);
     this.kind = kind;
   }
 
   public void setZone(Zone zone) {
+    Objects.requireNonNull(zone);
     this.zone = zone;
   }
 
   public void setBehavior(Behavior behavior) {
+    Objects.requireNonNull(behavior);
     this.behavior = behavior;
   }
 
   public void setDamage(int damage) {
+    if (damage < 0) {
+      // TODO est-ce qu'on pourrait mettre un damage positif ? ce serait rigolo
+      throw new IllegalArgumentException("damage < 0");
+    }
     this.damage = damage;
   }
 
   public void setText(String text) {
+    Objects.requireNonNull(text);
     this.text = text;
   }
 
@@ -86,6 +102,7 @@ public class ElementBuilder {
   }*/
 
   public void setFlow(Direction flow) {
+    Objects.requireNonNull(flow);
     this.flow = flow;
   }
 
@@ -94,6 +111,7 @@ public class ElementBuilder {
   }
 
   public void setTeleport(String teleport) {
+    Objects.requireNonNull(teleport);
     this.teleport = teleport;
   }
 
@@ -108,7 +126,7 @@ public class ElementBuilder {
       return new Enemy(personageType, name, position, kind, health, behavior, damage, zone, null);
     if (kind == Kind.FRIEND)
       return new Ally(personageType, name, position, zone, text);
-    return null;
+    throw new IllegalStateException("Can't find which PersonageEntity is this"); // TODO custom exception
   }
 
   // TODO : add locked at "item to unlock" in obstacle constructor
@@ -122,7 +140,7 @@ public class ElementBuilder {
       case SHOVEL -> new Shovel(name, position, damage);
       case STICK -> new Stick(name, position, damage);
       case SWORD -> new Sword(name, position, damage);
-      default -> null;
+      default -> throw new IllegalStateException("Can't find which WeaponEntity is this"); // TODO custom exception
     };
   }
 
@@ -141,12 +159,12 @@ public class ElementBuilder {
 
   public Entity toEntity() {
     return switch (skin) {
-      case null -> null;
       case ObstacleType obstacleType -> toObstacleEntity(obstacleType);
       case InventoryItemType inventoryItemType ->
           toItemEntity(inventoryItemType);
       case PersonageType personageType -> toPersonageEntity(personageType);
-      default -> throw new IllegalStateException("Unexpected value: " + skin);
+      case null -> throw new IllegalStateException("No skin provided !"); // TODO custom exception
+      default -> throw new IllegalStateException("Unexpected value: " + skin); // TODO custom exception
     };
   }
 }

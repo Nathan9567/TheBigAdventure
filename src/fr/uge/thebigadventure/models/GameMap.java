@@ -39,7 +39,7 @@ public class GameMap {
     this.elements = elements;
     splitPersonages();
     if (player == null) {
-      System.err.println("No player found in map");
+      throw new IllegalArgumentException("No player found in map");
     }
   }
 

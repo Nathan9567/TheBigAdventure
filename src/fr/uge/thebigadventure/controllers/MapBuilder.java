@@ -8,13 +8,13 @@ import fr.uge.thebigadventure.models.entities.personages.Personage;
 import fr.uge.thebigadventure.models.enums.entities.EntityType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 public class MapBuilder {
-  private final List<ElementBuilder> elementBuilders = new ArrayList<>();
+  private final List<Entity> entities = new ArrayList<>();
   public ElementBuilder elementBuilder = new ElementBuilder();
   private Size size = null;
   private Map<String, EntityType> encodings = null;
@@ -38,8 +38,11 @@ public class MapBuilder {
   }
 
   public void pushElementBuilder() {
-    elementBuilders.add(elementBuilder);
-    elementBuilder = new ElementBuilder();
+    try {
+      entities.add(elementBuilder.toEntity());
+    } finally {
+      elementBuilder = new ElementBuilder();
+    }
   }
 
   public void validateState() {
@@ -57,25 +60,34 @@ public class MapBuilder {
     }
   }
 
+  private Map<Coordinates, EntityType> mapDataEncoded() {
+    var mapData = new HashMap<Coordinates, EntityType>();
+    data.forEach((coord, tileEnc) -> {
+      var env = encodings.get(String.valueOf(tileEnc));
+      if (env == null) {
+        System.err.println("Error in map data : encoding '" + tileEnc + "' has no skin encoded.");
+      } else {        
+        mapData.put(coord, env);
+      }
+    });
+    return mapData;
+  }
+
   public GameMap toGameMap() {
     validateState();
-    var elements = elementBuilders.stream()
-        .map(ElementBuilder::toEntity)
+
+    var elements = entities.stream()
         .filter(entity -> entity.position() != null)
         .collect(Collectors.toMap(Entity::position, element -> element));
+
     var personages = elements.values().stream().filter(entity -> entity instanceof Personage)
         .map(entity -> (Personage) entity).toList();
+
     elements.values().removeAll(personages);
     System.out.println(elements);
     System.out.println(personages);
-    var mapData = data.entrySet().stream().collect(Collectors.toMap(Entry::getKey, entry -> {
-      var env = encodings.get(String.valueOf(entry.getValue()));
-      if (env == null) {
-        System.err.println("Error in map data : encoding '" + entry.getValue() + "' has no skin encoded.");
-      }
-      return env;
-    }));
-    return new GameMap(size, mapData, elements, personages);
+
+    return new GameMap(size, mapDataEncoded(), elements, personages);
   }
 
 }
