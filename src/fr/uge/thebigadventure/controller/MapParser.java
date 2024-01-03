@@ -1,14 +1,18 @@
 package fr.uge.thebigadventure.controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.Size;
+import fr.uge.thebigadventure.model.ElementRef;
 import fr.uge.thebigadventure.model.Zone;
 import fr.uge.thebigadventure.model.enums.entity.EntityType;
 import fr.uge.thebigadventure.model.enums.util.Behavior;
@@ -34,6 +38,7 @@ public class MapParser {
   private static final Pattern BOOLEAN_PATTERN =
       Pattern.compile("^true$", Pattern.CASE_INSENSITIVE);
   private static final Pattern LOCK_PATTERN = Pattern.compile("(KEY|LEVER)\\s*(.+)");
+  private static final Pattern TRADE_PATTERN = Pattern.compile("(\\w+)\\s*->\\s*(\\w+)(\\s+(\\w+))?");
   private final String text;
   private final MapBuilder builder = new MapBuilder();
   private int sectionPointer = 0;
@@ -187,6 +192,9 @@ public class MapParser {
       case "phantomized" -> parseElementAttributePhantomized(content);
       case "teleport" -> parseElementAttributeTeleport(content);
       case "flow" -> parseElementAttributeFlow(content);
+      case "locked" -> parseElementAttributeLocked(content);
+      case "steal" -> parseElementAttributeSteal(content);
+      // case "trade" -> parseElementAttributeTrade(content);
       default -> errorLine(attributePointer, "Unknown element attribute \"" + name + "\"");
     }
   }
@@ -199,7 +207,7 @@ public class MapParser {
     try {
       builder.elementBuilder.setSkin(EntityType.fromString(content));
     } catch (IllegalArgumentException e) {
-      errorLine(attributePointer, "Unknown skin \"" + content + "\".");
+      errorLine(attributePointer, "Unknown skin \"" + content + "\"");
     }
   }
 
@@ -225,7 +233,7 @@ public class MapParser {
     try {
       builder.elementBuilder.setHealth(Integer.parseInt(content));
     } catch (NumberFormatException e) {
-      errorLine(attributePointer, "health \"" + content + "\" is not a number.");
+      errorLine(attributePointer, "health \"" + content + "\" is not a number");
     }
   }
 
@@ -273,11 +281,59 @@ public class MapParser {
     }
   }
 
-  /*private void parseElementAttributeLocked(String content) {
+/*
+  TODO: need more understanding
+
+  private void parseElementAttributeTrade(String content) {
+    var trades = Arrays.stream(content.split(",")).map(String::trim).map(s -> {
+      var matcher = TRADE_PATTERN.matcher(content);
+      matcher.matches();
+      if (!matcher.matches()) {
+        errorLine(attributePointer, "can't parse trade \"" + s + "\"");
+        return;
+      }
+
+      try {
+        var type = EntityType.fromString(matcher.group(1));
+        return type;
+      } catch (IllegalArgumentException e) {
+        errorLine(attributePointer, "Unknown skin \"" + s + "\"");
+      }
+      return null;
+    }).filter(Predicate.not(Objects::isNull)).toList();
+
+    
+    builder.elementBuilder.setLocked(new ElementRef(
+        EntityType.fromString(matcher.group(1)),
+        matcher.group(2).trim()
+        ));
+  }*/
+  
+  private void parseElementAttributeSteal(String content) {
+    var steal = Arrays.stream(content.split(",")).map(String::trim).map(s -> {
+      try {
+        var type = EntityType.fromString(s);
+        return type;
+      } catch (IllegalArgumentException e) {
+        errorLine(attributePointer, "Unknown skin \"" + s + "\"");
+      }
+      return null;
+    }).filter(Predicate.not(Objects::isNull)).toList();
+    builder.elementBuilder.setSteal(steal);
+  }
+
+  private void parseElementAttributeLocked(String content) {
     var matcher = LOCK_PATTERN.matcher(content);
     matcher.matches();
-    builder.elementBuilder.setLocked(matcher.group(1), matcher.group(2));
-  }*/
+    if (!matcher.matches()) {
+      errorLine(attributePointer, "invalid locked");
+      return;
+    }
+    builder.elementBuilder.setLocked(new ElementRef(
+        EntityType.fromString(matcher.group(1)),
+        matcher.group(2).trim()
+        ));
+  }
 
   private void parseElementAttributeFlow(String content) {
     try {

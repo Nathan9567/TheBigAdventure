@@ -2,9 +2,12 @@ package fr.uge.thebigadventure.controller;
 
 import static fr.uge.thebigadventure.model.enums.entity.InventoryItemType.*;
 
+import java.util.List;
 import java.util.Objects;
 
 import fr.uge.thebigadventure.model.Coordinates;
+import fr.uge.thebigadventure.model.ElementRef;
+import fr.uge.thebigadventure.model.Trade;
 import fr.uge.thebigadventure.model.Zone;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.entity.inventory.*;
@@ -33,9 +36,9 @@ public class ElementBuilder {
   private Behavior behavior = null;
   private int damage = 0;
   private String text = null;
-  //  private List<String> steal;
-//  private List<Trade> trade;
-  // private Something locked;
+  private List<EntityType> steal = null;
+  private List<Trade> trades = null;
+  private ElementRef locked = null;
   private Direction flow = null;
   private boolean phantomized = false;
   private String teleport = null;
@@ -97,9 +100,25 @@ public class ElementBuilder {
     this.text = text;
   }
 
-  /*public void setLocked(String group, String group2) {
-    this.locked = 
-  }*/
+  public void setTrades(List<Trade> trades) {
+    trades = List.copyOf(trades);
+    if (trades.isEmpty()) {
+      throw new IllegalArgumentException("trades list is empty");
+    }
+    this.trades = trades;
+  }
+
+  public void setSteal(List<EntityType> steal) {
+    steal = List.copyOf(steal);
+    if (steal.isEmpty()) {
+      throw new IllegalArgumentException("steal list is empty");
+    }
+    this.steal = steal;
+  }
+
+  public void setLocked(ElementRef locked) {
+    this.locked = locked;
+  }
 
   public void setFlow(Direction flow) {
     Objects.requireNonNull(flow);

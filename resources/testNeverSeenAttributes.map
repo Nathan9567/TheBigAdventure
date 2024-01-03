@@ -1,0 +1,30 @@
+[grid]
+size : (10 x 10)
+encodings: WALL(W)
+data : """
+WWWWWWWWWW
+W
+W
+W
+W
+W        W
+W
+W
+W
+WWWWWWWWWW
+"""
+
+[element]
+skin: SWORD
+name: Epee
+locked: KEY red
+
+[element]
+skin: CRAB
+position: (38, 24)
+kind: enemy
+health: 10
+zone: (38, 24) (10 x 8)
+behavior: stroll
+damage: 5
+steal: SWORD, KEY TRUC, BANANA
