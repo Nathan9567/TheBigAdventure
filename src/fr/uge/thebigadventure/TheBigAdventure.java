@@ -11,13 +11,14 @@ import fr.umlv.zen5.ScreenInfo;
 
 import java.awt.*;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class TheBigAdventure {
 
   public static void main(String[] args) throws IllegalAccessException {
     var commandParser = new CommandLineParser(args);
     commandParser.parse();
-    var mapPath = commandParser.getMapPath();
+    var mapPath = Path.of(commandParser.getMapPath());
 
     GameMap gameMap;
     try {

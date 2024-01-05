@@ -1,6 +1,7 @@
 package fr.uge.thebigadventure.controller;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -12,6 +13,7 @@ import java.util.regex.Pattern;
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.Size;
+import fr.uge.thebigadventure.model.Trade;
 import fr.uge.thebigadventure.model.ElementRef;
 import fr.uge.thebigadventure.model.Zone;
 import fr.uge.thebigadventure.model.enums.entity.EntityType;
@@ -36,7 +38,7 @@ public class MapParser {
   private static final Pattern GRID_DATA_PATTERN =
       Pattern.compile("\"\"\"\\s*\\n(.+)\\n( *)\"\"\"", Pattern.DOTALL);
   private static final Pattern BOOLEAN_PATTERN =
-      Pattern.compile("^true$", Pattern.CASE_INSENSITIVE);
+      Pattern.compile("true|false", Pattern.CASE_INSENSITIVE);
   private static final Pattern LOCK_PATTERN = Pattern.compile("(KEY|LEVER)\\s*(.+)");
   private static final Pattern TRADE_PATTERN = Pattern.compile("(\\w+)\\s*->\\s*(\\w+)(\\s+(\\w+))?");
   private final String text;
@@ -49,9 +51,10 @@ public class MapParser {
   }
 
   public static void main(String[] args) throws IOException {
-    GameMap gameMap = GameMap.load("resources/test.map");
+    GameMap gameMap = GameMap.load(Path.of("resources/test.map"));
     System.out.println(gameMap.size());
     System.out.println(gameMap.data());
+    System.out.println(gameMap.elements());
   }
 
   private void errorLine(int pointer, String msg) {
@@ -88,11 +91,9 @@ public class MapParser {
     parseAttributes(content, this::parseElementAttributes);
     try {
       builder.pushElementBuilder();
-    } catch (IllegalStateException e) { // TODO custom exception
+    } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
       errorLine(sectionPointer, "can't create element : " + e.getMessage());
-    } catch (NullPointerException e) {
-      errorLine(sectionPointer, "can't create element : " + e.getMessage());
-    }
+    } // TODO custom exception ?
   }
 
   private void parseAttributes(String content,
@@ -194,7 +195,7 @@ public class MapParser {
       case "flow" -> parseElementAttributeFlow(content);
       case "locked" -> parseElementAttributeLocked(content);
       case "steal" -> parseElementAttributeSteal(content);
-      // case "trade" -> parseElementAttributeTrade(content);
+      case "trade" -> parseElementAttributeTrade(content);
       default -> errorLine(attributePointer, "Unknown element attribute \"" + name + "\"");
     }
   }
@@ -211,10 +212,19 @@ public class MapParser {
     }
   }
 
-  private void parseElementAttributePlayer(String content) {
+  private boolean parseAttributeBoolean(String content) {
     var matcher = BOOLEAN_PATTERN.matcher(content);
-    // TODO : test plus en profondeur
-    builder.elementBuilder.setPlayer(matcher.matches());
+    var bool = false;
+    if (matcher.matches()) {
+      bool = matcher.group().equalsIgnoreCase("true");
+    } else {
+      errorLine(attributePointer, "\"" + content + "\" is not a boolean, consider using \"true\" or \"false\", defaulting to false");
+    }
+    return bool;
+  }
+
+  private void parseElementAttributePlayer(String content) {
+    builder.elementBuilder.setPlayer(parseAttributeBoolean(content));
   }
 
   private void parseElementAttributePosition(String content) {
@@ -281,50 +291,58 @@ public class MapParser {
     }
   }
 
-/*
-  TODO: need more understanding
-
   private void parseElementAttributeTrade(String content) {
     var trades = Arrays.stream(content.split(",")).map(String::trim).map(s -> {
-      var matcher = TRADE_PATTERN.matcher(content);
-      matcher.matches();
+      var matcher = TRADE_PATTERN.matcher(s);
       if (!matcher.matches()) {
         errorLine(attributePointer, "can't parse trade \"" + s + "\"");
-        return;
+        return null;
       }
-
       try {
-        var type = EntityType.fromString(matcher.group(1));
-        return type;
-      } catch (IllegalArgumentException e) {
-        errorLine(attributePointer, "Unknown skin \"" + s + "\"");
+        return new Trade(
+            parseTradeElementRef(matcher.group(1), null),
+            parseTradeElementRef(matcher.group(2), matcher.group(4))
+            );
+      } catch (NullPointerException e) {
+        return null;
       }
-      return null;
     }).filter(Predicate.not(Objects::isNull)).toList();
 
-    
-    builder.elementBuilder.setLocked(new ElementRef(
-        EntityType.fromString(matcher.group(1)),
-        matcher.group(2).trim()
-        ));
-  }*/
-  
+    if (trades.isEmpty()) {
+      errorLine(attributePointer, "can't parse any trade");
+    } else {
+      builder.elementBuilder.setTrades(trades);
+    }
+  }
+
+  private ElementRef parseTradeElementRef(String skin, String name) {
+    var type = getEntityTypeFromAttribute(skin);
+    if (type == null) {
+      return null;
+    }
+    return new ElementRef(type, name);
+  }
+
+  private EntityType getEntityTypeFromAttribute(String skin) {
+    try {
+      var type = EntityType.fromString(skin);
+      return type;
+    } catch (IllegalArgumentException e) {
+      errorLine(attributePointer, "Unknown skin \"" + skin + "\"");
+    }
+    return null;
+  }
+
   private void parseElementAttributeSteal(String content) {
-    var steal = Arrays.stream(content.split(",")).map(String::trim).map(s -> {
-      try {
-        var type = EntityType.fromString(s);
-        return type;
-      } catch (IllegalArgumentException e) {
-        errorLine(attributePointer, "Unknown skin \"" + s + "\"");
-      }
-      return null;
-    }).filter(Predicate.not(Objects::isNull)).toList();
+    var steal = Arrays.stream(content.split(","))
+        .map(String::trim)
+        .map(this::getEntityTypeFromAttribute)
+        .filter(Predicate.not(Objects::isNull)).toList();
     builder.elementBuilder.setSteal(steal);
   }
 
   private void parseElementAttributeLocked(String content) {
     var matcher = LOCK_PATTERN.matcher(content);
-    matcher.matches();
     if (!matcher.matches()) {
       errorLine(attributePointer, "invalid locked");
       return;
@@ -344,9 +362,7 @@ public class MapParser {
   }
 
   private void parseElementAttributePhantomized(String content) {
-    var matcher = BOOLEAN_PATTERN.matcher(content);
-    // TODO : test plus en profondeur
-    builder.elementBuilder.setPhantomized(matcher.matches());
+    builder.elementBuilder.setPhantomized(parseAttributeBoolean(content));
   }
 
   private void parseElementAttributeTeleport(String content) {

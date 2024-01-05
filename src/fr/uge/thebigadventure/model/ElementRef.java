@@ -7,6 +7,6 @@ import fr.uge.thebigadventure.model.enums.entity.EntityType;
 public record ElementRef(EntityType type, String name) {
   public ElementRef {
     Objects.requireNonNull(type);
-    Objects.requireNonNull(name);
+    // name can be null
   }
 }
