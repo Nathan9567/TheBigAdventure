@@ -2,7 +2,7 @@ package fr.uge.thebigadventure.controller;
 
 import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
-import fr.uge.thebigadventure.model.enums.util.Direction;
+import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.view.entity.NPCView;
 
 import java.awt.*;

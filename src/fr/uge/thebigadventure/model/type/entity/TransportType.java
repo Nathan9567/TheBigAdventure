@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.model.enums.entity;
+package fr.uge.thebigadventure.model.type.entity;
 
 public enum TransportType implements EntityType {
   PLANE, ROCKET, UFO,

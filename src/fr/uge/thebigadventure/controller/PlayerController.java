@@ -5,7 +5,7 @@ import fr.uge.thebigadventure.model.entity.inventory.weapon.WeaponInterface;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.entity.personage.Player;
-import fr.uge.thebigadventure.model.enums.util.Direction;
+import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.view.entity.PlayerView;
 
 import java.awt.*;

@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.model.enums.util;
+package fr.uge.thebigadventure.model.type.util;
 
 public enum PlayerSkinType {
   BABA, BADBAD, FOFO, IT

@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.model.entity.other;
 
-import fr.uge.thebigadventure.model.enums.entity.OtherType;
+import fr.uge.thebigadventure.model.type.entity.OtherType;
 
 public class Lever implements SpecialEntity {
   @Override

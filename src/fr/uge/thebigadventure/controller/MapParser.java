@@ -17,10 +17,10 @@ import fr.uge.thebigadventure.model.Size;
 import fr.uge.thebigadventure.model.Trade;
 import fr.uge.thebigadventure.model.ElementRef;
 import fr.uge.thebigadventure.model.Zone;
-import fr.uge.thebigadventure.model.enums.entity.EntityType;
-import fr.uge.thebigadventure.model.enums.util.Behavior;
-import fr.uge.thebigadventure.model.enums.util.Direction;
-import fr.uge.thebigadventure.model.enums.util.Kind;
+import fr.uge.thebigadventure.model.type.entity.EntityType;
+import fr.uge.thebigadventure.model.type.util.Behavior;
+import fr.uge.thebigadventure.model.type.util.Direction;
+import fr.uge.thebigadventure.model.type.util.Kind;
 
 public class MapParser {
   private static final Pattern SECTIONS_PATTERN =

@@ -5,7 +5,7 @@ import java.util.Objects;
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.entity.inventory.InventoryItem;
-import fr.uge.thebigadventure.model.enums.entity.ObstacleType;
+import fr.uge.thebigadventure.model.type.entity.ObstacleType;
 
 public record Obstacle(ObstacleType skin, String name, Coordinates position,
                        InventoryItem itemToUnlock) implements Entity {

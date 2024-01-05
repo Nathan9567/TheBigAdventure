@@ -12,7 +12,7 @@ import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.Size;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.entity.personage.Personage;
-import fr.uge.thebigadventure.model.enums.entity.EntityType;
+import fr.uge.thebigadventure.model.type.entity.EntityType;
 
 public class MapBuilder {
   private final List<Entity> entities = new ArrayList<>();

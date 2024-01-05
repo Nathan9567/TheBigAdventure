@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.enums.entity.InventoryItemType;
-import fr.uge.thebigadventure.model.enums.util.WeaponType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.util.WeaponType;
 
 public record Weapon(InventoryItemType skin, String name, Coordinates position,
                      int damage) implements WeaponInterface {

@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.model.enums.entity;
+package fr.uge.thebigadventure.model.type.entity;
 
 public enum InventoryItemType implements EntityType {
   BOLT, BOOK, BOX, CASH, CLOCK, COG, CRYSTAL, CUP, DRUM, FLAG, GEM, GUITAR,

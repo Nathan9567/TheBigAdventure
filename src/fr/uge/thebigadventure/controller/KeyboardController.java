@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.controller;
 
-import fr.uge.thebigadventure.model.enums.util.Direction;
+import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.umlv.zen5.ApplicationContext;
 import fr.umlv.zen5.KeyboardKey;
 

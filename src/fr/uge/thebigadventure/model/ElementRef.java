@@ -2,7 +2,7 @@ package fr.uge.thebigadventure.model;
 
 import java.util.Objects;
 
-import fr.uge.thebigadventure.model.enums.entity.EntityType;
+import fr.uge.thebigadventure.model.type.entity.EntityType;
 
 public record ElementRef(EntityType type, String name) {
   public ElementRef {

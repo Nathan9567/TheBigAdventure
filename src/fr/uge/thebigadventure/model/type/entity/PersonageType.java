@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.model.enums.entity;
+package fr.uge.thebigadventure.model.type.entity;
 
 public enum PersonageType implements EntityType {
   BABA, BADBAD, BAT, BEE, BIRD, BUG, BUNNY, CAT, CRAB, DOG, FISH, FOFO, FROG,

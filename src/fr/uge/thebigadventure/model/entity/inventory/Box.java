@@ -3,8 +3,8 @@ package fr.uge.thebigadventure.model.entity.inventory;
 import java.util.Objects;
 
 import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.enums.entity.InventoryItemType;
-import fr.uge.thebigadventure.model.enums.util.Direction;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.util.Direction;
 
 public record Box(InventoryItemType skin, String name, Coordinates position,
                   Direction direction) implements InventoryItem {

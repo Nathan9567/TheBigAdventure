@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.controller;
 
-import static fr.uge.thebigadventure.model.enums.entity.InventoryItemType.*;
+import static fr.uge.thebigadventure.model.type.entity.InventoryItemType.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,13 +17,13 @@ import fr.uge.thebigadventure.model.entity.inventory.weapon.Stick;
 import fr.uge.thebigadventure.model.entity.inventory.weapon.Sword;
 import fr.uge.thebigadventure.model.entity.obstacle.Obstacle;
 import fr.uge.thebigadventure.model.entity.personage.*;
-import fr.uge.thebigadventure.model.enums.entity.EntityType;
-import fr.uge.thebigadventure.model.enums.entity.InventoryItemType;
-import fr.uge.thebigadventure.model.enums.entity.ObstacleType;
-import fr.uge.thebigadventure.model.enums.entity.PersonageType;
-import fr.uge.thebigadventure.model.enums.util.Behavior;
-import fr.uge.thebigadventure.model.enums.util.Direction;
-import fr.uge.thebigadventure.model.enums.util.Kind;
+import fr.uge.thebigadventure.model.type.entity.EntityType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.entity.ObstacleType;
+import fr.uge.thebigadventure.model.type.entity.PersonageType;
+import fr.uge.thebigadventure.model.type.util.Behavior;
+import fr.uge.thebigadventure.model.type.util.Direction;
+import fr.uge.thebigadventure.model.type.util.Kind;
 
 public class ElementBuilder {
   private String name = null;

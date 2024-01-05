@@ -4,8 +4,8 @@ import java.util.List;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.entity.obstacle.Obstacle;
-import fr.uge.thebigadventure.model.enums.entity.ObstacleType;
-import fr.uge.thebigadventure.model.enums.entity.PersonageType;
+import fr.uge.thebigadventure.model.type.entity.ObstacleType;
+import fr.uge.thebigadventure.model.type.entity.PersonageType;
 
 public final class Ghost implements NPC {
 

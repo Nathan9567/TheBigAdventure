@@ -3,7 +3,7 @@ package fr.uge.thebigadventure.view.entity;
 import javax.imageio.ImageIO;
 
 import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.enums.entity.*;
+import fr.uge.thebigadventure.model.type.entity.*;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

@@ -3,7 +3,7 @@ package fr.uge.thebigadventure.view;
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.entity.Entity;
-import fr.uge.thebigadventure.model.enums.entity.EntityType;
+import fr.uge.thebigadventure.model.type.entity.EntityType;
 import fr.uge.thebigadventure.view.entity.EntityView;
 
 import java.awt.*;

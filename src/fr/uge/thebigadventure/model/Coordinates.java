@@ -2,7 +2,7 @@ package fr.uge.thebigadventure.model;
 
 import java.util.Objects;
 
-import fr.uge.thebigadventure.model.enums.util.Direction;
+import fr.uge.thebigadventure.model.type.util.Direction;
 
 public record Coordinates(int x, int y) {
 

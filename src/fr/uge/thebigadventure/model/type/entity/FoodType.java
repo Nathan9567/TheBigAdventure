@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.model.enums.entity;
+package fr.uge.thebigadventure.model.type.entity;
 
 public enum FoodType {
   BANANA, BOBA, BOTTLE, BURGER, CAKE, CHEESE, DONUT, DRINK, EGG, FRUIT,

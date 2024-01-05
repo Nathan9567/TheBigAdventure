@@ -5,9 +5,9 @@ import java.util.Objects;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.entity.inventory.Inventory;
-import fr.uge.thebigadventure.model.enums.entity.PersonageType;
-import fr.uge.thebigadventure.model.enums.util.Direction;
-import fr.uge.thebigadventure.model.enums.util.PlayerSkinType;
+import fr.uge.thebigadventure.model.type.entity.PersonageType;
+import fr.uge.thebigadventure.model.type.util.Direction;
+import fr.uge.thebigadventure.model.type.util.PlayerSkinType;
 
 public final class Player implements Personage {
 

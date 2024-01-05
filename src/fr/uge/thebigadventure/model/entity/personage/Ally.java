@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.Zone;
-import fr.uge.thebigadventure.model.enums.entity.PersonageType;
+import fr.uge.thebigadventure.model.type.entity.PersonageType;
 
 public final class Ally implements NPC {
 

@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.model.enums.entity;
+package fr.uge.thebigadventure.model.type.entity;
 
 import java.util.Arrays;
 import java.util.HashMap;

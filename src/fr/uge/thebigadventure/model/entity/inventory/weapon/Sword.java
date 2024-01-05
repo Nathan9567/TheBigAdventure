@@ -1,7 +1,7 @@
 package fr.uge.thebigadventure.model.entity.inventory.weapon;
 
 import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.enums.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
 
 public final class Sword implements WeaponInterface {
 

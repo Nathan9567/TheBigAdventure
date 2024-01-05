@@ -5,7 +5,7 @@ import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.entity.personage.Personage;
 import fr.uge.thebigadventure.model.entity.personage.Player;
-import fr.uge.thebigadventure.model.enums.entity.EntityType;
+import fr.uge.thebigadventure.model.type.entity.EntityType;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

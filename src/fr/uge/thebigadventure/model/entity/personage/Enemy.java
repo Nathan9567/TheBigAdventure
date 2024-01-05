@@ -6,10 +6,10 @@ import java.util.Objects;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.Zone;
-import fr.uge.thebigadventure.model.enums.entity.InventoryItemType;
-import fr.uge.thebigadventure.model.enums.entity.PersonageType;
-import fr.uge.thebigadventure.model.enums.util.Behavior;
-import fr.uge.thebigadventure.model.enums.util.Kind;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.entity.PersonageType;
+import fr.uge.thebigadventure.model.type.util.Behavior;
+import fr.uge.thebigadventure.model.type.util.Kind;
 
 public final class Enemy implements NPC {
 
