@@ -43,28 +43,50 @@ public class ElementBuilder {
   private boolean phantomized = false;
   private String teleport = null;
 
-  public ElementBuilder() {
-  }
-
+  /**
+   * Set the name of the entity.
+   *
+   * @param name the name of the entity.
+   */
   public void setName(String name) {
     Objects.requireNonNull(name);
     this.name = name;
   }
 
+  /**
+   * Set the skin of the entity.
+   *
+   * @param skin the skin of the entity.
+   */
   public void setSkin(EntityType skin) {
     Objects.requireNonNull(skin);
     this.skin = skin;
   }
 
+  /**
+   * Set if the entity is a player.
+   *
+   * @param player true if the entity is a player.
+   */   
   public void setPlayer(boolean player) {
     this.player = player;
   }
 
+  /**
+   * Set the position of the entity.
+   *
+   * @param position the position of the entity.
+   */
   public void setPosition(Coordinates position) {
     Objects.requireNonNull(position);
     this.position = position;
   }
 
+  /**
+   * Set the health of the entity.
+   *
+   * @param health the health of the entity, must be positive.
+   */
   public void setHealth(int health) {
     if (health < 0) {
       throw new IllegalArgumentException("health < 0");
@@ -72,34 +94,63 @@ public class ElementBuilder {
     this.health = health;
   }
 
+  /**
+   * Set the kind of the entity.
+   *
+   * @param kind the kind of the entity.
+   */
   public void setKind(Kind kind) {
     Objects.requireNonNull(kind);
     this.kind = kind;
   }
 
+  /**
+   * Set the zone of the entity.
+   *
+   * @param zone the zone of the entity.
+   */
   public void setZone(Zone zone) {
     Objects.requireNonNull(zone);
     this.zone = zone;
   }
 
+  /**
+   * Set the behavior of the entity.
+   *
+   * @param behavior the behavior of the entity.
+   */
   public void setBehavior(Behavior behavior) {
     Objects.requireNonNull(behavior);
     this.behavior = behavior;
   }
 
+  /**
+   * Set the damage of the entity.
+   *
+   * @param damage the damage of the entity, must be positive.
+   */
   public void setDamage(int damage) {
     if (damage < 0) {
-      // TODO est-ce qu'on pourrait mettre un damage positif ? ce serait rigolo
       throw new IllegalArgumentException("damage < 0");
     }
     this.damage = damage;
   }
 
+  /**
+   * Set the text of the entity.
+   *
+   * @param text the text of the entity.
+   */
   public void setText(String text) {
     Objects.requireNonNull(text);
     this.text = text;
   }
 
+  /**
+   * Set the trades of the entity.
+   *
+   * @param trades the trades of the entity.
+   */
   public void setTrades(List<Trade> trades) {
     trades = List.copyOf(trades);
     if (trades.isEmpty()) {
@@ -108,6 +159,11 @@ public class ElementBuilder {
     this.trades = trades;
   }
 
+  /**
+   * Set the steal of the entity.
+   *
+   * @param steal the steal of the entity.
+   */
   public void setSteal(List<EntityType> steal) {
     steal = List.copyOf(steal);
     if (steal.isEmpty()) {
@@ -116,19 +172,39 @@ public class ElementBuilder {
     this.steal = steal;
   }
 
+  /**
+   * Set the locked of the entity.
+   *
+   * @param locked the locked of the entity.
+   */
   public void setLocked(ElementRef locked) {
     this.locked = locked;
   }
 
+  /**
+   * Set the flow of the entity.
+   *
+   * @param flow the flow of the entity.
+   */
   public void setFlow(Direction flow) {
     Objects.requireNonNull(flow);
     this.flow = flow;
   }
 
+  /**
+   * Set the phantomized of the entity.
+   *
+   * @param phantomized the phantomized of the entity.
+   */
   public void setPhantomized(boolean phantomized) {
     this.phantomized = phantomized;
   }
 
+  /**
+   * Set the teleport of the entity.
+   *
+   * @param teleport the teleport of the entity.
+   */
   public void setTeleport(String teleport) {
     Objects.requireNonNull(teleport);
     this.teleport = teleport;
@@ -176,6 +252,11 @@ public class ElementBuilder {
     };
   }
 
+  /**
+   * Create an entity from the current state of the element builder.
+   *
+   * @return the entity.
+   */
   public Entity toEntity() {
     return switch (skin) {
       case ObstacleType obstacleType -> toObstacleEntity(obstacleType);

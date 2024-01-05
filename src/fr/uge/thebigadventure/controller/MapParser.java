@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.GameMap;
@@ -35,33 +36,39 @@ public class MapParser {
       Pattern.compile("\\s*\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\)\\s*\\(\\s*(\\d+)\\s*x\\s*(\\d+)\\)\\s*");
   private static final Pattern ENCODINGS_PATTERN =
       Pattern.compile("\\s*(\\w+?)\\s*\\(\\s*(\\w)\\s*\\)\\s*");
-  private static final Pattern GRID_DATA_PATTERN =
+  private static final Pattern TEXT_PATTERN =
       Pattern.compile("\"\"\"\\s*\\n(.+)\\n( *)\"\"\"", Pattern.DOTALL);
   private static final Pattern BOOLEAN_PATTERN =
       Pattern.compile("true|false", Pattern.CASE_INSENSITIVE);
   private static final Pattern LOCK_PATTERN = Pattern.compile("(KEY|LEVER)\\s*(.+)");
   private static final Pattern TRADE_PATTERN = Pattern.compile("(\\w+)\\s*->\\s*(\\w+)(\\s+(\\w+))?");
-  private final String text;
   private final MapBuilder builder = new MapBuilder();
   private int sectionPointer = 0;
   private int attributePointer = 0;
+  private final String text;
 
+  /**
+   * Create a new map parser.
+   * @param text the text to parse
+   */
   public MapParser(String text) {
     this.text = text;
   }
 
-  public static void main(String[] args) throws IOException {
-    GameMap gameMap = GameMap.load(Path.of("resources/test.map"));
-    System.out.println(gameMap.size());
-    System.out.println(gameMap.data());
-    System.out.println(gameMap.elements());
-  }
-
+  /**
+   * Print an error message with the line number.
+   * @param pointer the character number in the text where the error occurred
+   * @param msg the error message
+   */
   private void errorLine(int pointer, String msg) {
     var line = text.substring(0, pointer).split("\n", -1).length;
     System.err.println("Error while parsing map at line " + line + " : " + msg);
   }
   
+  /**
+   * Parse the text and return the map builder.
+   * @return the map builder
+   */
   public MapBuilder parse() {
     var matcher = SECTIONS_PATTERN.matcher(text);
     var pointer = 0;
@@ -157,7 +164,7 @@ public class MapParser {
   }
 
   private void parseGridAttributeData(String content) {
-    var matcher = GRID_DATA_PATTERN.matcher(content);
+    var matcher = TEXT_PATTERN.matcher(content);
     if (!matcher.find())
       errorLine(attributePointer, "Grid data invalid");
     HashMap<Coordinates, Character> map = new HashMap<>();
@@ -190,18 +197,33 @@ public class MapParser {
       case "zone" -> parseElementAttributeZone(content);
       case "behavior" -> parseElementAttributeBehavior(content);
       case "damage" -> parseElementAttributeDamage(content);
-      case "phantomized" -> parseElementAttributePhantomized(content);
-      case "teleport" -> parseElementAttributeTeleport(content);
-      case "flow" -> parseElementAttributeFlow(content);
-      case "locked" -> parseElementAttributeLocked(content);
+      case "text" -> parseElementAttributeText(content);
       case "steal" -> parseElementAttributeSteal(content);
       case "trade" -> parseElementAttributeTrade(content);
+      case "flow" -> parseElementAttributeFlow(content);
+      case "locked" -> parseElementAttributeLocked(content);
+      case "phantomized" -> parseElementAttributePhantomized(content);
+      case "teleport" -> parseElementAttributeTeleport(content);
       default -> errorLine(attributePointer, "Unknown element attribute \"" + name + "\"");
     }
   }
 
   private void parseElementAttributeName(String content) {
     builder.elementBuilder.setName(content);
+  }
+
+  private void parseElementAttributeText(String content) {
+    if (content.startsWith("\"\"\"")) {
+      var matcher = TEXT_PATTERN.matcher(content);
+      if (!matcher.find()) {
+        errorLine(attributePointer, "Bad text format");
+      }
+      var nSpaces = matcher.group(2).length();
+      var text = matcher.group(1).lines().map(s -> s.substring(nSpaces)).collect(Collectors.joining("\n"));
+      builder.elementBuilder.setText(text);
+    } else {
+      builder.elementBuilder.setText(content);
+    }
   }
 
   private void parseElementAttributeSkin(String content) {
@@ -367,5 +389,17 @@ public class MapParser {
 
   private void parseElementAttributeTeleport(String content) {
     builder.elementBuilder.setTeleport(content);
+  }
+
+  /**
+   * Main method for testing.
+   * @param args
+   * @throws IOException
+   */
+  public static void main(String[] args) throws IOException {
+    GameMap gameMap = GameMap.load(Path.of(args[0]));
+    System.out.println(gameMap.size());
+    System.out.println(gameMap.data());
+    System.out.println(gameMap.elements());
   }
 }

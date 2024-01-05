@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import fr.uge.thebigadventure.model.Coordinates;
@@ -15,28 +16,56 @@ import fr.uge.thebigadventure.model.enums.entity.EntityType;
 
 public class MapBuilder {
   private final List<Entity> entities = new ArrayList<>();
-  public ElementBuilder elementBuilder = new ElementBuilder();
   private Size size = null;
   private Map<String, EntityType> encodings = null;
   private Map<Coordinates, Character> data = null;
   private Size effectiveSize;
 
+  /**
+   * Element builder used to build the current element.
+   */
+  public ElementBuilder elementBuilder = new ElementBuilder();
+
+  /**
+   * Set the size of the map.
+   * @param size the size of the map.
+   */
   public void setSize(Size size) {
+    Objects.requireNonNull(size);
     this.size = size;
   }
 
+  /**
+   * Set the effective size of the map.
+   * @param effectiveSize the effective size of the map.
+   */
   public void setEffectiveSize(Size effectiveSize) {
+    Objects.requireNonNull(effectiveSize);
     this.effectiveSize = effectiveSize;
   }
 
+  /**
+   * Set the encodings of the map.
+   * @param encodings the encodings of the map.
+   */
   public void setEncodings(Map<String, EntityType> encodings) {
+    Objects.requireNonNull(encodings);
     this.encodings = encodings;
   }
 
+  /**
+   * Set the data of the map.
+   * @param data the data of the map.
+   */
   public void setData(Map<Coordinates, Character> data) {
+    Objects.requireNonNull(data);
     this.data = data;
   }
 
+  /**
+   * Create the current element and add it to the list of elements.
+   * Reset the element builder.
+   */
   public void pushElementBuilder() {
     try {
       entities.add(elementBuilder.toEntity());
@@ -45,6 +74,10 @@ public class MapBuilder {
     }
   }
 
+  /**
+   * Validate the state of the map builder.
+   * @throws IllegalStateException if the state is invalid.
+   */
   public void validateState() {
     if (size == null) {
       throw new IllegalStateException("Grid size undefined in map.");
@@ -73,6 +106,10 @@ public class MapBuilder {
     return mapData;
   }
 
+  /**
+   * Create a game map from the current state of the map builder.
+   * @return the game map.
+   */
   public GameMap toGameMap() {
     validateState();
 

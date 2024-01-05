@@ -15,9 +15,12 @@ WWWWWWWWWW
 """
 
 [element]
-skin: SWORD
-name: Epee
-locked: KEY red
+  skin: SWORD
+  name: Epee
+  locked: KEY red
+  text: """
+    Vous avez trouvez la sword du feu avec la clef rouge !
+    """
 
 [element]
 skin: CRAB
@@ -26,6 +29,7 @@ kind: enemy
 health: 10
 zone: (38, 24) (10 x 8)
 behavior: stroll
+text: Coucou !
 damage: 5
 steal: SWORD, KEY, BANANA
 trade: CASH -> KEY red, CASH -> PIZZA
@@ -34,6 +38,12 @@ trade: CASH -> KEY red, CASH -> PIZZA
 skin: CRAB
 position: (38, 25)
 kind: enemy
+text: """
+      Dans la jungle
+      Vis un prédateur
+        Vraiment...
+            DANGEREUX
+      """
 health: 10
 behavior: stroll
 damage: 5
