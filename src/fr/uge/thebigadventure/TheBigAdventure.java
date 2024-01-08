@@ -73,7 +73,10 @@ public class TheBigAdventure {
           keyboardController = new KeyboardController(event.getKey());
         }
         if (gameMap.getPlayer() != null && keyboardController != null) {
-          mapController.updatePlayerController(keyboardController);
+          if (!mapController.isInventoryOpen())
+            mapController.updatePlayerController(keyboardController);
+          else
+            mapController.updateInventoryController(keyboardController);
           update = true;
         }
         if (keyboardController != null && keyboardController.handleQuitControl(context)) {
@@ -82,5 +85,4 @@ public class TheBigAdventure {
       }
     });
   }
-
 }

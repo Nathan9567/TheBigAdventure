@@ -211,4 +211,14 @@
   position: (44,45)
   kind: obstacle
 
+[element]
+    name: blé
+    skin: CASH
+    position: (6,5)
+    kind: item
 
+[element]
+    name: money
+    skin: CASH
+    position: (7,5)
+    kind: item

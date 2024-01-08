@@ -54,7 +54,7 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
       Coordinates coordinates = data.getKey();
       EntityType entityType = data.getValue();
       if (isInPlayerCenteredMap(coordinates)) {
-        entityView.drawEntityTile(graphics2D,
+        entityView.drawEntityTileInMap(graphics2D,
             entityType, coordinatesToPlayerCenteredMapCoordinates(coordinates),
             cellSize);
       }
@@ -66,7 +66,7 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
     for (var entity : element.values()) {
       Coordinates coordinates = entity.position();
       if (coordinates != null && isInPlayerCenteredMap(coordinates)) {
-        entityView.drawEntityTile(graphics2D, entity.skin(),
+        entityView.drawEntityTileInMap(graphics2D, entity.skin(),
             coordinatesToPlayerCenteredMapCoordinates(coordinates), cellSize);
       }
     }

@@ -6,10 +6,12 @@ import fr.uge.thebigadventure.model.entity.personage.Enemy;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.entity.personage.Player;
 import fr.uge.thebigadventure.model.type.util.Direction;
+import fr.uge.thebigadventure.view.InventoryView;
 import fr.uge.thebigadventure.view.entity.PlayerView;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Objects;
 
 public class PlayerController {
 
@@ -17,12 +19,15 @@ public class PlayerController {
   private final PlayerView playerView;
   private final GameMap map;
 
-  private boolean inventoryOpen = false;
+  private final InventoryController inventoryController;
 
   public PlayerController(Player player, PlayerView playerView, GameMap gameMap) {
     this.player = player;
     this.playerView = playerView;
     this.map = gameMap;
+    InventoryView inventoryView = new InventoryView(player.inventory(),
+        playerView.cellSize(), playerView.screenInfo());
+    this.inventoryController = new InventoryController(player.inventory(), inventoryView);
   }
 
   private boolean isAllowToMove(Direction direction) {
@@ -46,13 +51,14 @@ public class PlayerController {
     return entityElement == null || !entityElement.skin().isObstacle();
   }
 
-  public boolean movePlayer(Direction direction) {
+  public void movePlayer(Direction direction) {
+    Objects.requireNonNull(direction, "You need a direction to move the player");
+    if (player.getDirection() != direction)
+      player.setDirection(direction);
     if (!isAllowToMove(direction)) {
-      return false;
+      return;
     }
-    player.setDirection(direction);
     player.setPosition(player.position().move(direction));
-    return true;
   }
 
   public void action() {
@@ -67,10 +73,10 @@ public class PlayerController {
           .filter(NPC::isEnemy)
           .findFirst();
       if (target.isPresent()) {
-        Enemy npc = (Enemy) target.get();
-        npc.setHealth(npc.getHealth() - weapon.damage());
-        if (npc.getHealth() <= 0) {
-          map.removeNpc(npc);
+        Enemy enemy = (Enemy) target.get();
+        enemy.setHealth(enemy.getHealth() - weapon.damage());
+        if (enemy.getHealth() <= 0) {
+          map.removeNpc(enemy);
         }
       }
     }
@@ -80,15 +86,11 @@ public class PlayerController {
     playerView.renderPlayer(graphics2D);
   }
 
-  public boolean isInventoryOpen() {
-    return inventoryOpen;
-  }
-
-  public void toggleInventory() {
-    inventoryOpen = !inventoryOpen;
-  }
-
   public void renderInventory(Graphics2D graphics2D) throws IOException {
-    playerView.renderInventory(graphics2D);
+    inventoryController.updateView(graphics2D);
+  }
+
+  public InventoryController getInventoryController() {
+    return inventoryController;
   }
 }

@@ -1,8 +1,8 @@
 package fr.uge.thebigadventure.model;
 
-import java.util.Objects;
-
 import fr.uge.thebigadventure.model.type.util.Direction;
+
+import java.util.Objects;
 
 public record Coordinates(int x, int y) {
 
@@ -13,6 +13,16 @@ public record Coordinates(int x, int y) {
       case WEST -> new Coordinates(x - 1, y);
       case EAST -> new Coordinates(x + 1, y);
     };
+  }
+
+  /**
+   * Multiply the coordinates by a multiplier.
+   *
+   * @param multiplier the multiplier to apply
+   * @return the new coordinates
+   */
+  public Coordinates multiply(int multiplier) {
+    return new Coordinates(x * multiplier, y * multiplier);
   }
 
   public boolean notInBounds(Size size) {
@@ -30,5 +40,9 @@ public record Coordinates(int x, int y) {
       return false;
     }
     return coordinates.x == x && coordinates.y == y;
+  }
+
+  public Coordinates add(double x1, double x2) {
+    return new Coordinates((int) (x + x1), (int) (y + x2));
   }
 }

@@ -26,7 +26,7 @@ public record NPCView(NPC npc, int cellSize) {
         MapView.coordinatesToPlayerCenteredMapCoordinates(npc.position());
     switch (npc) {
       case Enemy enemy -> renderEnemy(enemy, graphics2D, NPCPositionCentered);
-      default -> entityView.drawEntityTile(graphics2D,
+      default -> entityView.drawEntityTileInMap(graphics2D,
           npc.skin(), npc.position(), cellSize);
     }
   }
@@ -40,7 +40,7 @@ public record NPCView(NPC npc, int cellSize) {
     graphics2D.setColor(new Color(77, 194, 26));
     graphics2D.fillRect(x, y, cellSize * enemy.getHealth() / enemy.maxHealth(),
         cellSize / 4);
-    entityView.drawEntityTile(graphics2D,
+    entityView.drawEntityTileInMap(graphics2D,
         enemy.skin(), position, cellSize);
   }
 }

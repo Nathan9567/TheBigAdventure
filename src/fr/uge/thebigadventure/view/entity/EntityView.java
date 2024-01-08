@@ -1,10 +1,9 @@
 package fr.uge.thebigadventure.view.entity;
 
-import javax.imageio.ImageIO;
-
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.type.entity.*;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -35,6 +34,41 @@ public class EntityView {
    * Draw an entity tile on the given graphics2D at the given coordinates.
    * The tile is resized to the given tile size and
    * rotated by the given rotation angle.
+   * In this method, the coordinates are not relative to the map. They are
+   * the coordinates of the top left corner of the tile.
+   * If you need the one relative to the map, use drawEntityTileInMap.
+   *
+   * @param graphics2D    the graphics2D to draw on
+   * @param skin          the skin of the entity
+   * @param coordinates   the coordinates of the entity
+   *                      (the coordinates of the top left corner of the tile)
+   * @param tileSize      the size of the tile
+   * @param rotationAngle the angle of rotation of the entity
+   */
+  public void drawEntityTile(Graphics2D graphics2D, EntityType skin,
+                             Coordinates coordinates, int tileSize,
+                             int rotationAngle) throws IOException {
+    Objects.requireNonNull(graphics2D, "Graphics2D cannot be null");
+    Objects.requireNonNull(skin, "Skin cannot be null");
+    Objects.requireNonNull(coordinates, "Coordinates cannot be null");
+    if (rotationAngle % 90 != 0) {
+      throw new IllegalArgumentException("Rotation angle must be a multiple of 90");
+    }
+    var imagePath = getImagePath(skin);
+    var image = getImage(imagePath);
+    var modifiedImage = resizeImage(image, tileSize, tileSize);
+    if (rotationAngle != 0) {
+      if (rotationAngle / 90 % 2 == 0)
+        modifiedImage = verticalFlipImage(modifiedImage);
+      modifiedImage = rotateImage(modifiedImage, rotationAngle);
+    }
+    graphics2D.drawImage(modifiedImage, coordinates.x(), coordinates.y(), null);
+  }
+
+  /**
+   * Draw an entity tile on the given graphics2D at the given coordinates.
+   * The tile is resized to the given tile size and
+   * rotated by the given rotation angle.
    *
    * @param graphics2D    the graphics2D to draw on
    * @param skin          the skin of the entity
@@ -43,26 +77,10 @@ public class EntityView {
    * @param rotationAngle the angle of rotation of the entity
    * @throws IOException if the image cannot be loaded
    */
-  public void drawEntityTile(Graphics2D graphics2D, EntityType skin,
-                             Coordinates coordinates, int tileSize,
-                             int rotationAngle) throws IOException {
-    Objects.requireNonNull(graphics2D, "Graphics2D cannot be null");
-    Objects.requireNonNull(skin, "Skin cannot be null");
-    Objects.requireNonNull(coordinates, "Coordinates cannot be null");
-    if (tileSize <= 0) {
-      throw new IllegalArgumentException("Tile size must be positive");
-    }
-    if (rotationAngle % 90 != 0) {
-      throw new IllegalArgumentException("Rotation angle must be a multiple of 90");
-    }
-    var imagePath = getImagePath(skin);
-    var image = getImage(imagePath);
-    var modifiedImage = resizeImage(image, tileSize, tileSize);
-    if (rotationAngle != 0) {
-      modifiedImage = rotateImage(modifiedImage, rotationAngle);
-    }
-    graphics2D.drawImage(modifiedImage, coordinates.x() * tileSize,
-        coordinates.y() * tileSize, null);
+  public void drawEntityTileInMap(Graphics2D graphics2D, EntityType skin,
+                                  Coordinates coordinates, int tileSize,
+                                  int rotationAngle) throws IOException {
+    drawEntityTile(graphics2D, skin, coordinates.multiply(tileSize), tileSize, rotationAngle);
   }
 
   /**
@@ -80,9 +98,10 @@ public class EntityView {
    * @param tileSize    the size of the tile
    * @throws IOException if the image cannot be loaded
    */
-  public void drawEntityTile(Graphics2D graphics2D,
-                             EntityType skin, Coordinates coordinates, int tileSize) throws IOException {
-    drawEntityTile(graphics2D, skin, coordinates, tileSize, 0);
+  public void drawEntityTileInMap(Graphics2D graphics2D,
+                                  EntityType skin, Coordinates coordinates,
+                                  int tileSize) throws IOException {
+    drawEntityTileInMap(graphics2D, skin, coordinates, tileSize, 0);
   }
 
   private String getImagePath(EntityType skin) {
@@ -101,6 +120,7 @@ public class EntityView {
   }
 
   private BufferedImage resizeImage(BufferedImage originalImage, int newWidth, int newHeight) {
+    Objects.requireNonNull(originalImage, "Original image cannot be null");
     BufferedImage resizedImage = new BufferedImage(newWidth, newHeight,
         BufferedImage.TYPE_INT_ARGB);
     Graphics2D g2d = resizedImage.createGraphics();
@@ -128,4 +148,13 @@ public class EntityView {
     return rotatedImage;
   }
 
+  private BufferedImage verticalFlipImage(BufferedImage originalImage) {
+    int w = originalImage.getWidth();
+    int h = originalImage.getHeight();
+    BufferedImage flippedImage = new BufferedImage(w, h, originalImage.getType());
+    Graphics2D g2d = flippedImage.createGraphics();
+    g2d.drawImage(originalImage, 0, h, w, -h, null);
+    g2d.dispose();
+    return flippedImage;
+  }
 }

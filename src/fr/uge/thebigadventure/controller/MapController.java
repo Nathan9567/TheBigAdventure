@@ -44,6 +44,10 @@ public class MapController {
     return updated;
   }
 
+  public boolean isInventoryOpen() {
+    return playerController.getInventoryController().isInventoryOpen();
+  }
+
   private void pickupItem() {
     var playerPosition = gameMap.getPlayer().position();
     var element = gameMap.elements().get(playerPosition);
@@ -58,6 +62,10 @@ public class MapController {
     pickupItem();
   }
 
+  public void updateInventoryController(KeyboardController keyboardController) {
+    keyboardController.handleInventoryControl(playerController.getInventoryController());
+  }
+
   public void updateView(Graphics2D graphics2D) throws IOException {
     mapView.clearLastView(graphics2D);
     mapView.drawPlayerCenteredMap(graphics2D);
@@ -65,7 +73,7 @@ public class MapController {
     for (var npcController : npcControllers) {
       npcController.updateView(graphics2D);
     }
-    if (playerController.isInventoryOpen()) {
+    if (playerController.getInventoryController().isInventoryOpen()) {
       playerController.renderInventory(graphics2D);
     }
   }

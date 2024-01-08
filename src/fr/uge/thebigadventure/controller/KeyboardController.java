@@ -14,20 +14,28 @@ public record KeyboardController(KeyboardKey keyboardKey) {
     return false;
   }
 
-  public boolean handlePlayerControl(PlayerController playerController) {
-    return switch (keyboardKey) {
+  public void handleInventoryControl(InventoryController inventoryController) {
+    switch (keyboardKey) {
+      case UP -> inventoryController.moveInventoryCursor(Direction.NORTH);
+      case DOWN -> inventoryController.moveInventoryCursor(Direction.SOUTH);
+      case RIGHT -> inventoryController.moveInventoryCursor(Direction.EAST);
+      case LEFT -> inventoryController.moveInventoryCursor(Direction.WEST);
+      case SPACE -> inventoryController.moveItemToMainHand();
+      case I -> inventoryController.toggleInventory();
+    }
+  }
+
+  public void handlePlayerControl(PlayerController playerController) {
+    switch (keyboardKey) {
       case UP -> playerController.movePlayer(Direction.NORTH);
       case DOWN -> playerController.movePlayer(Direction.SOUTH);
       case RIGHT -> playerController.movePlayer(Direction.EAST);
       case LEFT -> playerController.movePlayer(Direction.WEST);
-//      case SPACE -> {
-//        // TODO: Action controller
-//      }
-      case I -> {
-        playerController.toggleInventory();
-        yield true;
+      case SPACE -> {
+        // TODO: Action controller
+        playerController.action();
       }
-      default -> false;
-    };
+      case I -> playerController.getInventoryController().toggleInventory();
+    }
   }
 }

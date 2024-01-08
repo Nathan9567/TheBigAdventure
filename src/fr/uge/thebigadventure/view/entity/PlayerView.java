@@ -2,7 +2,6 @@ package fr.uge.thebigadventure.view.entity;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.entity.personage.Player;
-import fr.uge.thebigadventure.view.InventoryView;
 import fr.uge.thebigadventure.view.MapView;
 import fr.umlv.zen5.ScreenInfo;
 
@@ -31,9 +30,22 @@ public record PlayerView(Player player, int cellSize, ScreenInfo screenInfo) {
     graphics2D.drawString(player.name(), x, y);
   }
 
-  public void renderInventory(Graphics2D graphics2D) throws IOException {
-    var inventoryView = new InventoryView(player.inventory(), cellSize, screenInfo);
-    inventoryView.renderInventory(graphics2D);
+  private void showMainHand(Graphics2D graphics2D,
+                            Coordinates playerCenteredPosition,
+                            int angle) throws IOException {
+    var mainHand = player.inventory().mainHand();
+    if (mainHand == null) {
+      return;
+    }
+    var coordinates = playerCenteredPosition.multiply(cellSize).add((double) cellSize / 2, 0);
+    switch (player.getDirection()) {
+      case NORTH -> coordinates = coordinates.add(-cellSize / 2, -cellSize / 2);
+      case SOUTH -> coordinates = coordinates.add(0, cellSize / 2);
+      case EAST -> coordinates = coordinates.add(cellSize / 4, 0);
+      case WEST -> coordinates = coordinates.add(-cellSize, 0);
+    }
+    entityView.drawEntityTile(graphics2D, mainHand.skin(),
+        coordinates, (int) (cellSize * 0.8), angle);
   }
 
   public void renderPlayer(Graphics2D graphics2D) throws IOException {
@@ -47,9 +59,10 @@ public record PlayerView(Player player, int cellSize, ScreenInfo screenInfo) {
       case WEST -> 180;
       case null -> 0;
     };
-    entityView.drawEntityTile(graphics2D,
+    entityView.drawEntityTileInMap(graphics2D,
         player.skin(), playerPositionCentered, cellSize, angle);
     showPlayerHealth(graphics2D, playerPositionCentered);
     showPlayerName(graphics2D, playerPositionCentered);
+    showMainHand(graphics2D, playerPositionCentered, angle);
   }
 }
