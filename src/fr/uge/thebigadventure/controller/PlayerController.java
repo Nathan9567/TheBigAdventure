@@ -1,9 +1,6 @@
 package fr.uge.thebigadventure.controller;
 
 import fr.uge.thebigadventure.model.GameMap;
-import fr.uge.thebigadventure.model.entity.inventory.weapon.WeaponInterface;
-import fr.uge.thebigadventure.model.entity.personage.Enemy;
-import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.entity.personage.Player;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.view.InventoryView;
@@ -59,27 +56,6 @@ public class PlayerController {
       return;
     }
     player.setPosition(player.position().move(direction));
-  }
-
-  public void action() {
-    if (!player.inventory().mainHand().isWeapon()) {
-      return;
-    }
-    var weapon = (WeaponInterface) player.inventory().mainHand();
-    if (weapon != null) {
-      var targetPosition = player.position().move(player.getDirection());
-      var target = map.getNpcs().stream()
-          .filter(npc -> npc.position().equals(targetPosition))
-          .filter(NPC::isEnemy)
-          .findFirst();
-      if (target.isPresent()) {
-        Enemy enemy = (Enemy) target.get();
-        enemy.setHealth(enemy.getHealth() - weapon.damage());
-        if (enemy.getHealth() <= 0) {
-          map.removeNpc(enemy);
-        }
-      }
-    }
   }
 
   public void updateView(Graphics2D graphics2D) throws IOException {

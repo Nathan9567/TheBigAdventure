@@ -1,5 +1,12 @@
 package fr.uge.thebigadventure.controller;
 
+import fr.uge.thebigadventure.model.*;
+import fr.uge.thebigadventure.model.type.entity.EntityType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.util.Behavior;
+import fr.uge.thebigadventure.model.type.util.Direction;
+import fr.uge.thebigadventure.model.type.util.Kind;
+
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -10,17 +17,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.GameMap;
-import fr.uge.thebigadventure.model.Size;
-import fr.uge.thebigadventure.model.Trade;
-import fr.uge.thebigadventure.model.ElementRef;
-import fr.uge.thebigadventure.model.Zone;
-import fr.uge.thebigadventure.model.type.entity.EntityType;
-import fr.uge.thebigadventure.model.type.util.Behavior;
-import fr.uge.thebigadventure.model.type.util.Direction;
-import fr.uge.thebigadventure.model.type.util.Kind;
 
 public class MapParser {
   private static final Pattern SECTIONS_PATTERN =
@@ -43,12 +39,13 @@ public class MapParser {
   private static final Pattern LOCK_PATTERN = Pattern.compile("(KEY|LEVER)\\s*(.+)");
   private static final Pattern TRADE_PATTERN = Pattern.compile("(\\w+)\\s*->\\s*(\\w+)(\\s+(\\w+))?");
   private final MapBuilder builder = new MapBuilder();
+  private final String text;
   private int sectionPointer = 0;
   private int attributePointer = 0;
-  private final String text;
 
   /**
    * Create a new map parser.
+   *
    * @param text the text to parse
    */
   public MapParser(String text) {
@@ -56,17 +53,32 @@ public class MapParser {
   }
 
   /**
+   * Main method for testing.
+   *
+   * @param args
+   * @throws IOException
+   */
+  public static void main(String[] args) throws IOException {
+    GameMap gameMap = GameMap.load(Path.of(args[0]));
+    System.out.println(gameMap.size());
+    System.out.println(gameMap.data());
+    System.out.println(gameMap.elements());
+  }
+
+  /**
    * Print an error message with the line number.
+   *
    * @param pointer the character number in the text where the error occurred
-   * @param msg the error message
+   * @param msg     the error message
    */
   private void errorLine(int pointer, String msg) {
     var line = text.substring(0, pointer).split("\n", -1).length;
     System.err.println("Error while parsing map at line " + line + " : " + msg);
   }
-  
+
   /**
    * Parse the text and return the map builder.
+   *
    * @return the map builder
    */
   public MapBuilder parse() {
@@ -98,7 +110,8 @@ public class MapParser {
     parseAttributes(content, this::parseElementAttributes);
     try {
       builder.pushElementBuilder();
-    } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
+    } catch (IllegalArgumentException | IllegalStateException |
+             NullPointerException e) {
       errorLine(sectionPointer, "can't create element : " + e.getMessage());
     } // TODO custom exception ?
   }
@@ -125,7 +138,8 @@ public class MapParser {
       case "size" -> parseGridAttributeSize(content);
       case "encodings" -> parseGridAttributeEncodings(content);
       case "data" -> parseGridAttributeData(content);
-      default -> errorLine(attributePointer, "Unknown grid attribute \"" + name + "\"");
+      default ->
+          errorLine(attributePointer, "Unknown grid attribute \"" + name + "\"");
     }
   }
 
@@ -150,7 +164,7 @@ public class MapParser {
         errorLine(attributePointer + pointer, "Error in encodings, letter '" + matcher.group(2) + "' is already associated with a skin");
       } else {
         try {
-            encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
+          encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
         } catch (IllegalArgumentException e) {
           errorLine(attributePointer + pointer, "Unknown skin \"" + matcher.group(1) + "\" in encodings");
         }
@@ -204,7 +218,8 @@ public class MapParser {
       case "locked" -> parseElementAttributeLocked(content);
       case "phantomized" -> parseElementAttributePhantomized(content);
       case "teleport" -> parseElementAttributeTeleport(content);
-      default -> errorLine(attributePointer, "Unknown element attribute \"" + name + "\"");
+      default ->
+          errorLine(attributePointer, "Unknown element attribute \"" + name + "\"");
     }
   }
 
@@ -324,7 +339,7 @@ public class MapParser {
         return new Trade(
             parseTradeElementRef(matcher.group(1), null),
             parseTradeElementRef(matcher.group(2), matcher.group(4))
-            );
+        );
       } catch (NullPointerException e) {
         return null;
       }
@@ -347,8 +362,16 @@ public class MapParser {
 
   private EntityType getEntityTypeFromAttribute(String skin) {
     try {
-      var type = EntityType.fromString(skin);
-      return type;
+      return EntityType.fromString(skin);
+    } catch (IllegalArgumentException e) {
+      errorLine(attributePointer, "Unknown skin \"" + skin + "\"");
+    }
+    return null;
+  }
+
+  private InventoryItemType getInventoryItemTypeFromAttribute(String skin) {
+    try {
+      return InventoryItemType.valueOf(skin);
     } catch (IllegalArgumentException e) {
       errorLine(attributePointer, "Unknown skin \"" + skin + "\"");
     }
@@ -358,7 +381,7 @@ public class MapParser {
   private void parseElementAttributeSteal(String content) {
     var steal = Arrays.stream(content.split(","))
         .map(String::trim)
-        .map(this::getEntityTypeFromAttribute)
+        .map(this::getInventoryItemTypeFromAttribute)
         .filter(Predicate.not(Objects::isNull)).toList();
     builder.elementBuilder.setSteal(steal);
   }
@@ -372,7 +395,7 @@ public class MapParser {
     builder.elementBuilder.setLocked(new ElementRef(
         EntityType.fromString(matcher.group(1)),
         matcher.group(2).trim()
-        ));
+    ));
   }
 
   private void parseElementAttributeFlow(String content) {
@@ -389,17 +412,5 @@ public class MapParser {
 
   private void parseElementAttributeTeleport(String content) {
     builder.elementBuilder.setTeleport(content);
-  }
-
-  /**
-   * Main method for testing.
-   * @param args
-   * @throws IOException
-   */
-  public static void main(String[] args) throws IOException {
-    GameMap gameMap = GameMap.load(Path.of(args[0]));
-    System.out.println(gameMap.size());
-    System.out.println(gameMap.data());
-    System.out.println(gameMap.elements());
   }
 }

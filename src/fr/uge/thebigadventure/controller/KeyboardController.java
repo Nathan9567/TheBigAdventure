@@ -25,17 +25,14 @@ public record KeyboardController(KeyboardKey keyboardKey) {
     }
   }
 
-  public void handlePlayerControl(PlayerController playerController) {
+  public void handleMapControl(MapController mapController) {
     switch (keyboardKey) {
-      case UP -> playerController.movePlayer(Direction.NORTH);
-      case DOWN -> playerController.movePlayer(Direction.SOUTH);
-      case RIGHT -> playerController.movePlayer(Direction.EAST);
-      case LEFT -> playerController.movePlayer(Direction.WEST);
-      case SPACE -> {
-        // TODO: Action controller
-        playerController.action();
-      }
-      case I -> playerController.getInventoryController().toggleInventory();
+      case UP -> mapController.movePlayer(Direction.NORTH);
+      case DOWN -> mapController.movePlayer(Direction.SOUTH);
+      case RIGHT -> mapController.movePlayer(Direction.EAST);
+      case LEFT -> mapController.movePlayer(Direction.WEST);
+      case SPACE -> mapController.action();
+      case I -> mapController.toggleInventory();
     }
   }
 }

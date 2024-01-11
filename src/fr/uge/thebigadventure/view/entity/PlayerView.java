@@ -37,7 +37,7 @@ public record PlayerView(Player player, int cellSize, ScreenInfo screenInfo) {
     if (mainHand == null) {
       return;
     }
-    var coordinates = playerCenteredPosition.multiply(cellSize).add((double) cellSize / 2, 0);
+    var coordinates = playerCenteredPosition.multiply(cellSize).add(cellSize / 2, 0);
     switch (player.getDirection()) {
       case NORTH -> coordinates = coordinates.add(-cellSize / 2, -cellSize / 2);
       case SOUTH -> coordinates = coordinates.add(0, cellSize / 2);

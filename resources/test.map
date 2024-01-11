@@ -222,3 +222,13 @@
     skin: CASH
     position: (7,5)
     kind: item
+
+[element]
+    name: michel
+    skin: BEE
+    position: (8,5)
+    kind: friend
+    text: """
+    Salut, mon nom est michel.
+    Veux-tu m'aider à retrouver mon ami waldo ?
+    """

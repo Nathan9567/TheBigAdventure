@@ -51,9 +51,6 @@ public class EntityView {
     Objects.requireNonNull(graphics2D, "Graphics2D cannot be null");
     Objects.requireNonNull(skin, "Skin cannot be null");
     Objects.requireNonNull(coordinates, "Coordinates cannot be null");
-    if (rotationAngle % 90 != 0) {
-      throw new IllegalArgumentException("Rotation angle must be a multiple of 90");
-    }
     var imagePath = getImagePath(skin);
     var image = getImage(imagePath);
     var modifiedImage = resizeImage(image, tileSize, tileSize);

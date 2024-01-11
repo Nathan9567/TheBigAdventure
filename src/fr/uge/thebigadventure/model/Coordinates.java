@@ -42,7 +42,7 @@ public record Coordinates(int x, int y) {
     return coordinates.x == x && coordinates.y == y;
   }
 
-  public Coordinates add(double x1, double x2) {
-    return new Coordinates((int) (x + x1), (int) (y + x2));
+  public Coordinates add(int x1, int x2) {
+    return new Coordinates(x + x1, y + x2);
   }
 }

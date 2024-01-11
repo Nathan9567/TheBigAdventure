@@ -1,10 +1,5 @@
 package fr.uge.thebigadventure.controller;
 
-import static fr.uge.thebigadventure.model.type.entity.InventoryItemType.*;
-
-import java.util.List;
-import java.util.Objects;
-
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.ElementRef;
 import fr.uge.thebigadventure.model.Trade;
@@ -25,6 +20,11 @@ import fr.uge.thebigadventure.model.type.util.Behavior;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.model.type.util.Kind;
 
+import java.util.List;
+import java.util.Objects;
+
+import static fr.uge.thebigadventure.model.type.entity.InventoryItemType.*;
+
 public class ElementBuilder {
   private String name = null;
   private EntityType skin = null;
@@ -36,7 +36,7 @@ public class ElementBuilder {
   private Behavior behavior = null;
   private int damage = 0;
   private String text = null;
-  private List<EntityType> steal = null;
+  private List<InventoryItemType> steal = null;
   private List<Trade> trades = null;
   private ElementRef locked = null;
   private Direction flow = null;
@@ -67,7 +67,7 @@ public class ElementBuilder {
    * Set if the entity is a player.
    *
    * @param player true if the entity is a player.
-   */   
+   */
   public void setPlayer(boolean player) {
     this.player = player;
   }
@@ -164,7 +164,7 @@ public class ElementBuilder {
    *
    * @param steal the steal of the entity.
    */
-  public void setSteal(List<EntityType> steal) {
+  public void setSteal(List<InventoryItemType> steal) {
     steal = List.copyOf(steal);
     if (steal.isEmpty()) {
       throw new IllegalArgumentException("steal list is empty");
@@ -218,15 +218,14 @@ public class ElementBuilder {
     if (player)
       return new Player(personageType, name, position, health);
     if (kind == Kind.ENEMY)
-      return new Enemy(personageType, name, position, kind, health, behavior, damage, zone, null);
+      return new Enemy(personageType, name, position, kind, health, behavior, damage, zone, steal);
     if (kind == Kind.FRIEND)
-      return new Ally(personageType, name, position, zone, text);
+      return new Ally(personageType, name, position, zone, text, trades);
     throw new IllegalStateException("Can't find which PersonageEntity is this"); // TODO custom exception
   }
 
-  // TODO : add locked at "item to unlock" in obstacle constructor
   private Obstacle toObstacleEntity(ObstacleType obstacleType) {
-    return new Obstacle(obstacleType, name, position, null);
+    return new Obstacle(obstacleType, name, position, locked);
   }
 
   private InventoryItem toWeaponEntity() {
@@ -235,7 +234,8 @@ public class ElementBuilder {
       case SHOVEL -> new Shovel(name, position, damage);
       case STICK -> new Stick(name, position, damage);
       case SWORD -> new Sword(name, position, damage);
-      default -> throw new IllegalStateException("Can't find which WeaponEntity is this"); // TODO custom exception
+      default ->
+          throw new IllegalStateException("Can't find which WeaponEntity is this"); // TODO custom exception
     };
   }
 
@@ -263,8 +263,10 @@ public class ElementBuilder {
       case InventoryItemType inventoryItemType ->
           toItemEntity(inventoryItemType);
       case PersonageType personageType -> toPersonageEntity(personageType);
-      case null -> throw new IllegalStateException("No skin provided !"); // TODO custom exception
-      default -> throw new IllegalStateException("Unexpected value: " + skin); // TODO custom exception
+      case null ->
+          throw new IllegalStateException("No skin provided !"); // TODO custom exception
+      default ->
+          throw new IllegalStateException("Unexpected value: " + skin); // TODO custom exception
     };
   }
 }

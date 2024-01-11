@@ -74,7 +74,7 @@ public class TheBigAdventure {
         }
         if (gameMap.getPlayer() != null && keyboardController != null) {
           if (!mapController.isInventoryOpen())
-            mapController.updatePlayerController(keyboardController);
+            mapController.updateMapController(keyboardController);
           else
             mapController.updateInventoryController(keyboardController);
           update = true;

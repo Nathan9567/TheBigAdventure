@@ -1,6 +1,7 @@
 package fr.uge.thebigadventure.view.entity;
 
 import fr.uge.thebigadventure.model.Coordinates;
+import fr.uge.thebigadventure.model.entity.personage.Ally;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.view.MapView;
@@ -20,14 +21,27 @@ public record NPCView(NPC npc, int cellSize) {
     }
   }
 
+  private void renderTextBubble(Graphics2D graphics2D, String text,
+                                Coordinates position) {
+    if (text == null) {
+      return;
+    }
+    graphics2D.drawString(text, position.x() * cellSize,
+        position.y() * cellSize - cellSize / 2);
+  }
 
   public void renderNPC(Graphics2D graphics2D) throws IOException {
     var NPCPositionCentered =
         MapView.coordinatesToPlayerCenteredMapCoordinates(npc.position());
     switch (npc) {
       case Enemy enemy -> renderEnemy(enemy, graphics2D, NPCPositionCentered);
+      case Ally ally -> {
+        entityView.drawEntityTileInMap(graphics2D,
+            ally.skin(), NPCPositionCentered, cellSize);
+        renderTextBubble(graphics2D, ally.text(), NPCPositionCentered);
+      }
       default -> entityView.drawEntityTileInMap(graphics2D,
-          npc.skin(), npc.position(), cellSize);
+          npc.skin(), NPCPositionCentered, cellSize);
     }
   }
 

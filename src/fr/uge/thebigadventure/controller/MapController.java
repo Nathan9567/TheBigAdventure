@@ -2,6 +2,11 @@ package fr.uge.thebigadventure.controller;
 
 import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.entity.inventory.InventoryItem;
+import fr.uge.thebigadventure.model.entity.inventory.weapon.WeaponInterface;
+import fr.uge.thebigadventure.model.entity.personage.Ally;
+import fr.uge.thebigadventure.model.entity.personage.Enemy;
+import fr.uge.thebigadventure.model.entity.personage.NPC;
+import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.view.MapView;
 import fr.uge.thebigadventure.view.entity.NPCView;
 import fr.uge.thebigadventure.view.entity.PlayerView;
@@ -38,7 +43,7 @@ public class MapController {
   public boolean updateNpcControllers() {
     var updated = false;
     for (var npcController : npcControllers) {
-      if (npcController.update(gameMap))
+      if (npcController.isAlive() && npcController.update(gameMap))
         updated = true;
     }
     return updated;
@@ -57,8 +62,61 @@ public class MapController {
     }
   }
 
-  public void updatePlayerController(KeyboardController keyboardController) {
-    keyboardController.handlePlayerControl(playerController);
+  private NPC getNPCInFront() {
+    var targetPosition = gameMap.getPlayer().position().move(gameMap.getPlayer().getDirection());
+    return gameMap.getNpcs().stream()
+        .filter(npc -> npc.position().equals(targetPosition))
+        .findFirst()
+        .orElse(null);
+  }
+
+  private void actionOnEnemy(Enemy enemy) {
+    var mainHand = gameMap.getPlayer().inventory().mainHand();
+    if (mainHand == null || !mainHand.isWeapon()) {
+      return;
+    }
+    var weapon = (WeaponInterface) gameMap.getPlayer().inventory().mainHand();
+    if (weapon == null) {
+      return;
+    }
+    enemy.setHealth(enemy.getHealth() - weapon.damage());
+    if (enemy.getHealth() <= 0) {
+      npcControllers.stream().filter(npcController ->
+              npcController.getNpcPosition().equals(enemy.position()))
+          .findFirst().ifPresent(NPCController::kill);
+      gameMap.removeNpc(enemy);
+    }
+  }
+
+  private void actionOnAlly(Ally ally) {
+//    var text = ally.text();
+//    if (text == null) {
+//      npcControllers.stream().filter(npcController ->
+//              npcController.getNpcPosition().equals(ally.position()))
+//          .findFirst()
+//          .ifPresent(npcController -> npcController.);
+//    }
+  }
+
+  public void action() {
+    switch (getNPCInFront()) {
+      case Enemy enemy -> actionOnEnemy(enemy);
+      case Ally ally -> actionOnAlly(ally);
+      case null, default -> {
+      }
+    }
+  }
+
+  public void movePlayer(Direction direction) {
+    playerController.movePlayer(direction);
+  }
+
+  public void toggleInventory() {
+    playerController.getInventoryController().toggleInventory();
+  }
+
+  public void updateMapController(KeyboardController keyboardController) {
+    keyboardController.handleMapControl(this);
     pickupItem();
   }
 
@@ -71,7 +129,9 @@ public class MapController {
     mapView.drawPlayerCenteredMap(graphics2D);
     playerController.updateView(graphics2D);
     for (var npcController : npcControllers) {
-      npcController.updateView(graphics2D);
+      if (npcController.isAlive()) {
+        npcController.updateView(graphics2D);
+      }
     }
     if (playerController.getInventoryController().isInventoryOpen()) {
       playerController.renderInventory(graphics2D);

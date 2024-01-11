@@ -1,10 +1,12 @@
 package fr.uge.thebigadventure.model.entity.personage;
 
-import java.util.Objects;
-
 import fr.uge.thebigadventure.model.Coordinates;
+import fr.uge.thebigadventure.model.Trade;
 import fr.uge.thebigadventure.model.Zone;
 import fr.uge.thebigadventure.model.type.entity.PersonageType;
+
+import java.util.List;
+import java.util.Objects;
 
 public final class Ally implements NPC {
 
@@ -16,7 +18,7 @@ public final class Ally implements NPC {
 
   // TODO : Implement trade system
   public Ally(PersonageType skin, String name, Coordinates position, Zone zone,
-              String text) {
+              String text, List<Trade> trades) {
     Objects.requireNonNull(skin, "Skin cannot be null");
     this.skin = skin;
     this.name = name;
@@ -52,5 +54,16 @@ public final class Ally implements NPC {
 
   public Zone getZone() {
     return zone;
+  }
+
+  @Override
+  public String toString() {
+    return "Ally{" +
+        "skin=" + skin +
+        ", name='" + name + '\'' +
+        ", text='" + text + '\'' +
+        ", zone=" + zone +
+        ", position=" + position +
+        '}';
   }
 }
