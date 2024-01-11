@@ -29,6 +29,13 @@ public record Coordinates(int x, int y) {
     return 0 > x || 0 > y || x >= size.width() || y >= size.height();
   }
 
+  public boolean isAdjacent(Coordinates other) {
+    return (other.x() + 1 == x() && other.y() == y()
+        || other.x() - 1 == x() && other.y() == y()
+        || other.x() == x() && other.y() + 1 == y()
+        || other.x() == x() && other.y() - 1 == y());
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(x, y);
