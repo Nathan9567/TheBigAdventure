@@ -232,6 +232,7 @@ public class MapParser {
       var matcher = TEXT_PATTERN.matcher(content);
       if (!matcher.find()) {
         errorLine(attributePointer, "Bad text format");
+        return;
       }
       var nSpaces = matcher.group(2).length();
       var text = matcher.group(1).lines().map(s -> s.substring(nSpaces)).collect(Collectors.joining("\n"));
