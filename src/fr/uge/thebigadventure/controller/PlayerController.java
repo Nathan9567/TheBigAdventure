@@ -45,10 +45,7 @@ public class PlayerController {
       return false;
     }
     if (entityElement != null && entityElement.skin().isObstacle()) {
-      if (entityElement instanceof Obstacle obstacle && obstacle.itemToUnlock() != null && obstacle.itemToUnlock().looksLike(player.inventory().mainHand())) {
-        return true;
-      }
-      return false;
+      return entityElement instanceof Obstacle obstacle && obstacle.itemToUnlock() != null && obstacle.itemToUnlock().looksLike(player.inventory().mainHand());
     }
     return true;
   }
@@ -73,5 +70,12 @@ public class PlayerController {
 
   public InventoryController getInventoryController() {
     return inventoryController;
+  }
+
+  public void eatMainHand() {
+    if (player.health() < player.maxHealth()) {
+      var givenHealth = inventoryController.eatMainHand();
+      player.setCurrentHealth(Math.min(player.health() + givenHealth, player.health()));
+    }
   }
 }

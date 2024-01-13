@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.model;
 
-import fr.uge.thebigadventure.controller.MapParser;
+import fr.uge.thebigadventure.model.utils.MapParser;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.entity.personage.Personage;

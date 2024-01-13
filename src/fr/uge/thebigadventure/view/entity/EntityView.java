@@ -111,6 +111,7 @@ public class EntityView {
       case OtherType ignored -> "others";
       case PersonageType ignored -> "personages";
       case TransportType ignored -> "transports";
+      case FoodType ignored -> "foods";
     };
     return "/img/" + folder + "/" + skin.name().toLowerCase(Locale.ROOT) +
         ".png";

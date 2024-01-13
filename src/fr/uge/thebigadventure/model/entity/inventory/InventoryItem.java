@@ -2,12 +2,12 @@ package fr.uge.thebigadventure.model.entity.inventory;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.entity.Entity;
-import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.entity.EntityType;
 
 public interface InventoryItem extends Entity {
 
   @Override
-  InventoryItemType skin();
+  EntityType skin();
 
   Coordinates position();
 

@@ -63,7 +63,11 @@ public class MapController {
   }
 
   private NPC getNPCInFront() {
-    var targetPosition = gameMap.getPlayer().position().move(gameMap.getPlayer().getDirection());
+    var direction = gameMap.getPlayer().getDirection();
+    if (direction == null) {
+      return null;
+    }
+    var targetPosition = gameMap.getPlayer().position().move(direction);
     return gameMap.getNpcs().stream()
         .filter(npc -> npc.position().equals(targetPosition))
         .findFirst()
@@ -101,8 +105,7 @@ public class MapController {
     switch (getNPCInFront()) {
       case Enemy enemy -> actionOnEnemy(enemy);
       case Ally ally -> actionOnAlly(ally);
-      case null, default -> {
-      }
+      case null, default -> playerController.eatMainHand();
     }
   }
 

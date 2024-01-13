@@ -8,7 +8,9 @@ import fr.uge.thebigadventure.view.MapView;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -23,66 +25,73 @@ public record NPCView(NPC npc, int cellSize) {
     }
   }
 
-//  private void renderTextBubble(Graphics2D graphics2D, String text,
-//                                Coordinates position) {
-//    if (text == null) {
-//    }
-//    // I want to draw text in a bubble above the NPC
-//    // This bubble is a rectangle of 4 cases width and 1 case height
-//    // The text is centered at the west of the rectangle and
-//    // is centered at the NPC position
-//    // We want to have only 3 lines of text in the bubble
-//    // If the text is longer than 3 lines, we want to display
-//    // the first 3 lines and add "..." at the end of the third line
-//
-//
-//  }
+  private List<String[]> splitText(String text, int maxWidth, FontMetrics fontMetrics) {
+    String[] words = text.split("\\s+");
+    StringBuilder currentLine = new StringBuilder();
+    int currentWidth = 0;
+    List<String[]> lines = new ArrayList<>();
+    for (String word : words) {
+      int wordWidth = fontMetrics.stringWidth(word);
+      if (currentWidth + wordWidth <= maxWidth) {
+        currentLine.append(word).append(" ");
+        currentWidth += wordWidth + fontMetrics.stringWidth(" ");
+      } else {
+        lines.add(currentLine.toString().split("\\s+"));
+        currentLine = new StringBuilder(word + " ");
+        currentWidth = wordWidth + fontMetrics.stringWidth(" ");
+      }
+    }
+    if (!currentLine.isEmpty()) {
+      lines.add(currentLine.toString().split("\\s+"));
+    }
+    return lines;
+  }
+
+  private void drawBubble(Graphics2D graphics2D, int bubbleX, int bubbleY,
+                          int bubbleWidth, int bubbleHeight) {
+    // Draw the bubble
+    graphics2D.setColor(new Color(255, 255, 255, 200));
+    graphics2D.fillRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight);
+    graphics2D.setColor(new Color(0, 0, 0, 200));
+    graphics2D.drawRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight);
+
+    // Draw the arrow
+    int arrowX = bubbleX + bubbleWidth / 2;
+    int arrowY = bubbleY + bubbleHeight;
+    int arrowWidth = cellSize / 2;
+    int arrowHeight = cellSize / 2;
+    int[] xPoints = {arrowX, arrowX + arrowWidth, arrowX + arrowWidth / 2};
+    int[] yPoints = {arrowY, arrowY, arrowY + arrowHeight};
+    graphics2D.setColor(new Color(255, 255, 255, 200));
+    graphics2D.fillPolygon(xPoints, yPoints, 3);
+    graphics2D.setColor(new Color(0, 0, 0, 200));
+    graphics2D.drawPolygon(xPoints, yPoints, 3);
+  }
+
+  private void drawTextInBubble(Graphics2D graphics2D, String text, int bubbleX, int bubbleY, int bubbleWidth) {
+    FontMetrics fontMetrics = graphics2D.getFontMetrics();
+    List<String[]> lines = splitText(text, bubbleWidth - 10, fontMetrics);
+    graphics2D.setColor(Color.BLACK);
+    int y = bubbleY + (int) (fontMetrics.getHeight() * 0.75);
+    for (int i = 0; i < lines.size(); i++) {
+      var line = String.join(" ", lines.get(i));
+      line += (i == 2 && lines.size() > 3) ? "..." : "";
+      graphics2D.drawString(line, bubbleX + 5, y);
+      y += fontMetrics.getHeight();
+    }
+  }
 
   private void renderTextBubble(Graphics2D graphics2D, String text, Coordinates position) {
     if (Objects.equals(text, "")) {
       return;
     }
-
     int bubbleWidth = cellSize * 4;
     int bubbleHeight = cellSize;
     int bubbleX = position.x() * cellSize - bubbleWidth / 2;
     int bubbleY = position.y() * cellSize - bubbleHeight * 2;
 
-    // Draw the bubble
-    graphics2D.setColor(Color.WHITE);
-    graphics2D.fillRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight);
-    graphics2D.setColor(Color.BLACK);
-    graphics2D.drawRect(bubbleX, bubbleY, bubbleWidth, bubbleHeight);
-
-    // Split the text into words
-    String[] words = text.split(" ");
-    String[] lines = new String[3];
-    int lineIndex = 0;
-    StringBuilder currentLine = new StringBuilder();
-
-    for (String word : words) {
-      if (currentLine.length() + word.length() > bubbleWidth / 10) {
-        if (lineIndex < 3) {
-          lines[lineIndex++] = currentLine.toString();
-          currentLine = new StringBuilder();
-        } else {
-          currentLine.append("...");
-          break;
-        }
-      }
-      currentLine.append(word).append(" ");
-    }
-    if (lineIndex < 3) {
-      lines[lineIndex] = currentLine.toString();
-    }
-
-    // Draw the text
-    graphics2D.setColor(Color.BLACK);
-    for (int i = 0; i < lines.length; i++) {
-      if (lines[i] != null) {
-        graphics2D.drawString(lines[i], bubbleX + 5, bubbleY + (i + 1) * bubbleHeight / 4);
-      }
-    }
+    drawBubble(graphics2D, bubbleX, bubbleY, bubbleWidth, bubbleHeight);
+    drawTextInBubble(graphics2D, text, bubbleX, bubbleY, bubbleWidth);
   }
 
   public void renderNPC(Graphics2D graphics2D, int currentDialogPosition) throws IOException {

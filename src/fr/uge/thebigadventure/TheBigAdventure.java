@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure;
 
-import fr.uge.thebigadventure.controller.CommandLineParser;
+import fr.uge.thebigadventure.model.utils.CommandLineParser;
 import fr.uge.thebigadventure.controller.KeyboardController;
 import fr.uge.thebigadventure.controller.MapController;
 import fr.uge.thebigadventure.model.GameMap;

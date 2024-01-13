@@ -2,6 +2,7 @@ package fr.uge.thebigadventure.controller;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.Size;
+import fr.uge.thebigadventure.model.entity.inventory.Food;
 import fr.uge.thebigadventure.model.entity.inventory.Inventory;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.view.InventoryView;
@@ -42,6 +43,14 @@ public class InventoryController {
     if (item == null)
       return;
     inventory.setMainHand(item);
+  }
+
+  public int eatMainHand() {
+    var item = inventory.mainHand();
+    if (item == null)
+      return 0;
+    inventory.removeItem(item);
+    return item instanceof Food food ? food.getFoodSupply() : 0;
   }
 
   public void updateView(Graphics2D graphics2D) throws IOException {

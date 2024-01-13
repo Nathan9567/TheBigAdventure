@@ -7,9 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public sealed interface EntityType permits EffectType,
-    InventoryItemType, PersonageType, OtherType, TransportType,
-    BiomeType, DecorationType, ObstacleType {
+public sealed interface EntityType permits BiomeType, DecorationType, EffectType, FoodType, InventoryItemType, ObstacleType, OtherType, PersonageType, TransportType {
 
   Map<String, EntityType> nameToTypeMap = new HashMap<>();
 
@@ -19,7 +17,7 @@ public sealed interface EntityType permits EffectType,
               DecorationType.values(), ObstacleType.values(),
               EffectType.values(), InventoryItemType.values(),
               PersonageType.values(), OtherType.values(),
-              TransportType.values())
+              TransportType.values(), FoodType.values())
           .flatMap(Arrays::stream)
           .collect(Collectors.toMap(Enum::name, Function.identity())));
     }

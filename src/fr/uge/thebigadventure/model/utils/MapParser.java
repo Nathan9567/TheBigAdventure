@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.controller;
+package fr.uge.thebigadventure.model.utils;
 
 import fr.uge.thebigadventure.model.*;
 import fr.uge.thebigadventure.model.type.entity.EntityType;

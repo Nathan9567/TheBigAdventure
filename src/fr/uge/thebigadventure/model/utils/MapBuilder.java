@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.controller;
+package fr.uge.thebigadventure.model.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -13,10 +13,10 @@ import java.util.Random;
 
 public class NPCController {
 
+  private static final Random random = new Random();
   private final NPCView npcView;
   private final NPC npc;
   private int currentDialogPosition = -1;
-  private static final Random random = new Random();
   private long lastTime = 0;
   private boolean isDead = false;
 
@@ -57,7 +57,7 @@ public class NPCController {
    * @return true if the NPC has been updated, false otherwise
    */
   public boolean update(GameMap gameMap) {
-    long delay = 1000;
+    long delay = 200;
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastTime <= delay) {
       return false;
@@ -99,7 +99,7 @@ public class NPCController {
       case 3 -> Direction.WEST;
       case 4 -> null;
       default ->
-        throw new IllegalStateException("Unexpected value: " + randomInt);
+          throw new IllegalStateException("Unexpected value: " + randomInt);
     };
   }
 
@@ -118,13 +118,11 @@ public class NPCController {
 
   private void randomMove(GameMap gameMap) {
     var direction = switch (npc) {
-      case Enemy enemy -> {
-        yield switch (enemy.getBehavior()) {
-          case STROLL -> randomDirection();
-          case SHY -> playerDependentDirection(gameMap, false);
-          case AGGRESSIVE -> playerDependentDirection(gameMap, true);
-        };
-      }
+      case Enemy enemy -> switch (enemy.getBehavior()) {
+        case STROLL -> randomDirection();
+        case SHY -> playerDependentDirection(gameMap, false);
+        case AGGRESSIVE -> playerDependentDirection(gameMap, true);
+      };
       default -> randomDirection();
     };
     if (direction == null) {

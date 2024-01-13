@@ -67,4 +67,8 @@ public class Inventory {
     Objects.requireNonNull(item, "You need an item to set it as main hand");
     swapItemWithMainHand(item);
   }
+
+  public void eatItem(InventoryItem item) {
+
+  }
 }
