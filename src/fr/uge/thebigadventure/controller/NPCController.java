@@ -2,6 +2,7 @@ package fr.uge.thebigadventure.controller;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.GameMap;
+import fr.uge.thebigadventure.model.entity.personage.Enemy;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.view.entity.NPCView;
@@ -15,6 +16,7 @@ public class NPCController {
   private final NPCView npcView;
   private final NPC npc;
   private int currentDialogPosition = -1;
+  private static final Random random = new Random();
   private long lastTime = 0;
   private boolean isDead = false;
 
@@ -64,7 +66,17 @@ public class NPCController {
     if (currentDialogPosition != -1)
       currentDialogPosition++;
     randomMove(gameMap);
+    action(gameMap);
     return true;
+  }
+
+  private void action(GameMap gameMap) {
+    if (npc.isEnemy()) {
+      var player = gameMap.getPlayer();
+      if (player.position().isAdjacent(npc.position())) {
+        player.setCurrentHealth(player.health() - ((Enemy) npc).getDamage());
+      }
+    }
   }
 
   private boolean isValidMove(Direction direction, GameMap gameMap) {
@@ -79,7 +91,6 @@ public class NPCController {
   }
 
   private Direction randomDirection() {
-    var random = new Random();
     var randomInt = random.nextInt(5);
     return switch (randomInt) {
       case 0 -> Direction.NORTH;
@@ -88,12 +99,34 @@ public class NPCController {
       case 3 -> Direction.WEST;
       case 4 -> null;
       default ->
-          throw new IllegalStateException("Unexpected value: " + randomInt);
+        throw new IllegalStateException("Unexpected value: " + randomInt);
+    };
+  }
+
+  private Direction playerDependentDirection(GameMap gameMap, boolean follow) {
+    var randomMove = random.nextInt(5);
+    var playerPosition = gameMap.getPlayer().position();
+    var enemyPosition = npc.position();
+    var isAtWest = follow ^ (enemyPosition.x() < playerPosition.x());
+    var isAtNorth = follow ^ (enemyPosition.y() < playerPosition.y());
+    return switch (randomMove) {
+      case 0, 1 -> isAtWest ? Direction.WEST : Direction.EAST;
+      case 2, 3 -> isAtNorth ? Direction.NORTH : Direction.SOUTH;
+      default -> null;
     };
   }
 
   private void randomMove(GameMap gameMap) {
-    var direction = randomDirection();
+    var direction = switch (npc) {
+      case Enemy enemy -> {
+        yield switch (enemy.getBehavior()) {
+          case STROLL -> randomDirection();
+          case SHY -> playerDependentDirection(gameMap, false);
+          case AGGRESSIVE -> playerDependentDirection(gameMap, true);
+        };
+      }
+      default -> randomDirection();
+    };
     if (direction == null) {
       return;
     }

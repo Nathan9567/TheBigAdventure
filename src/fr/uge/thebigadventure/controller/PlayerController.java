@@ -1,6 +1,7 @@
 package fr.uge.thebigadventure.controller;
 
 import fr.uge.thebigadventure.model.GameMap;
+import fr.uge.thebigadventure.model.entity.obstacle.Obstacle;
 import fr.uge.thebigadventure.model.entity.personage.Player;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.view.InventoryView;
@@ -37,15 +38,19 @@ public class PlayerController {
     var personage = map.getNpcs().stream()
         .filter(npc -> npc.position().equals(newPosition))
         .anyMatch(npc -> npc.skin().isObstacle());
-    if (entityTypeData != null) {
-      if (entityTypeData.isObstacle()) {
-        return false;
-      }
+    if (entityTypeData != null && entityTypeData.isObstacle()) {
+      return false;
     }
     if (personage) {
       return false;
     }
-    return entityElement == null || !entityElement.skin().isObstacle();
+    if (entityElement != null && entityElement.skin().isObstacle()) {
+      if (entityElement instanceof Obstacle obstacle && obstacle.itemToUnlock() != null && obstacle.itemToUnlock().looksLike(player.inventory().mainHand())) {
+        return true;
+      }
+      return false;
+    }
+    return true;
   }
 
   public void movePlayer(Direction direction) {
