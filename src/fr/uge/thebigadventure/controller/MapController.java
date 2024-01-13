@@ -89,13 +89,12 @@ public class MapController {
   }
 
   private void actionOnAlly(Ally ally) {
-//    var text = ally.text();
-//    if (text == null) {
-//      npcControllers.stream().filter(npcController ->
-//              npcController.getNpcPosition().equals(ally.position()))
-//          .findFirst()
-//          .ifPresent(npcController -> npcController.);
-//    }
+    if (ally.text() != null) {
+      npcControllers.stream().filter(npcController ->
+              npcController.getNpcPosition().equals(ally.position()))
+          .findFirst()
+          .ifPresent(NPCController::startDialog);
+    }
   }
 
   public void action() {

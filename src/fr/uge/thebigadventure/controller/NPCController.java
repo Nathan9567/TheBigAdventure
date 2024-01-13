@@ -14,7 +14,7 @@ public class NPCController {
 
   private final NPCView npcView;
   private final NPC npc;
-  private final boolean isDialogOpen = false;
+  private int currentDialogPosition = -1;
   private long lastTime = 0;
   private boolean isDead = false;
 
@@ -61,6 +61,8 @@ public class NPCController {
       return false;
     }
     lastTime = currentTime;
+    if (currentDialogPosition != -1)
+      currentDialogPosition++;
     randomMove(gameMap);
     return true;
   }
@@ -102,6 +104,10 @@ public class NPCController {
     npc.setPosition(npc.position().move(direction));
   }
 
+  public void startDialog() {
+    currentDialogPosition = 0;
+  }
+
   /**
    * Render the NPC
    *
@@ -109,6 +115,6 @@ public class NPCController {
    * @throws IOException if the image cannot be loaded
    */
   public void updateView(Graphics2D graphics2D) throws IOException {
-    npcView.renderNPC(graphics2D);
+    npcView.renderNPC(graphics2D, currentDialogPosition);
   }
 }

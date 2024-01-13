@@ -14,6 +14,7 @@ public final class Ally implements NPC {
   private final String name;
   private final String text;
   private final Zone zone;
+  private final List<Trade> trades;
   private Coordinates position;
 
   // TODO : Implement trade system
@@ -26,6 +27,7 @@ public final class Ally implements NPC {
     this.position = position;
     this.zone = zone;
     this.text = text;
+    this.trades = trades;
   }
 
   @Override
