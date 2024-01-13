@@ -1,9 +1,9 @@
 package fr.uge.thebigadventure;
 
-import fr.uge.thebigadventure.model.utils.CommandLineParser;
 import fr.uge.thebigadventure.controller.KeyboardController;
 import fr.uge.thebigadventure.controller.MapController;
 import fr.uge.thebigadventure.model.GameMap;
+import fr.uge.thebigadventure.model.utils.CommandLineParser;
 import fr.umlv.zen5.Application;
 import fr.umlv.zen5.Event;
 import fr.umlv.zen5.Event.Action;
@@ -38,7 +38,7 @@ public class TheBigAdventure {
 
     Color bkgdColor = new Color(113, 94, 68, 255);
     Application.run(bkgdColor, context -> {
-      boolean update = false;
+      boolean update = true;
 
       // Create map controller
       ScreenInfo screenInfo = context.getScreenInfo();
