@@ -33,7 +33,7 @@ public class MapParser {
   private static final Pattern ENCODINGS_PATTERN =
       Pattern.compile("\\s*(\\w+?)\\s*\\(\\s*(\\w)\\s*\\)\\s*");
   private static final Pattern TEXT_PATTERN =
-      Pattern.compile("\"\"\"\\s*\\n(.+)\\n( *)\"\"\"", Pattern.DOTALL);
+      Pattern.compile("\"\"\"\\s*\\R(.+)\\R( *)\"\"\"", Pattern.DOTALL);
   private static final Pattern BOOLEAN_PATTERN =
       Pattern.compile("true|false", Pattern.CASE_INSENSITIVE);
   private static final Pattern LOCK_PATTERN = Pattern.compile("(KEY|LEVER)\\s*(.+)");
@@ -72,7 +72,7 @@ public class MapParser {
    * @param msg     the error message
    */
   private void errorLine(int pointer, String msg) {
-    var line = text.substring(0, pointer).split("\n", -1).length;
+    var line = text.substring(0, pointer).split("\\R", -1).length;
     System.err.println("Error while parsing map at line " + line + " : " + msg);
   }
 
@@ -182,10 +182,12 @@ public class MapParser {
     if (!matcher.find())
       errorLine(attributePointer, "Grid data invalid");
     HashMap<Coordinates, Character> map = new HashMap<>();
-    var y = 0;
-    var x = 0;
-    for (var lineMap : matcher.group(1).split("\n")) {
-      x = -matcher.group(2).length();
+    int y = 0, x = 0;
+    var startCol = matcher.group(2).length();
+    var linesIterator = matcher.group(1).lines().iterator();
+    while (linesIterator.hasNext()) {
+      var lineMap = linesIterator.next();
+      x = -startCol;
       for (var charMap : lineMap.toCharArray()) {
         if (charMap == ' ') {
           x++;
