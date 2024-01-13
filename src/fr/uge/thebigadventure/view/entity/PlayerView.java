@@ -15,10 +15,7 @@ public record PlayerView(Player player, int cellSize, ScreenInfo screenInfo) {
   public void showPlayerHealth(Graphics2D graphics2D, Coordinates position) {
     var x = position.x() * cellSize;
     var y = position.y() * cellSize - cellSize / 4;
-    graphics2D.setColor(Color.BLACK);
-    graphics2D.drawRect(x, y, cellSize, cellSize / 4);
-    graphics2D.setColor(new Color(77, 194, 26));
-    graphics2D.fillRect(x, y, cellSize * player.health() / player.maxHealth(), cellSize / 4);
+    Utils.renderHealthBar(graphics2D, x, y, cellSize, cellSize / 4, player.health(), player.maxHealth());
   }
 
   public void showPlayerName(Graphics2D graphics2D, Coordinates position) {
@@ -40,7 +37,8 @@ public record PlayerView(Player player, int cellSize, ScreenInfo screenInfo) {
     var coordinates = playerCenteredPosition.multiply(cellSize).add(cellSize / 2, 0);
     switch (player.getDirection()) {
       case NORTH -> coordinates = coordinates.add(-cellSize / 2, -cellSize / 2);
-      case SOUTH -> coordinates = coordinates.add(0, cellSize / 2);
+      case SOUTH ->
+          coordinates = coordinates.add(-cellSize / 4, (int) (cellSize / 1.5));
       case EAST -> coordinates = coordinates.add(cellSize / 4, 0);
       case WEST -> coordinates = coordinates.add(-cellSize, 0);
     }

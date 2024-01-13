@@ -16,8 +16,8 @@ public class PlayerController {
   private final Player player;
   private final PlayerView playerView;
   private final GameMap map;
-
   private final InventoryController inventoryController;
+  private long lastTime = System.currentTimeMillis();
 
   public PlayerController(Player player, PlayerView playerView, GameMap gameMap) {
     this.player = player;
@@ -52,11 +52,16 @@ public class PlayerController {
 
   public void movePlayer(Direction direction) {
     Objects.requireNonNull(direction, "You need a direction to move the player");
+    var currentTime = System.currentTimeMillis();
+    if (currentTime - lastTime < 100) {
+      return;
+    }
     if (player.getDirection() != direction)
       player.setDirection(direction);
     if (!isAllowToMove(direction)) {
       return;
     }
+    lastTime = currentTime;
     player.setPosition(player.position().move(direction));
   }
 
@@ -68,8 +73,16 @@ public class PlayerController {
     inventoryController.updateView(graphics2D);
   }
 
-  public InventoryController getInventoryController() {
-    return inventoryController;
+  public boolean isInventoryOpen() {
+    return inventoryController.isInventoryOpen();
+  }
+
+  public void toggleInventory() {
+    inventoryController.toggleInventory();
+  }
+
+  public void updateInventoryController(KeyboardController keyboardController) {
+    keyboardController.handleInventoryControl(inventoryController);
   }
 
   public void eatMainHand() {

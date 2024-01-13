@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public record NPCView(NPC npc, int cellSize) {
 
   private static final EntityView entityView = new EntityView();
+  private static int page = 0;
 
   public NPCView {
     Objects.requireNonNull(npc);
@@ -29,22 +30,22 @@ public record NPCView(NPC npc, int cellSize) {
     String[] words = text.split("\\s+");
     StringBuilder currentLine = new StringBuilder();
     int currentWidth = 0;
-    List<String[]> lines = new ArrayList<>();
+    List<String[]> textLines = new ArrayList<>();
     for (String word : words) {
       int wordWidth = fontMetrics.stringWidth(word);
       if (currentWidth + wordWidth <= maxWidth) {
         currentLine.append(word).append(" ");
         currentWidth += wordWidth + fontMetrics.stringWidth(" ");
       } else {
-        lines.add(currentLine.toString().split("\\s+"));
+        textLines.add(currentLine.toString().split("\\s+"));
         currentLine = new StringBuilder(word + " ");
         currentWidth = wordWidth + fontMetrics.stringWidth(" ");
       }
     }
     if (!currentLine.isEmpty()) {
-      lines.add(currentLine.toString().split("\\s+"));
+      textLines.add(currentLine.toString().split("\\s+"));
     }
-    return lines;
+    return textLines;
   }
 
   private void drawBubble(Graphics2D graphics2D, int bubbleX, int bubbleY,
@@ -70,13 +71,17 @@ public record NPCView(NPC npc, int cellSize) {
 
   private void drawTextInBubble(Graphics2D graphics2D, String text, int bubbleX, int bubbleY, int bubbleWidth) {
     FontMetrics fontMetrics = graphics2D.getFontMetrics();
-    List<String[]> lines = splitText(text, bubbleWidth - 10, fontMetrics);
+    var lines = splitText(text, bubbleWidth - 10, fontMetrics);
     graphics2D.setColor(Color.BLACK);
     int y = bubbleY + (int) (fontMetrics.getHeight() * 0.75);
-    for (int i = 0; i < lines.size(); i++) {
+    for (int i = (page * 3); i < lines.size(); i++) {
       var line = String.join(" ", lines.get(i));
-      line += (i == 2 && lines.size() > 3) ? "..." : "";
+      line += (i == ((page + 1) * 3) - 1 && lines.size() > ((page + 1) * 3)) ? "..." : "";
       graphics2D.drawString(line, bubbleX + 5, y);
+      if (i == ((page + 1) * 3) - 1 && lines.size() > ((page + 1) * 3)) {
+        page++;
+        break;
+      }
       y += fontMetrics.getHeight();
     }
   }
@@ -94,34 +99,45 @@ public record NPCView(NPC npc, int cellSize) {
     drawTextInBubble(graphics2D, text, bubbleX, bubbleY, bubbleWidth);
   }
 
-  public void renderNPC(Graphics2D graphics2D, int currentDialogPosition) throws IOException {
-    var NPCPositionCentered =
-        MapView.coordinatesToPlayerCenteredMapCoordinates(npc.position());
-    switch (npc) {
-      case Enemy enemy -> renderEnemy(enemy, graphics2D, NPCPositionCentered);
-      case Ally ally -> {
-        entityView.drawEntityTileInMap(graphics2D,
-            ally.skin(), NPCPositionCentered, cellSize);
-        var replaceBackslashN = String.join(" ", ally.text().split("\n"));
-        var text = Arrays.stream(replaceBackslashN.split(" "))
-            .limit(currentDialogPosition + 1).collect(Collectors.joining(" "));
-        renderTextBubble(graphics2D, text, NPCPositionCentered);
-      }
-      default -> entityView.drawEntityTileInMap(graphics2D,
-          npc.skin(), NPCPositionCentered, cellSize);
-    }
+  private boolean renderAlly(Ally ally, Graphics2D graphics2D, int currentDialogPosition, Coordinates NPCPositionCentered) throws IOException {
+    entityView.drawEntityTileInMap(graphics2D,
+        ally.skin(), MapView.coordinatesToPlayerCenteredMapCoordinates(ally.position()),
+        cellSize);
+    var text = Arrays.stream(ally.text().split(" "))
+        .limit(currentDialogPosition + 1).collect(Collectors.joining(" "));
+    renderTextBubble(graphics2D, text, NPCPositionCentered);
+    return text.equals(ally.text());
   }
 
   private void renderEnemy(Enemy enemy, Graphics2D graphics2D,
                            Coordinates position) throws IOException {
     var x = position.x() * cellSize;
     var y = position.y() * cellSize - cellSize / 4;
-    graphics2D.setColor(Color.BLACK);
-    graphics2D.drawRect(x, y, cellSize, cellSize / 4);
-    graphics2D.setColor(new Color(77, 194, 26));
-    graphics2D.fillRect(x, y, cellSize * enemy.getHealth() / enemy.maxHealth(),
-        cellSize / 4);
+    Utils.renderHealthBar(graphics2D, x, y, cellSize, cellSize / 4,
+        enemy.getHealth(), enemy.maxHealth());
     entityView.drawEntityTileInMap(graphics2D,
         enemy.skin(), position, cellSize);
+  }
+
+  /**
+   * Render the NPC in the map.
+   *
+   * @param graphics2D            the graphics
+   * @param currentDialogPosition the current dialog position
+   * @return true if the Ally rendered dialog is finished
+   * @throws IOException if the image cannot be loaded
+   */
+  public boolean renderNPC(Graphics2D graphics2D, int currentDialogPosition) throws IOException {
+    var NPCPositionCentered =
+        MapView.coordinatesToPlayerCenteredMapCoordinates(npc.position());
+    switch (npc) {
+      case Enemy enemy -> renderEnemy(enemy, graphics2D, NPCPositionCentered);
+      case Ally ally -> {
+        return renderAlly(ally, graphics2D, currentDialogPosition, NPCPositionCentered);
+      }
+      default -> entityView.drawEntityTileInMap(graphics2D,
+          npc.skin(), NPCPositionCentered, cellSize);
+    }
+    return false;
   }
 }

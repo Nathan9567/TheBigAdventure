@@ -26,8 +26,9 @@ public class MapController {
   private final MapView mapView;
   private final int cellSize;
   private final GameMap gameMap;
+  private final boolean dryRunActive;
 
-  public MapController(GameMap gameMap, ScreenInfo screenInfo) {
+  public MapController(GameMap gameMap, ScreenInfo screenInfo, boolean dryRun) {
     Objects.requireNonNull(gameMap, "Game map cannot be null");
     Objects.requireNonNull(screenInfo, "Screen info cannot be null");
     this.gameMap = gameMap;
@@ -38,19 +39,20 @@ public class MapController {
     this.npcControllers = gameMap.getNpcs().stream().map(npc ->
         new NPCController(npc, new NPCView(npc, cellSize))).toList();
     this.mapView = new MapView(gameMap, NB_TILES_WIDTH, nbTilesHeight, cellSize);
+    this.dryRunActive = dryRun;
   }
 
   public boolean updateNpcControllers() {
     var updated = false;
     for (var npcController : npcControllers) {
-      if (npcController.isAlive() && npcController.update(gameMap))
+      if (npcController.isAlive() && npcController.update(gameMap, dryRunActive))
         updated = true;
     }
     return updated;
   }
 
   public boolean isInventoryOpen() {
-    return playerController.getInventoryController().isInventoryOpen();
+    return playerController.isInventoryOpen();
   }
 
   private void pickupItem() {
@@ -114,7 +116,7 @@ public class MapController {
   }
 
   public void toggleInventory() {
-    playerController.getInventoryController().toggleInventory();
+    playerController.toggleInventory();
   }
 
   public void updateMapController(KeyboardController keyboardController) {
@@ -123,7 +125,7 @@ public class MapController {
   }
 
   public void updateInventoryController(KeyboardController keyboardController) {
-    keyboardController.handleInventoryControl(playerController.getInventoryController());
+    playerController.updateInventoryController(keyboardController);
   }
 
   public void updateView(Graphics2D graphics2D) throws IOException {
@@ -135,8 +137,17 @@ public class MapController {
         npcController.updateView(graphics2D);
       }
     }
-    if (playerController.getInventoryController().isInventoryOpen()) {
+    if (playerController.isInventoryOpen()) {
       playerController.renderInventory(graphics2D);
     }
+  }
+
+  /**
+   * Check if the player is dead
+   *
+   * @return true if the player is dead, false otherwise
+   */
+  public boolean isPlayerDead() {
+    return gameMap.getPlayer().health() <= 0;
   }
 }

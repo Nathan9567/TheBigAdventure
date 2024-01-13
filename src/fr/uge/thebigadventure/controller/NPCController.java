@@ -2,6 +2,7 @@ package fr.uge.thebigadventure.controller;
 
 import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.GameMap;
+import fr.uge.thebigadventure.model.entity.personage.Ally;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.type.util.Direction;
@@ -17,7 +18,8 @@ public class NPCController {
   private final NPCView npcView;
   private final NPC npc;
   private int currentDialogPosition = -1;
-  private long lastTime = 0;
+  private long lastTimeMove = 0;
+  private long lastSpeakTime = 0;
   private boolean isDead = false;
 
   public NPCController(NPC npc, NPCView npcView) {
@@ -53,18 +55,38 @@ public class NPCController {
   /**
    * Update the NPC position
    *
-   * @param gameMap the game map
+   * @param gameMap        the game map
+   * @param isDryRunActive true if the dry run is active, false otherwise
    * @return true if the NPC has been updated, false otherwise
    */
-  public boolean update(GameMap gameMap) {
+  public boolean update(GameMap gameMap, boolean isDryRunActive) {
+    return switch (npc) {
+      case Ally ally ->
+          updateAllySpeak(ally) || (!isDryRunActive && updateNPCMovement(gameMap));
+      default -> !isDryRunActive && updateNPCMovement(gameMap);
+    };
+  }
+
+  private boolean updateAllySpeak(Ally ally) {
     long delay = 200;
     long currentTime = System.currentTimeMillis();
-    if (currentTime - lastTime <= delay) {
+    if (currentTime - lastSpeakTime <= delay) {
       return false;
     }
-    lastTime = currentTime;
-    if (currentDialogPosition != -1)
+    lastSpeakTime = currentTime;
+    if (currentDialogPosition != -1) {
       currentDialogPosition++;
+    }
+    return true;
+  }
+
+  private boolean updateNPCMovement(GameMap gameMap) {
+    long delay = 1000;
+    long currentTime = System.currentTimeMillis();
+    if (currentTime - lastTimeMove <= delay) {
+      return false;
+    }
+    lastTimeMove = currentTime;
     randomMove(gameMap);
     action(gameMap);
     return true;
@@ -83,7 +105,8 @@ public class NPCController {
     var newPosition = npc.position().move(direction);
     if (newPosition.notInBounds(gameMap.size()) || npc.getZone() == null ||
         !npc.getZone().contains(newPosition) ||
-        gameMap.getPlayer().position().equals(newPosition)) {
+        gameMap.getPlayer().position().equals(newPosition) || gameMap.getNpcs().stream()
+        .anyMatch(npc -> npc.position().equals(newPosition))) {
       return false;
     }
     var entityType = gameMap.data().get(newPosition);
@@ -146,6 +169,8 @@ public class NPCController {
    * @throws IOException if the image cannot be loaded
    */
   public void updateView(Graphics2D graphics2D) throws IOException {
-    npcView.renderNPC(graphics2D, currentDialogPosition);
+    if (npcView.renderNPC(graphics2D, currentDialogPosition)) {
+      currentDialogPosition = -1;
+    }
   }
 }

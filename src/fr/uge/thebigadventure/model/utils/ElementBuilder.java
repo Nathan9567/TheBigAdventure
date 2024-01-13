@@ -143,7 +143,7 @@ public class ElementBuilder {
    */
   public void setText(String text) {
     Objects.requireNonNull(text);
-    this.text = text;
+    this.text = text.replaceAll("\n", " ");
   }
 
   /**
@@ -210,8 +210,6 @@ public class ElementBuilder {
     this.teleport = teleport;
   }
 
-  // If health != 0, then it's a personage
-  // TODO: add stealableItems in enemy constructor
   private Entity toPersonageEntity(PersonageType personageType) {
     if (skin.name().equals("GHOST"))
       return new Ghost();
@@ -227,6 +225,8 @@ public class ElementBuilder {
   }
 
   private Obstacle toObstacleEntity(ObstacleType obstacleType) {
+    if (kind != Kind.OBSTACLE)
+      System.err.println("Warning: obstacle without kind");
     return new Obstacle(obstacleType, name, position, locked);
   }
 

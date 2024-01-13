@@ -1,0 +1,67 @@
+[grid]
+  size: (15x15)
+  data: """
+  WWWWWWWWWWWWWWW
+  W             W
+  W             W
+  W             W
+  W             W
+  W             W
+  W             W
+  W             W
+  W             W
+  W             W
+  W             W
+  W             W
+  W             W
+  W             W
+  WWWWWWWWWWWWWWW
+  """
+  encodings: WALL(W)
+
+[element]
+  name: fluffy
+  player: true
+  skin: BABA
+  position: (2,2)
+  health: 10
+
+[element]
+    name: crab1
+    skin: CRAB
+    kind: enemy
+    behavior: aggressive
+    position: (5,5)
+    zone: (1,1) (5 x 5)
+    health: 10
+    damage: 1
+
+[element]
+    name: crab2
+    skin: CRAB
+    kind: enemy
+    behavior: aggressive
+    position: (6,5)
+    zone: (1,1) (5 x 5)
+    health: 10
+    damage: 1
+
+[element]
+    name: crab3
+    skin: CRAB
+    kind: enemy
+    behavior: aggressive
+    position: (5,6)
+    zone: (1,1) (5 x 5)
+    health: 10
+    damage: 1
+
+[element]
+  name: crab6
+  skin: CRAB
+  kind: enemy
+  behavior: aggressive
+  position: (6,6)
+  zone: (1,1) (5 x 5)
+  health: 10
+  damage: 1

@@ -31,10 +31,7 @@ public class TheBigAdventure {
       return;
     }
 
-    if (commandParser.isDryRun()) {
-      System.out.println("Not implemented yet");
-      return;
-    }
+    var dryRun = commandParser.isDryRun();
 
     Color bkgdColor = new Color(113, 94, 68, 255);
     Application.run(bkgdColor, context -> {
@@ -42,9 +39,9 @@ public class TheBigAdventure {
 
       // Create map controller
       ScreenInfo screenInfo = context.getScreenInfo();
-      MapController mapController = new MapController(gameMap, screenInfo);
+      MapController mapController = new MapController(gameMap, screenInfo, dryRun);
 
-      while (true) {
+      while (!mapController.isPlayerDead()) {
         Event event = context.pollOrWaitEvent(30);
 
         if (mapController.updateNpcControllers()) {
@@ -83,6 +80,8 @@ public class TheBigAdventure {
           return;
         }
       }
+      System.out.println("Game Over");
+      context.exit(0);
     });
   }
 }
