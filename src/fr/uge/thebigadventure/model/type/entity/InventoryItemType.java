@@ -8,14 +8,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public sealed interface InventoryItemType extends EntityType permits InventoryItemRawType, FoodType {
-  Map<String, InventoryItemType> nameToTypeMap = new HashMap<>();
 
   static InventoryItemType fromString(String string) {
-    if (nameToTypeMap.isEmpty()) {
-      nameToTypeMap.putAll(Stream.of(InventoryItemRawType.values(), FoodType.values())
-          .flatMap(Arrays::stream)
-          .collect(Collectors.toMap(Enum::name, Function.identity())));
-    }
+    Map<String, InventoryItemType> nameToTypeMap =
+        new HashMap<>(Stream.of(InventoryItemRawType.values(), FoodType.values())
+            .flatMap(Arrays::stream)
+            .collect(Collectors.toMap(Enum::name, Function.identity())));
     var res = nameToTypeMap.get(string);
     if (res != null)
       return res;

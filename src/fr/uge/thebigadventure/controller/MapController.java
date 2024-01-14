@@ -34,6 +34,7 @@ public class MapController {
     this.gameMap = gameMap;
     this.cellSize = (int) (screenInfo.getWidth() / NB_TILES_WIDTH);
     int nbTilesHeight = (int) (screenInfo.getHeight() / cellSize);
+    // Here is the problem (PlayerView must be init in controller)
     this.playerController = new PlayerController(gameMap.getPlayer(),
         new PlayerView(gameMap.getPlayer(), cellSize, screenInfo), gameMap);
     this.npcControllers = gameMap.getNpcs().stream().map(npc ->
@@ -49,10 +50,6 @@ public class MapController {
         updated = true;
     }
     return updated;
-  }
-
-  public boolean isInventoryOpen() {
-    return playerController.isInventoryOpen();
   }
 
   private void pickupItem() {
@@ -106,6 +103,7 @@ public class MapController {
     }
     tradeController = new TradeController(ally.getTradeTable(),
         playerController.getInventoryController(), cellSize);
+    tradeController.toggleTradeInventory();
   }
 
   public void action() {
@@ -124,13 +122,25 @@ public class MapController {
     playerController.toggleInventory();
   }
 
-  public void updateMapController(KeyboardController keyboardController) {
-    keyboardController.handleMapControl(this);
-    pickupItem();
+  private void updateInventoryController(KeyboardController keyboardController) {
+    playerController.updateInventoryController(keyboardController);
   }
 
-  public void updateInventoryController(KeyboardController keyboardController) {
-    playerController.updateInventoryController(keyboardController);
+  private void updateTradeController(KeyboardController keyboardController) {
+    keyboardController.handleTradeControl(tradeController);
+  }
+
+  public void updateMapController(KeyboardController keyboardController) {
+    if (tradeController != null && tradeController.isTradeOpen()) {
+      updateTradeController(keyboardController);
+      return;
+    }
+    if (playerController.isInventoryOpen()) {
+      updateInventoryController(keyboardController);
+      return;
+    }
+    keyboardController.handleMapControl(this);
+    pickupItem();
   }
 
   public void updateView(Graphics2D graphics2D) throws IOException {
@@ -145,7 +155,7 @@ public class MapController {
     if (playerController.isInventoryOpen()) {
       playerController.renderInventory(graphics2D);
     }
-    if (tradeController != null) {
+    if (tradeController != null && tradeController.isTradeOpen()) {
       tradeController.render(graphics2D);
     }
   }

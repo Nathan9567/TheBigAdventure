@@ -13,9 +13,9 @@ public record TradeView(List<Trade> tradeTable, int cellSize) {
   private static final EntityView entityView = new EntityView();
   private static final int NB_TRADE_DISPLAYED = 8;
 
-  private void drawTrade(Graphics2D graphics2D, Trade trade, Coordinates topLeftCorner) throws IOException {
-    var x = topLeftCorner.x() * cellSize;
-    var y = topLeftCorner.y() * cellSize;
+  private void drawTrade(Graphics2D graphics2D, Trade trade, Coordinates topLeftCorner, double extraMargin) throws IOException {
+    var x = (int) (topLeftCorner.x() * cellSize + extraMargin);
+    var y = (int) (topLeftCorner.y() * cellSize + extraMargin);
     entityView.drawEntityTile(graphics2D, trade.wanted().type(),
         new Coordinates(x, y), cellSize, 0);
     entityView.drawEntityTile(graphics2D, OtherType.ARROW,
@@ -24,9 +24,15 @@ public record TradeView(List<Trade> tradeTable, int cellSize) {
         new Coordinates(x + cellSize * 2, y), cellSize, 0);
   }
 
+  private void drawTradingCursor(Graphics2D graphics2D, Coordinates topLeftCorner, double extraMargin) {
+    var x = (int) (topLeftCorner.x() * cellSize + extraMargin);
+    var y = (int) (topLeftCorner.y() * cellSize + extraMargin);
+    graphics2D.setColor(new Color(255, 255, 255));
+    graphics2D.drawRect(x, y, cellSize * 3, cellSize);
+  }
+
   private void drawTradingTableBackground(Graphics2D graphics2D,
-                                          Coordinates topLeftCorner) throws IOException {
-    var extraMargin = cellSize * 0.1;
+                                          Coordinates topLeftCorner, double extraMargin) {
     graphics2D.setColor(new Color(199, 199, 199));
     graphics2D.fillRect((int) (topLeftCorner.x() - extraMargin),
         (int) (topLeftCorner.y() - extraMargin),
@@ -34,11 +40,13 @@ public record TradeView(List<Trade> tradeTable, int cellSize) {
         (int) (tradeTable.size() > NB_TRADE_DISPLAYED ? NB_TRADE_DISPLAYED : tradeTable.size() * cellSize + extraMargin * 3));
   }
 
-  public void renderTradingTable(Graphics2D graphics2D) throws IOException {
-    drawTradingTableBackground(graphics2D, new Coordinates(0, 0));
+  public void renderTradingTable(Graphics2D graphics2D, int cursorPosition) throws IOException {
+    var extraMargin = cellSize * 0.1;
+    drawTradingTableBackground(graphics2D, new Coordinates(0, 0), extraMargin);
     for (int i = 0; i < tradeTable.size() && i < NB_TRADE_DISPLAYED; i++) {
-      drawTrade(graphics2D, tradeTable.get(i), new Coordinates(0, i));
+      drawTrade(graphics2D, tradeTable.get(i), new Coordinates(0, i), extraMargin);
     }
+    drawTradingCursor(graphics2D, new Coordinates(0, cursorPosition), extraMargin);
   }
 
 }

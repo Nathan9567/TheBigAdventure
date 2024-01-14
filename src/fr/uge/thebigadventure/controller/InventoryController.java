@@ -51,8 +51,8 @@ public class InventoryController {
     if (item == null) {
       return 0;
     }
-    if (inventory.removeItem(item)) {
-      return item instanceof Food food ? food.getFoodSupply() : 0;
+    if (item.isFood() && inventory.removeItem(item)) {
+      return item instanceof Food food ? food.getFoodSupply() : 1;
     }
     return 0;
   }

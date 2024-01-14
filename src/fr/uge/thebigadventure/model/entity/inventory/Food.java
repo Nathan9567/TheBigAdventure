@@ -1,9 +1,9 @@
 package fr.uge.thebigadventure.model.entity.inventory;
 
-import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.type.entity.EntityType;
 import fr.uge.thebigadventure.model.type.entity.FoodType;
 import fr.uge.thebigadventure.model.type.entity.PersonageType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -13,8 +13,8 @@ public class Food implements InventoryItem {
   private final String name;
   private final EntityType skin;
   private final Coordinates position;
+  private final int foodSupply;
   private boolean isCooked = true;
-  private int foodSupply = 0;
 
   public Food(FoodType skin, int foodSupply, String name, Coordinates position) {
     Objects.requireNonNull(skin, "You need a skin for the food");
@@ -62,5 +62,10 @@ public class Food implements InventoryItem {
 
   public int getFoodSupply() {
     return foodSupply;
+  }
+
+  @Override
+  public boolean isFood() {
+    return true;
   }
 }

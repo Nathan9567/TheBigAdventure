@@ -53,6 +53,7 @@ public final class Ally implements NPC {
     return text;
   }
 
+  @Override
   public Zone getZone() {
     return zone;
   }

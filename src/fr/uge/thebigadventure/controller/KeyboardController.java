@@ -14,6 +14,21 @@ public record KeyboardController(KeyboardKey keyboardKey) {
     return false;
   }
 
+  public void handleTradeControl(TradeController tradeController) {
+    switch (keyboardKey) {
+      case UP -> tradeController.moveTradeCursor(Direction.NORTH);
+      case DOWN -> tradeController.moveTradeCursor(Direction.SOUTH);
+      case SPACE -> {
+        if (tradeController.trade())
+          tradeController.toggleTradeInventory();
+      }
+      case I -> tradeController.toggleTradeInventory();
+      default -> {
+        // Do nothing
+      }
+    }
+  }
+
   public void handleInventoryControl(InventoryController inventoryController) {
     switch (keyboardKey) {
       case UP -> inventoryController.moveInventoryCursor(Direction.NORTH);
@@ -22,6 +37,9 @@ public record KeyboardController(KeyboardKey keyboardKey) {
       case LEFT -> inventoryController.moveInventoryCursor(Direction.WEST);
       case SPACE -> inventoryController.moveItemToMainHand();
       case I -> inventoryController.toggleInventory();
+      default -> {
+        // Do nothing
+      }
     }
   }
 
@@ -33,6 +51,9 @@ public record KeyboardController(KeyboardKey keyboardKey) {
       case LEFT -> mapController.movePlayer(Direction.WEST);
       case SPACE -> mapController.action();
       case I -> mapController.toggleInventory();
+      default -> {
+        // Do nothing
+      }
     }
   }
 }
