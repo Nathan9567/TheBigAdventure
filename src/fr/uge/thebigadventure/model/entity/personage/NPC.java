@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.model.entity.personage;
 
-import fr.uge.thebigadventure.model.Zone;
+import fr.uge.thebigadventure.model.utils.Zone;
 
 public sealed interface NPC extends Personage permits Ally, Enemy, Ghost {
 

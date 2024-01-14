@@ -91,4 +91,8 @@ public class PlayerController {
       player.setCurrentHealth(Math.min(player.health() + givenHealth, player.health()));
     }
   }
+
+  public InventoryController getInventoryController() {
+    return inventoryController;
+  }
 }

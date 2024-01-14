@@ -2,7 +2,7 @@ package fr.uge.thebigadventure.model.entity.personage;
 
 import java.util.List;
 
-import fr.uge.thebigadventure.model.Coordinates;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.entity.obstacle.Obstacle;
 import fr.uge.thebigadventure.model.type.entity.ObstacleType;
 import fr.uge.thebigadventure.model.type.entity.PersonageType;

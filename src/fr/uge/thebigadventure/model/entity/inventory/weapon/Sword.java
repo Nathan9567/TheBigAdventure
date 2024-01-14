@@ -1,7 +1,7 @@
 package fr.uge.thebigadventure.model.entity.inventory.weapon;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 
 public final class Sword implements WeaponInterface {
 
@@ -9,7 +9,7 @@ public final class Sword implements WeaponInterface {
   private boolean isIgnite;
 
   public Sword(String name, Coordinates position, int damage) {
-    weapon = new Weapon(InventoryItemType.SWORD, name, position, damage);
+    weapon = new Weapon(InventoryItemRawType.SWORD, name, position, damage);
   }
 
   public Sword(String name, int damage) {
@@ -22,7 +22,7 @@ public final class Sword implements WeaponInterface {
   }
 
   @Override
-  public InventoryItemType skin() {
+  public InventoryItemRawType skin() {
     return weapon.skin();
   }
 

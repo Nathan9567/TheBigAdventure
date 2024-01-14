@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.view.entity;
 
-import fr.uge.thebigadventure.model.Coordinates;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.entity.personage.Player;
 import fr.uge.thebigadventure.view.MapView;
 import fr.umlv.zen5.ScreenInfo;

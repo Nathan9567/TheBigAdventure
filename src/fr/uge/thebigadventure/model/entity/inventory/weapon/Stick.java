@@ -1,7 +1,7 @@
 package fr.uge.thebigadventure.model.entity.inventory.weapon;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 
 public final class Stick implements WeaponInterface {
 
@@ -10,7 +10,7 @@ public final class Stick implements WeaponInterface {
   private boolean isIgnite;
 
   public Stick(String name, Coordinates position, int damage) {
-    weapon = new Weapon(InventoryItemType.STICK, name, position, damage);
+    weapon = new Weapon(InventoryItemRawType.STICK, name, position, damage);
   }
 
   public Stick(String name, int damage) {
@@ -23,7 +23,7 @@ public final class Stick implements WeaponInterface {
   }
 
   @Override
-  public InventoryItemType skin() {
+  public InventoryItemRawType skin() {
     return weapon.skin();
   }
 

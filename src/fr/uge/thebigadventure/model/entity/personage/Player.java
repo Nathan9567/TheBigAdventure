@@ -3,7 +3,7 @@ package fr.uge.thebigadventure.model.entity.personage;
 import java.util.Arrays;
 import java.util.Objects;
 
-import fr.uge.thebigadventure.model.Coordinates;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.entity.inventory.Inventory;
 import fr.uge.thebigadventure.model.type.entity.PersonageType;
 import fr.uge.thebigadventure.model.type.util.Direction;

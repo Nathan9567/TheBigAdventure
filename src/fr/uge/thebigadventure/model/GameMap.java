@@ -1,11 +1,13 @@
 package fr.uge.thebigadventure.model;
 
-import fr.uge.thebigadventure.model.utils.MapParser;
+import fr.uge.thebigadventure.model.utils.Coordinates;
+import fr.uge.thebigadventure.model.utils.parser.MapParser;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.entity.personage.Personage;
 import fr.uge.thebigadventure.model.entity.personage.Player;
 import fr.uge.thebigadventure.model.type.entity.EntityType;
+import fr.uge.thebigadventure.model.utils.Size;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

@@ -1,9 +1,9 @@
 package fr.uge.thebigadventure.model.entity.inventory;
 
-import java.util.Objects;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import java.util.Objects;
 
 public record Key(String name, Coordinates position) implements InventoryItem {
 
@@ -11,8 +11,8 @@ public record Key(String name, Coordinates position) implements InventoryItem {
     Objects.requireNonNull(name);
   }
 
-  public InventoryItemType skin() {
-    return InventoryItemType.KEY;
+  public InventoryItemRawType skin() {
+    return InventoryItemRawType.KEY;
   }
 
 }

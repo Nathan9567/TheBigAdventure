@@ -1,13 +1,13 @@
 package fr.uge.thebigadventure.model.entity.inventory.weapon;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 
 public record Bolt(String name, Coordinates position,
                    int damage) implements WeaponInterface {
 
   public Bolt {
-    new Weapon(InventoryItemType.BOLT, name, position, damage);
+    new Weapon(InventoryItemRawType.BOLT, name, position, damage);
   }
 
   public Bolt(String name, int damage) {
@@ -15,7 +15,7 @@ public record Bolt(String name, Coordinates position,
   }
 
   @Override
-  public InventoryItemType skin() {
-    return InventoryItemType.BOLT;
+  public InventoryItemRawType skin() {
+    return InventoryItemRawType.BOLT;
   }
 }

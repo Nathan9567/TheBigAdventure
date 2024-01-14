@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.controller;
 
-import fr.uge.thebigadventure.model.Coordinates;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.entity.personage.Ally;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;

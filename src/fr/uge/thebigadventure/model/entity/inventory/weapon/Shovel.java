@@ -1,13 +1,13 @@
 package fr.uge.thebigadventure.model.entity.inventory.weapon;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 
 public record Shovel(String name, Coordinates position,
                      int damage) implements WeaponInterface {
 
   public Shovel {
-    new Weapon(InventoryItemType.SHOVEL, name, position, damage);
+    new Weapon(InventoryItemRawType.SHOVEL, name, position, damage);
   }
 
   public Shovel(String name, int damage) {
@@ -16,7 +16,7 @@ public record Shovel(String name, Coordinates position,
 
 
   @Override
-  public InventoryItemType skin() {
-    return InventoryItemType.SHOVEL;
+  public InventoryItemRawType skin() {
+    return InventoryItemRawType.SHOVEL;
   }
 }

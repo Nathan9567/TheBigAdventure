@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.model;
+package fr.uge.thebigadventure.model.utils;
 
 public record Size(int width, int height) {
   public Size {

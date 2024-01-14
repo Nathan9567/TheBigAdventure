@@ -1,15 +1,15 @@
 package fr.uge.thebigadventure.model.entity.personage;
 
 
-import java.util.List;
-import java.util.Objects;
-
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.Zone;
 import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
 import fr.uge.thebigadventure.model.type.entity.PersonageType;
 import fr.uge.thebigadventure.model.type.util.Behavior;
 import fr.uge.thebigadventure.model.type.util.Kind;
+import fr.uge.thebigadventure.model.utils.Coordinates;
+import fr.uge.thebigadventure.model.utils.Zone;
+
+import java.util.List;
+import java.util.Objects;
 
 public final class Enemy implements NPC {
 

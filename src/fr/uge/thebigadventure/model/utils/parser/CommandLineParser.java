@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.model.utils;
+package fr.uge.thebigadventure.model.utils.parser;
 
 import java.util.Arrays;
 

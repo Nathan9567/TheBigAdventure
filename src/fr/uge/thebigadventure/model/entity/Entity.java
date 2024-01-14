@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.model.entity;
 
-import fr.uge.thebigadventure.model.Coordinates;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.type.entity.EntityType;
 
 public interface Entity {

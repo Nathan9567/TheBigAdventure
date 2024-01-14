@@ -1,4 +1,6 @@
-package fr.uge.thebigadventure.model;
+package fr.uge.thebigadventure.model.utils;
+
+import fr.uge.thebigadventure.model.utils.ElementRef;
 
 import java.util.Objects;
 

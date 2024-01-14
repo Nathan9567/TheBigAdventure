@@ -1,13 +1,13 @@
 package fr.uge.thebigadventure.model.entity.inventory;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 
-public record LoreItem(InventoryItemType skin, String name,
+public record LoreItem(InventoryItemRawType skin, String name,
                        String text,
                        Coordinates position) implements InventoryItem {
 
-  public InventoryItemType skin() {
-    return InventoryItemType.BOOK;
+  public InventoryItemRawType skin() {
+    return InventoryItemRawType.BOOK;
   }
 }

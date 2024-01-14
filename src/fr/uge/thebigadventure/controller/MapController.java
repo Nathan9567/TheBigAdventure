@@ -20,7 +20,7 @@ import java.util.Objects;
 public class MapController {
 
   private static final int NB_TILES_WIDTH = 30;
-
+  private static TradeController tradeController = null;
   private final PlayerController playerController;
   private final List<NPCController> npcControllers;
   private final MapView mapView;
@@ -101,6 +101,11 @@ public class MapController {
           .findFirst()
           .ifPresent(NPCController::startDialog);
     }
+    if (ally.getTradeTable() == null) {
+      return;
+    }
+    tradeController = new TradeController(ally.getTradeTable(),
+        playerController.getInventoryController(), cellSize);
   }
 
   public void action() {
@@ -139,6 +144,9 @@ public class MapController {
     }
     if (playerController.isInventoryOpen()) {
       playerController.renderInventory(graphics2D);
+    }
+    if (tradeController != null) {
+      tradeController.render(graphics2D);
     }
   }
 

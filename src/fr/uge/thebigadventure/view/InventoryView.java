@@ -1,7 +1,7 @@
 package fr.uge.thebigadventure.view;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.Size;
+import fr.uge.thebigadventure.model.utils.Coordinates;
+import fr.uge.thebigadventure.model.utils.Size;
 import fr.uge.thebigadventure.model.entity.inventory.Inventory;
 import fr.uge.thebigadventure.view.entity.EntityView;
 import fr.umlv.zen5.ScreenInfo;

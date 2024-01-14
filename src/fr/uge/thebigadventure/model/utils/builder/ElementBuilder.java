@@ -1,9 +1,5 @@
-package fr.uge.thebigadventure.model.utils;
+package fr.uge.thebigadventure.model.utils.builder;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.ElementRef;
-import fr.uge.thebigadventure.model.Trade;
-import fr.uge.thebigadventure.model.Zone;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.entity.inventory.*;
 import fr.uge.thebigadventure.model.entity.inventory.weapon.Bolt;
@@ -19,18 +15,22 @@ import fr.uge.thebigadventure.model.type.entity.*;
 import fr.uge.thebigadventure.model.type.util.Behavior;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.model.type.util.Kind;
+import fr.uge.thebigadventure.model.utils.Coordinates;
+import fr.uge.thebigadventure.model.utils.ElementRef;
+import fr.uge.thebigadventure.model.utils.Trade;
+import fr.uge.thebigadventure.model.utils.Zone;
 
 import java.util.List;
 import java.util.Objects;
 
-import static fr.uge.thebigadventure.model.type.entity.InventoryItemType.*;
+import static fr.uge.thebigadventure.model.type.entity.InventoryItemRawType.*;
 
 public class ElementBuilder {
   private String name = null;
   private EntityType skin = null;
   private boolean player = false;
   private Coordinates position = null;
-  private int health = 0;
+  private int health = 1;
   private Kind kind = null;
   private Zone zone = null;
   private Behavior behavior = null;
@@ -173,9 +173,10 @@ public class ElementBuilder {
   }
 
   /**
-   * Set the locked of the entity.
+   * Set the item to unlock the entity.
+   * If the entity is not an obstacle, this method will throw an exception.
    *
-   * @param locked the locked of the entity.
+   * @param locked the item to unlock the entity.
    */
   public void setLocked(ElementRef locked) {
     this.locked = locked;
@@ -241,7 +242,13 @@ public class ElementBuilder {
     };
   }
 
-  private InventoryItem toItemEntity(InventoryItemType item) {
+  /**
+   * Create an entity from the current state of the element builder.
+   *
+   * @param item the item type.
+   * @return the entity.
+   */
+  public InventoryItem toItemEntity(InventoryItemRawType item) {
     return switch (item) {
       // TODO: direction for box
       case BOLT, SHOVEL, STICK, SWORD -> toWeaponEntity();
@@ -254,6 +261,10 @@ public class ElementBuilder {
     };
   }
 
+  public Food toFoodEntity(FoodType foodType) {
+    return new Food(foodType, health, name, position);
+  }
+
   /**
    * Create an entity from the current state of the element builder.
    *
@@ -262,10 +273,10 @@ public class ElementBuilder {
   public Entity toEntity() {
     return switch (skin) {
       case ObstacleType obstacleType -> toObstacleEntity(obstacleType);
-      case InventoryItemType inventoryItemType ->
-          toItemEntity(inventoryItemType);
+      case InventoryItemRawType inventoryItemRawType ->
+          toItemEntity(inventoryItemRawType);
       case PersonageType personageType -> toPersonageEntity(personageType);
-      case FoodType foodType -> new Food(foodType, health, name, position);
+      case FoodType foodType -> toFoodEntity(foodType);
       case null ->
           throw new IllegalStateException("No skin provided !"); // TODO custom exception
       default ->

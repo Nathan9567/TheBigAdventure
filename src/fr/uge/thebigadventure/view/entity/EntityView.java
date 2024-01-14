@@ -1,7 +1,7 @@
 package fr.uge.thebigadventure.view.entity;
 
-import fr.uge.thebigadventure.model.Coordinates;
 import fr.uge.thebigadventure.model.type.entity.*;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -107,7 +107,7 @@ public class EntityView {
       case ObstacleType ignored -> "obstacles";
       case DecorationType ignored -> "decorations";
       case EffectType ignored -> "effects";
-      case InventoryItemType ignored -> "items";
+      case InventoryItemRawType ignored -> "items";
       case OtherType ignored -> "others";
       case PersonageType ignored -> "personages";
       case TransportType ignored -> "transports";

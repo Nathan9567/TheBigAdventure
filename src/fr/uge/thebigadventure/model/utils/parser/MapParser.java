@@ -1,14 +1,14 @@
-package fr.uge.thebigadventure.model.utils;
+package fr.uge.thebigadventure.model.utils.parser;
 
-import fr.uge.thebigadventure.model.*;
 import fr.uge.thebigadventure.model.type.entity.EntityType;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
 import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
 import fr.uge.thebigadventure.model.type.util.Behavior;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.model.type.util.Kind;
+import fr.uge.thebigadventure.model.utils.*;
+import fr.uge.thebigadventure.model.utils.builder.MapBuilder;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -50,19 +50,6 @@ public class MapParser {
    */
   public MapParser(String text) {
     this.text = text;
-  }
-
-  /**
-   * Main method for testing.
-   *
-   * @param args
-   * @throws IOException
-   */
-  public static void main(String[] args) throws IOException {
-    GameMap gameMap = GameMap.load(Path.of(args[0]));
-    System.out.println(gameMap.size());
-    System.out.println(gameMap.data());
-    System.out.println(gameMap.elements());
   }
 
   /**
@@ -356,25 +343,16 @@ public class MapParser {
   }
 
   private ElementRef parseTradeElementRef(String skin, String name) {
-    var type = getEntityTypeFromAttribute(skin);
+    var type = getInventoryItemTypeFromAttribute(skin);
     if (type == null) {
       return null;
     }
     return new ElementRef(type, name);
   }
 
-  private EntityType getEntityTypeFromAttribute(String skin) {
-    try {
-      return EntityType.fromString(skin);
-    } catch (IllegalArgumentException e) {
-      errorLine(attributePointer, "Unknown skin \"" + skin + "\"");
-    }
-    return null;
-  }
-
   private InventoryItemType getInventoryItemTypeFromAttribute(String skin) {
     try {
-      return InventoryItemType.valueOf(skin);
+      return InventoryItemType.fromString(skin);
     } catch (IllegalArgumentException e) {
       errorLine(attributePointer, "Unknown skin \"" + skin + "\"");
     }
@@ -396,7 +374,7 @@ public class MapParser {
       return;
     }
     builder.elementBuilder.setLocked(new ElementRef(
-        EntityType.fromString(matcher.group(1)),
+        InventoryItemRawType.valueOf(matcher.group(1)),
         matcher.group(2).trim()
     ));
   }

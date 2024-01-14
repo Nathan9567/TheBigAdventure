@@ -1,4 +1,4 @@
-package fr.uge.thebigadventure.model;
+package fr.uge.thebigadventure.model.utils;
 
 import fr.uge.thebigadventure.model.type.util.Direction;
 

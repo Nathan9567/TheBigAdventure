@@ -1,10 +1,11 @@
 package fr.uge.thebigadventure.controller;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.Size;
 import fr.uge.thebigadventure.model.entity.inventory.Food;
 import fr.uge.thebigadventure.model.entity.inventory.Inventory;
 import fr.uge.thebigadventure.model.type.util.Direction;
+import fr.uge.thebigadventure.model.utils.Coordinates;
+import fr.uge.thebigadventure.model.utils.ElementRef;
+import fr.uge.thebigadventure.model.utils.Size;
 import fr.uge.thebigadventure.view.InventoryView;
 
 import java.awt.*;
@@ -47,13 +48,24 @@ public class InventoryController {
 
   public int eatMainHand() {
     var item = inventory.mainHand();
-    if (item == null)
+    if (item == null) {
       return 0;
-    inventory.removeItem(item);
-    return item instanceof Food food ? food.getFoodSupply() : 0;
+    }
+    if (inventory.removeItem(item)) {
+      return item instanceof Food food ? food.getFoodSupply() : 0;
+    }
+    return 0;
   }
 
   public void updateView(Graphics2D graphics2D) throws IOException {
     inventoryView.renderInventory(graphics2D, cursorPosition);
+  }
+
+  public boolean remove(ElementRef given) {
+    return inventory.removeItem(given);
+  }
+
+  public void add(ElementRef wanted) {
+    inventory.addItem(wanted.toItem());
   }
 }

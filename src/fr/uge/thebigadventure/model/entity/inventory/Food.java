@@ -1,6 +1,6 @@
 package fr.uge.thebigadventure.model.entity.inventory;
 
-import fr.uge.thebigadventure.model.Coordinates;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.type.entity.EntityType;
 import fr.uge.thebigadventure.model.type.entity.FoodType;
 import fr.uge.thebigadventure.model.type.entity.PersonageType;

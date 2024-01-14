@@ -1,7 +1,7 @@
 package fr.uge.thebigadventure.model.entity.obstacle;
 
-import fr.uge.thebigadventure.model.Coordinates;
-import fr.uge.thebigadventure.model.ElementRef;
+import fr.uge.thebigadventure.model.utils.Coordinates;
+import fr.uge.thebigadventure.model.utils.ElementRef;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.type.entity.ObstacleType;
 
