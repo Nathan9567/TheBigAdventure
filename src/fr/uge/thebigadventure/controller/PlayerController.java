@@ -6,6 +6,7 @@ import fr.uge.thebigadventure.model.entity.personage.Player;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.view.InventoryView;
 import fr.uge.thebigadventure.view.entity.PlayerView;
+import fr.umlv.zen5.ScreenInfo;
 
 import java.awt.*;
 import java.io.IOException;
@@ -19,12 +20,11 @@ public class PlayerController {
   private final InventoryController inventoryController;
   private long lastTime = System.currentTimeMillis();
 
-  public PlayerController(Player player, PlayerView playerView, GameMap gameMap) {
+  public PlayerController(Player player, GameMap gameMap, int cellSize, ScreenInfo screenInfo) {
     this.player = player;
-    this.playerView = playerView;
+    this.playerView = new PlayerView(player, cellSize);
     this.map = gameMap;
-    InventoryView inventoryView = new InventoryView(player.inventory(),
-        playerView.cellSize(), playerView.screenInfo());
+    InventoryView inventoryView = new InventoryView(player.inventory(), cellSize, screenInfo);
     this.inventoryController = new InventoryController(player.inventory(), inventoryView);
   }
 
@@ -88,7 +88,8 @@ public class PlayerController {
   public void eatMainHand() {
     if (player.health() < player.maxHealth()) {
       var givenHealth = inventoryController.eatMainHand();
-      player.setCurrentHealth(Math.min(player.health() + givenHealth, player.health()));
+      givenHealth = Math.min(player.health() + givenHealth, player.maxHealth());
+      player.setCurrentHealth(givenHealth);
     }
   }
 

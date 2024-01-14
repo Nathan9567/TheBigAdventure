@@ -1,16 +1,22 @@
 package fr.uge.thebigadventure.view.entity;
 
-import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.entity.personage.Player;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.view.MapView;
-import fr.umlv.zen5.ScreenInfo;
 
 import java.awt.*;
 import java.io.IOException;
 
-public record PlayerView(Player player, int cellSize, ScreenInfo screenInfo) {
+public class PlayerView {
 
   private static final EntityView entityView = new EntityView();
+  private final Player player;
+  private final int cellSize;
+
+  public PlayerView(Player player, int cellSize) {
+    this.player = player;
+    this.cellSize = cellSize;
+  }
 
   public void showPlayerHealth(Graphics2D graphics2D, Coordinates position) {
     var x = position.x() * cellSize;

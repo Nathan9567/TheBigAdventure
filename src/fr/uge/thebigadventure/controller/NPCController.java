@@ -1,11 +1,11 @@
 package fr.uge.thebigadventure.controller;
 
-import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.entity.personage.Ally;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.type.util.Direction;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.view.entity.NPCView;
 
 import java.awt.*;
@@ -68,7 +68,7 @@ public class NPCController {
   }
 
   private boolean updateAllySpeak() {
-    long delay = 450;
+    long delay = 400;
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastSpeakTime <= delay) {
       return false;

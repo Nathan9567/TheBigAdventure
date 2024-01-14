@@ -11,7 +11,7 @@ import java.util.List;
 
 public record TradeView(List<Trade> tradeTable, int cellSize) {
   private static final EntityView entityView = new EntityView();
-  private static final int NB_TRADE_DISPLAYED = 8;
+  private static final int NB_TRADE_DISPLAYED = 9; // TODO: adapt to the screen size
 
   private void drawTrade(Graphics2D graphics2D, Trade trade, Coordinates topLeftCorner, double extraMargin) throws IOException {
     var x = (int) (topLeftCorner.x() * cellSize + extraMargin);
@@ -37,16 +37,17 @@ public record TradeView(List<Trade> tradeTable, int cellSize) {
     graphics2D.fillRect((int) (topLeftCorner.x() - extraMargin),
         (int) (topLeftCorner.y() - extraMargin),
         (int) (cellSize * 3 + extraMargin * 3),
-        (int) (tradeTable.size() > NB_TRADE_DISPLAYED ? NB_TRADE_DISPLAYED : tradeTable.size() * cellSize + extraMargin * 3));
+        Math.min(tradeTable.size(), NB_TRADE_DISPLAYED) * cellSize + (int) (extraMargin * 3));
   }
 
   public void renderTradingTable(Graphics2D graphics2D, int cursorPosition) throws IOException {
     var extraMargin = cellSize * 0.1;
     drawTradingTableBackground(graphics2D, new Coordinates(0, 0), extraMargin);
-    for (int i = 0; i < tradeTable.size() && i < NB_TRADE_DISPLAYED; i++) {
-      drawTrade(graphics2D, tradeTable.get(i), new Coordinates(0, i), extraMargin);
+    for (int i = NB_TRADE_DISPLAYED > cursorPosition ? 0 : (NB_TRADE_DISPLAYED - cursorPosition + 1);
+         i < tradeTable.size() && i < (NB_TRADE_DISPLAYED > cursorPosition ? NB_TRADE_DISPLAYED : NB_TRADE_DISPLAYED + (NB_TRADE_DISPLAYED - cursorPosition + 1)); i++) {
+      drawTrade(graphics2D, tradeTable.get(i), new Coordinates(0, NB_TRADE_DISPLAYED > cursorPosition ? i : i - (NB_TRADE_DISPLAYED - cursorPosition + 1)), extraMargin);
     }
-    drawTradingCursor(graphics2D, new Coordinates(0, cursorPosition), extraMargin);
+    drawTradingCursor(graphics2D, new Coordinates(0, Math.min(NB_TRADE_DISPLAYED - 1, cursorPosition)), extraMargin);
   }
 
 }

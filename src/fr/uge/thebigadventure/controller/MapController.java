@@ -9,7 +9,6 @@ import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.view.MapView;
 import fr.uge.thebigadventure.view.entity.NPCView;
-import fr.uge.thebigadventure.view.entity.PlayerView;
 import fr.umlv.zen5.ScreenInfo;
 
 import java.awt.*;
@@ -35,8 +34,7 @@ public class MapController {
     this.cellSize = (int) (screenInfo.getWidth() / NB_TILES_WIDTH);
     int nbTilesHeight = (int) (screenInfo.getHeight() / cellSize);
     // Here is the problem (PlayerView must be init in controller)
-    this.playerController = new PlayerController(gameMap.getPlayer(),
-        new PlayerView(gameMap.getPlayer(), cellSize, screenInfo), gameMap);
+    this.playerController = new PlayerController(gameMap.getPlayer(), gameMap, cellSize, screenInfo);
     this.npcControllers = gameMap.getNpcs().stream().map(npc ->
         new NPCController(npc, new NPCView(npc, cellSize))).toList();
     this.mapView = new MapView(gameMap, NB_TILES_WIDTH, nbTilesHeight, cellSize);
