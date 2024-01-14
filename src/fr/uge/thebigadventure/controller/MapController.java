@@ -130,7 +130,7 @@ public class MapController {
 
   public void updateView(Graphics2D graphics2D) throws IOException {
     mapView.clearLastView(graphics2D);
-    mapView.drawPlayerCenteredMap(graphics2D);
+    mapView.drawCenteredMap(graphics2D);
     playerController.updateView(graphics2D);
     for (var npcController : npcControllers) {
       if (npcController.isAlive()) {

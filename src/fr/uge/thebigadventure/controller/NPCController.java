@@ -61,14 +61,14 @@ public class NPCController {
    */
   public boolean update(GameMap gameMap, boolean isDryRunActive) {
     return switch (npc) {
-      case Ally ally ->
-          updateAllySpeak(ally) || (!isDryRunActive && updateNPCMovement(gameMap));
+      case Ally ignored ->
+          updateAllySpeak() || (!isDryRunActive && updateNPCMovement(gameMap));
       default -> !isDryRunActive && updateNPCMovement(gameMap);
     };
   }
 
-  private boolean updateAllySpeak(Ally ally) {
-    long delay = 200;
+  private boolean updateAllySpeak() {
+    long delay = 450;
     long currentTime = System.currentTimeMillis();
     if (currentTime - lastSpeakTime <= delay) {
       return false;
@@ -158,6 +158,9 @@ public class NPCController {
     npc.setPosition(npc.position().move(direction));
   }
 
+  /**
+   * Start the dialog with the NPC
+   */
   public void startDialog() {
     currentDialogPosition = 0;
   }

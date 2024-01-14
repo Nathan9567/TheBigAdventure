@@ -100,13 +100,15 @@ public record NPCView(NPC npc, int cellSize) {
   }
 
   private boolean renderAlly(Ally ally, Graphics2D graphics2D, int currentDialogPosition, Coordinates NPCPositionCentered) throws IOException {
-    entityView.drawEntityTileInMap(graphics2D,
-        ally.skin(), MapView.coordinatesToPlayerCenteredMapCoordinates(ally.position()),
-        cellSize);
+    entityView.drawEntityTileInMap(graphics2D, ally.skin(), NPCPositionCentered, cellSize);
     var text = Arrays.stream(ally.text().split(" "))
         .limit(currentDialogPosition + 1).collect(Collectors.joining(" "));
     renderTextBubble(graphics2D, text, NPCPositionCentered);
-    return text.equals(ally.text());
+    if (text.equals(ally.text())) {
+      page = 0;
+      return true;
+    }
+    return false;
   }
 
   private void renderEnemy(Enemy enemy, Graphics2D graphics2D,

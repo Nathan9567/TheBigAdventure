@@ -43,9 +43,9 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
 
   private boolean isInPlayerCenteredMap(Coordinates coordinates) {
     return coordinates.x() >= northWestCornerX
-        && coordinates.x() < northWestCornerX + nbCellsWidth
+        && coordinates.x() < northWestCornerX + (nbCellsWidth + 1)
         && coordinates.y() >= northWestCornerY
-        && coordinates.y() < northWestCornerY + nbCellsHeight;
+        && coordinates.y() < northWestCornerY + (nbCellsHeight + 1);
   }
 
   private void drawPlayerCenteredData(Map<Coordinates,
@@ -74,11 +74,10 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
 
   public void clearLastView(Graphics2D graphics2D) {
     Objects.requireNonNull(graphics2D, "You need a graphics2D to clear the view in.");
-    graphics2D.clearRect(0, 0, nbCellsWidth * cellSize,
-        nbCellsHeight * cellSize);
+    graphics2D.clearRect(0, 0, nbCellsWidth * cellSize, (nbCellsHeight + 1) * cellSize);
   }
 
-  public void drawPlayerCenteredMap(Graphics2D graphics2D) throws IOException {
+  public void drawCenteredMap(Graphics2D graphics2D) throws IOException {
     Objects.requireNonNull(graphics2D, "You need a graphics2D to draw the map in.");
     coordinatesAccordingToPlayer();
     drawPlayerCenteredData(gameMap.data(), graphics2D);
