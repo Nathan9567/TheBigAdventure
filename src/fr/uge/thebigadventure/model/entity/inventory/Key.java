@@ -5,14 +5,28 @@ import fr.uge.thebigadventure.model.utils.Coordinates;
 
 import java.util.Objects;
 
-public record Key(String name, Coordinates position) implements InventoryItem {
+public class Key implements InventoryItem {
 
-  public Key {
+  private final BasicItem item;
+
+  public Key(String name, Coordinates position) {
     Objects.requireNonNull(name);
+    this.item = new BasicItem(InventoryItemRawType.KEY, name, position);
   }
 
+  @Override
+  public String name() {
+    return item.name();
+  }
+
+  @Override
   public InventoryItemRawType skin() {
     return InventoryItemRawType.KEY;
+  }
+
+  @Override
+  public Coordinates position() {
+    return item.position();
   }
 
 }

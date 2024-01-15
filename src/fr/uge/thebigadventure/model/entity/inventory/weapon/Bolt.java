@@ -10,10 +10,6 @@ public record Bolt(String name, Coordinates position,
     new Weapon(InventoryItemRawType.BOLT, name, position, damage);
   }
 
-  public Bolt(String name, int damage) {
-    this(name, null, damage);
-  }
-
   @Override
   public InventoryItemRawType skin() {
     return InventoryItemRawType.BOLT;

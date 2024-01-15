@@ -166,14 +166,23 @@ public class NPCController {
   }
 
   /**
+   * Cancel the dialog with the NPC and close the dialog
+   * if it is already open
+   */
+  public void cancelDialog() {
+    currentDialogPosition = -1;
+  }
+
+  /**
    * Render the NPC
    *
-   * @param graphics2D the graphics
+   * @param graphics2D  the graphics
+   * @param updateSpeak true if the speaking must be updated, false otherwise
    * @throws IOException if the image cannot be loaded
    */
-  public void updateView(Graphics2D graphics2D) throws IOException {
-    if (npcView.renderNPC(graphics2D, currentDialogPosition)) {
-      currentDialogPosition = -1;
+  public void updateView(Graphics2D graphics2D, boolean updateSpeak) throws IOException {
+    if (npcView.renderNPC(graphics2D, updateSpeak ? currentDialogPosition : -1)) {
+      cancelDialog();
     }
   }
 }

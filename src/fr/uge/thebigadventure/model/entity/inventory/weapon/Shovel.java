@@ -10,11 +10,6 @@ public record Shovel(String name, Coordinates position,
     new Weapon(InventoryItemRawType.SHOVEL, name, position, damage);
   }
 
-  public Shovel(String name, int damage) {
-    this(name, null, damage);
-  }
-
-
   @Override
   public InventoryItemRawType skin() {
     return InventoryItemRawType.SHOVEL;

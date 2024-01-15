@@ -1,24 +1,20 @@
 package fr.uge.thebigadventure.model;
 
-import fr.uge.thebigadventure.model.utils.Coordinates;
-import fr.uge.thebigadventure.model.utils.parser.MapParser;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.entity.personage.Personage;
 import fr.uge.thebigadventure.model.entity.personage.Player;
 import fr.uge.thebigadventure.model.type.entity.EntityType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.utils.Size;
+import fr.uge.thebigadventure.model.utils.parser.MapParser;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class GameMap {
   private final List<NPC> npcs = new ArrayList<>();
@@ -39,7 +35,7 @@ public class GameMap {
     this.personages = List.copyOf(personages);
     this.size = size;
     this.data = data;
-    this.elements = new HashMap<Coordinates, Entity>(elements);
+    this.elements = new HashMap<>(elements);
     splitPersonages();
     if (player == null) {
       throw new IllegalArgumentException("No player found in map");
@@ -71,7 +67,7 @@ public class GameMap {
   }
 
   public List<NPC> getNpcs() {
-    return npcs;
+    return List.copyOf(npcs);
   }
 
   public void removeNpc(NPC npc) {
@@ -79,15 +75,19 @@ public class GameMap {
   }
 
   public Map<Coordinates, EntityType> data() {
-    return data;
+    return Map.copyOf(data);
   }
 
   public void putElement(Coordinates coords, Entity element) {
     elements.put(coords, element);
   }
 
+  public void removeElement(Coordinates coords) {
+    elements.remove(coords);
+  }
+
   public Map<Coordinates, Entity> elements() {
-    return elements;
+    return Map.copyOf(elements);
   }
 
   public Size size() {

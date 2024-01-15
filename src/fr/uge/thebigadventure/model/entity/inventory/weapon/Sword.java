@@ -12,10 +12,6 @@ public final class Sword implements WeaponInterface {
     weapon = new Weapon(InventoryItemRawType.SWORD, name, position, damage);
   }
 
-  public Sword(String name, int damage) {
-    this(name, null, damage);
-  }
-
   @Override
   public String name() {
     return weapon.name();

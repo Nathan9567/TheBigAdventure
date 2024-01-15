@@ -13,10 +13,6 @@ public final class Stick implements WeaponInterface {
     weapon = new Weapon(InventoryItemRawType.STICK, name, position, damage);
   }
 
-  public Stick(String name, int damage) {
-    this(name, null, damage);
-  }
-
   @Override
   public String name() {
     return weapon.name();

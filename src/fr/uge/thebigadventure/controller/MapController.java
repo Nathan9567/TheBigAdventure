@@ -7,8 +7,8 @@ import fr.uge.thebigadventure.model.entity.inventory.InventoryItem;
 import fr.uge.thebigadventure.model.entity.inventory.weapon.WeaponInterface;
 import fr.uge.thebigadventure.model.entity.personage.Ally;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;
-import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.entity.personage.Ghost;
+import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
 import fr.uge.thebigadventure.model.type.entity.ObstacleType;
 import fr.uge.thebigadventure.model.type.util.Direction;
@@ -61,7 +61,7 @@ public class MapController {
     var element = gameMap.elements().get(playerPosition);
     if (element instanceof InventoryItem inventoryItem) {
       if (gameMap.getPlayer().inventory().addItem(inventoryItem))
-        gameMap.elements().remove(playerPosition);
+        gameMap.removeElement(playerPosition);
     }
   }
 
@@ -131,7 +131,7 @@ public class MapController {
       switch (npc) {
         case Enemy enemy -> actionOnEnemy(enemy);
         case Ally ally -> actionOnAlly(ally);
-        case Ghost ghost -> {/* DO NOTHING */}
+        case Ghost ignored -> {/* DO NOTHING */}
       }
       return;
     }
@@ -178,7 +178,7 @@ public class MapController {
     playerController.updateView(graphics2D);
     for (var npcController : npcControllers) {
       if (npcController.isAlive()) {
-        npcController.updateView(graphics2D);
+        npcController.updateView(graphics2D, tradeController != null && tradeController.isTradeOpen());
       }
     }
     if (playerController.isInventoryOpen()) {
