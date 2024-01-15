@@ -1,23 +1,36 @@
 package fr.uge.thebigadventure.model.entity.inventory;
 
+import fr.uge.thebigadventure.model.type.entity.EntityType;
 import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.model.utils.Coordinates;
 
-import java.util.Objects;
+public class Box implements InventoryItem {
+  private final BasicItem item;
+  private final Direction direction;
 
-public record Box(InventoryItemRawType skin, String name, Coordinates position,
-                  Direction direction) implements InventoryItem {
-  public Box {
-    Objects.requireNonNull(skin);
+  public Box(String name, Coordinates position,
+             Direction direction) {
+    this.item = new BasicItem(InventoryItemRawType.BOX, name, position);
+    this.direction = direction;
   }
 
-  public Box(InventoryItemRawType itemType) {
-    this(itemType, null, null, null);
+  @Override
+  public String name() {
+    return item.name();
   }
 
-  public Box(InventoryItemRawType itemType, String name) {
-    this(itemType, name, null, null);
+  @Override
+  public EntityType skin() {
+    return item.skin();
   }
 
+  @Override
+  public Coordinates position() {
+    return item.position();
+  }
+  
+  public Direction direction() {
+    return direction;
+  }
 }

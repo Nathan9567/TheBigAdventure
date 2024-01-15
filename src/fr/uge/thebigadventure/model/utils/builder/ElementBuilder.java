@@ -252,7 +252,7 @@ public class ElementBuilder {
     return switch (item) {
       // TODO: direction for box
       case BOLT, SHOVEL, STICK, SWORD -> toWeaponEntity();
-      case BOX -> new Box(item, name, position, null);
+      case BOX -> new Box(name, position, null);
       case KEY -> new Key(name, position);
       case MIRROR -> new Mirror(name, position);
       case SEED -> new Seed(name, position);
