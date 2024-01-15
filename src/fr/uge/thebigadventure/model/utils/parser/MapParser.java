@@ -38,6 +38,7 @@ public class MapParser {
       Pattern.compile("true|false", Pattern.CASE_INSENSITIVE);
   private static final Pattern LOCK_PATTERN = Pattern.compile("(KEY|LEVER)\\s*(.+)");
   private static final Pattern TRADE_PATTERN = Pattern.compile("(\\w+)\\s*->\\s*(\\w+)(\\s+(\\w+))?");
+  private static final String UNKNOWN_SKIN = "Unknown skin";
   private final MapBuilder builder = new MapBuilder();
   private final String text;
   private int sectionPointer = 0;
@@ -100,7 +101,7 @@ public class MapParser {
     } catch (IllegalArgumentException | IllegalStateException |
              NullPointerException e) {
       errorLine(sectionPointer, "can't create element : " + e.getMessage());
-    } // TODO custom exception ?
+    }
   }
 
   private void parseAttributes(String content,
@@ -153,7 +154,7 @@ public class MapParser {
         try {
           encodingMap.put(matcher.group(2), EntityType.fromString(matcher.group(1)));
         } catch (IllegalArgumentException e) {
-          errorLine(attributePointer + pointer, "Unknown skin \"" + matcher.group(1) + "\" in encodings");
+          errorLine(attributePointer + pointer, UNKNOWN_SKIN + " \"" + matcher.group(1) + "\" in encodings");
         }
       }
       pointer = matcher.end();
@@ -169,7 +170,8 @@ public class MapParser {
     if (!matcher.find())
       errorLine(attributePointer, "Grid data invalid");
     HashMap<Coordinates, Character> map = new HashMap<>();
-    int y = 0, x = 0;
+    var y = 0;
+    var x = 0;
     var startCol = matcher.group(2).length();
     var linesIterator = matcher.group(1).lines().iterator();
     while (linesIterator.hasNext()) {
@@ -213,7 +215,7 @@ public class MapParser {
   }
 
   private void parseElementAttributeName(String content) {
-    builder.elementBuilder.setName(content);
+    builder.elementBuilder().setName(content);
   }
 
   private void parseElementAttributeText(String content) {
@@ -224,18 +226,19 @@ public class MapParser {
         return;
       }
       var nSpaces = matcher.group(2).length();
-      var text = matcher.group(1).lines().map(s -> s.substring(nSpaces)).collect(Collectors.joining("\n"));
-      builder.elementBuilder.setText(text);
+      var textAttribute = matcher.group(1).lines().map(
+          s -> s.substring(nSpaces)).collect(Collectors.joining("\n"));
+      builder.elementBuilder().setText(textAttribute);
     } else {
-      builder.elementBuilder.setText(content);
+      builder.elementBuilder().setText(content);
     }
   }
 
   private void parseElementAttributeSkin(String content) {
     try {
-      builder.elementBuilder.setSkin(EntityType.fromString(content));
+      builder.elementBuilder().setSkin(EntityType.fromString(content));
     } catch (IllegalArgumentException e) {
-      errorLine(attributePointer, "Unknown skin \"" + content + "\"");
+      errorLine(attributePointer, UNKNOWN_SKIN + " \"" + content + "\"");
     }
   }
 
@@ -251,7 +254,7 @@ public class MapParser {
   }
 
   private void parseElementAttributePlayer(String content) {
-    builder.elementBuilder.setPlayer(parseAttributeBoolean(content));
+    builder.elementBuilder().setPlayer(parseAttributeBoolean(content));
   }
 
   private void parseElementAttributePosition(String content) {
@@ -260,7 +263,7 @@ public class MapParser {
       errorLine(attributePointer, "Invalid position");
       return;
     }
-    builder.elementBuilder.setPosition(new Coordinates(
+    builder.elementBuilder().setPosition(new Coordinates(
         Integer.parseInt(matcher.group(1)),
         Integer.parseInt(matcher.group(2))
     ));
@@ -268,7 +271,7 @@ public class MapParser {
 
   private void parseElementAttributeHealth(String content) {
     try {
-      builder.elementBuilder.setHealth(Integer.parseInt(content));
+      builder.elementBuilder().setHealth(Integer.parseInt(content));
     } catch (NumberFormatException e) {
       errorLine(attributePointer, "health \"" + content + "\" is not a number");
     }
@@ -276,7 +279,7 @@ public class MapParser {
 
   private void parseElementAttributeKind(String content) {
     try {
-      builder.elementBuilder.setKind(Kind.valueOf(content.toUpperCase(Locale.ROOT)));
+      builder.elementBuilder().setKind(Kind.valueOf(content.toUpperCase(Locale.ROOT)));
     } catch (IllegalArgumentException e) {
       errorLine(attributePointer, "invalid kind \"" + content + "\"");
     }
@@ -288,7 +291,7 @@ public class MapParser {
       errorLine(attributePointer, "invalid zone");
       return;
     }
-    builder.elementBuilder.setZone(
+    builder.elementBuilder().setZone(
         new Zone(
             new Coordinates(
                 Integer.parseInt(matcher.group(1)),
@@ -304,7 +307,7 @@ public class MapParser {
 
   private void parseElementAttributeBehavior(String content) {
     try {
-      builder.elementBuilder.setBehavior(Behavior.valueOf(content.toUpperCase(Locale.ROOT)));
+      builder.elementBuilder().setBehavior(Behavior.valueOf(content.toUpperCase(Locale.ROOT)));
     } catch (IllegalArgumentException e) {
       errorLine(attributePointer, "invalid behavior \"" + content + "\"");
     }
@@ -312,7 +315,7 @@ public class MapParser {
 
   private void parseElementAttributeDamage(String content) {
     try {
-      builder.elementBuilder.setDamage(Integer.parseInt(content));
+      builder.elementBuilder().setDamage(Integer.parseInt(content));
     } catch (NumberFormatException e) {
       errorLine(attributePointer, "damage \"" + content + "\" is not a number");
     }
@@ -338,7 +341,7 @@ public class MapParser {
     if (trades.isEmpty()) {
       errorLine(attributePointer, "can't parse any trade");
     } else {
-      builder.elementBuilder.setTrades(trades);
+      builder.elementBuilder().setTrades(trades);
     }
   }
 
@@ -354,7 +357,7 @@ public class MapParser {
     try {
       return InventoryItemType.fromString(skin);
     } catch (IllegalArgumentException e) {
-      errorLine(attributePointer, "Unknown skin \"" + skin + "\"");
+      errorLine(attributePointer, UNKNOWN_SKIN + " \"" + skin + "\"");
     }
     return null;
   }
@@ -364,7 +367,7 @@ public class MapParser {
         .map(String::trim)
         .map(this::getInventoryItemTypeFromAttribute)
         .filter(Predicate.not(Objects::isNull)).toList();
-    builder.elementBuilder.setSteal(steal);
+    builder.elementBuilder().setSteal(steal);
   }
 
   private void parseElementAttributeLocked(String content) {
@@ -373,7 +376,7 @@ public class MapParser {
       errorLine(attributePointer, "invalid locked");
       return;
     }
-    builder.elementBuilder.setLocked(new ElementRef(
+    builder.elementBuilder().setLocked(new ElementRef(
         InventoryItemRawType.valueOf(matcher.group(1)),
         matcher.group(2).trim()
     ));
@@ -381,17 +384,17 @@ public class MapParser {
 
   private void parseElementAttributeFlow(String content) {
     try {
-      builder.elementBuilder.setFlow(Direction.valueOf(content));
+      builder.elementBuilder().setFlow(Direction.valueOf(content));
     } catch (IllegalArgumentException e) {
       errorLine(attributePointer, "invalid flow \"" + content + "\"");
     }
   }
 
   private void parseElementAttributePhantomized(String content) {
-    builder.elementBuilder.setPhantomized(parseAttributeBoolean(content));
+    builder.elementBuilder().setPhantomized(parseAttributeBoolean(content));
   }
 
   private void parseElementAttributeTeleport(String content) {
-    builder.elementBuilder.setTeleport(content);
+    builder.elementBuilder().setTeleport(content);
   }
 }

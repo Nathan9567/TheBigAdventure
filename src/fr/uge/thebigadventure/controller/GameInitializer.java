@@ -37,7 +37,7 @@ public class GameInitializer {
    */
   public boolean parseArguments() {
     var commandParser = new CommandLineParser(args);
-    commandParser.parse();
+    commandParser.parse(args);
     var mapPath = Path.of(commandParser.getMapPath());
 
     try {
@@ -63,8 +63,9 @@ public class GameInitializer {
     Application.run(bkgdColor, context -> {
       boolean update = true;
 
-      // Create map controller
       ScreenInfo screenInfo = context.getScreenInfo();
+      
+      // Create map controller
       MapController mapController = new MapController(gameMap, screenInfo, dryRun);
 
       while (!mapController.isPlayerDead()) {

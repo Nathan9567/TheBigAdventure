@@ -1,14 +1,26 @@
 package fr.uge.thebigadventure.model.utils.parser;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
-public record CommandLineParser(String[] args) {
+/**
+ * This class is responsible for parsing the command line arguments.
+ * It uses a map to associate each argument with its corresponding action.
+ */
+public class CommandLineParser {
 
-  private static String mapPath;
-  private static boolean validate;
-  private static boolean dryRun;
+  private static final Map<String, Consumer<String>> ARGUMENTS = new HashMap<>();
+  private String mapPath;
+  private boolean validate;
+  private boolean dryRun;
 
-  public CommandLineParser {
+  /**
+   * Constructor for the CommandLineParser class.
+   *
+   * @param args the command line arguments.
+   */
+  public CommandLineParser(String[] args) {
     if (args.length < 1) {
       System.err.println("""
           Invalid number of arguments.
@@ -16,47 +28,77 @@ public record CommandLineParser(String[] args) {
           """);
       System.exit(1);
     }
+
+    ARGUMENTS.put("-v", arg -> validate = true);
+    ARGUMENTS.put("--validate", arg -> validate = true);
+    ARGUMENTS.put("-d", arg -> dryRun = true);
+    ARGUMENTS.put("--dry-run", arg -> dryRun = true);
+    ARGUMENTS.put("-l", this::setMapPath);
+    ARGUMENTS.put("--level", this::setMapPath);
+    ARGUMENTS.put("-h", arg -> displayHelpAndExit());
+    ARGUMENTS.put("--help", arg -> displayHelpAndExit());
+
+    parse(args);
   }
 
+  /**
+   * Displays the help message and exits the program.
+   */
+  private void displayHelpAndExit() {
+    System.out.println(helpMessage());
+    System.exit(0);
+  }
+
+  /**
+   * Checks if the validate option is set.
+   * The validate option is used to validate a map file without playing it.
+   *
+   * @return true if the validate option is set, false otherwise.
+   */
   public boolean isValidate() {
     return validate;
   }
 
+  /**
+   * Checks if the dry-run option is set.
+   * The dry-run option is used to test the map without moving the mobs.
+   *
+   * @return true if the dry-run option is set, false otherwise.
+   */
   public boolean isDryRun() {
     return dryRun;
   }
 
+  /**
+   * Gets the path of the map file.
+   *
+   * @return the path of the map file.
+   */
   public String getMapPath() {
     return mapPath;
   }
 
-  private void addValidateArgument() {
-    validate = true;
+  /**
+   * Sets the path of the map file.
+   *
+   * @param path the path of the map file.
+   */
+  private void setMapPath(String path) {
+    mapPath = path;
   }
 
-  private void addDryRunArgument() {
-    dryRun = true;
-  }
-
-  public void parse() {
-    var argIterator = Arrays.stream(args).iterator();
-    while (argIterator.hasNext()) {
-      var arg = argIterator.next();
-      if (help(arg)) {
-        System.out.println(helpMessage());
-        System.exit(0);
-        return;
-      } else if (validate(arg)) {
-        addValidateArgument();
-      } else if (dryRun(arg)) {
-        addDryRunArgument();
-      } else if (load(arg)) {
-        if (!argIterator.hasNext()) {
-          throw new IllegalArgumentException("Missing map file");
-        }
-        mapPath = argIterator.next();
+  /**
+   * Parses the command line arguments.
+   *
+   * @param args the command line arguments.
+   */
+  public void parse(String[] args) {
+    for (String arg : args) {
+      Consumer<String> action = ARGUMENTS.get(arg);
+      if (action != null) {
+        action.accept(arg);
       } else if (arg.endsWith(".map")) {
-        mapPath = arg;
+        setMapPath(arg);
       } else {
         throw new IllegalArgumentException("Invalid argument: " + arg);
       }
@@ -64,6 +106,9 @@ public record CommandLineParser(String[] args) {
     checkOptions();
   }
 
+  /**
+   * Checks the options and throws an exception if the options are not valid.
+   */
   private void checkOptions() {
     if (mapPath == null) {
       throw new IllegalArgumentException("Missing map file");
@@ -73,26 +118,15 @@ public record CommandLineParser(String[] args) {
     }
   }
 
-  private boolean help(String arg) {
-    return arg.equals("-h") || arg.equals("--help");
-  }
-
-  private boolean validate(String arg) {
-    return arg.equals("-v") || arg.equals("--validate");
-  }
-
-  private boolean dryRun(String arg) {
-    return arg.equals("-d") || arg.equals("--dry-run");
-  }
-
-  private boolean load(String arg) {
-    return arg.equals("-l") || arg.equals("--level");
-  }
-
+  /**
+   * Returns the help message.
+   *
+   * @return the help message.
+   */
   private String helpMessage() {
     return """
         Usage: java -jar TheBigAdventure.jar [options] [map]
-                
+
         Options:
         map is the path to a map file
         -d, --dry-run           map in stroll mode (mob don't move)

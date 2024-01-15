@@ -1,12 +1,5 @@
 package fr.uge.thebigadventure.model.utils.builder;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.entity.personage.Personage;
@@ -14,16 +7,29 @@ import fr.uge.thebigadventure.model.type.entity.EntityType;
 import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.utils.Size;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class MapBuilder {
   private final List<Entity> entities = new ArrayList<>();
   /**
    * Element builder used to build the current element.
    */
-  public ElementBuilder elementBuilder = new ElementBuilder();
+  private ElementBuilder elementBuilder = new ElementBuilder();
   private Size size = null;
   private Map<String, EntityType> encodings = null;
   private Map<Coordinates, Character> data = null;
   private Size effectiveSize;
+
+  /**
+   * Get the element builder. The element builder is used to build the current element.
+   * The current element is the element that will be created when calling {@link #pushElementBuilder()}.
+   *
+   * @return the element builder.
+   */
+  public ElementBuilder elementBuilder() {
+    return elementBuilder;
+  }
 
   /**
    * Set the size of the map.
@@ -125,8 +131,8 @@ public class MapBuilder {
     // java.lang.IllegalStateException: Duplicate key Coordinates
     // comment on gère ça ?
 
-    var personages = elements.values().stream().filter(entity -> entity instanceof Personage)
-        .map(entity -> (Personage) entity).toList();
+    var personages = elements.values().stream().filter(Personage.class::isInstance)
+        .map(Personage.class::cast).toList();
 
     elements.values().removeAll(personages);
     System.out.println(elements);
