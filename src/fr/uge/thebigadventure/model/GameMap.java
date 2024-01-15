@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +39,7 @@ public class GameMap {
     this.personages = List.copyOf(personages);
     this.size = size;
     this.data = data;
-    this.elements = elements;
+    this.elements = new HashMap<Coordinates, Entity>(elements);
     splitPersonages();
     if (player == null) {
       throw new IllegalArgumentException("No player found in map");
@@ -79,6 +80,10 @@ public class GameMap {
 
   public Map<Coordinates, EntityType> data() {
     return data;
+  }
+
+  public void putElement(Coordinates coords, Entity element) {
+    elements.put(coords, element);
   }
 
   public Map<Coordinates, Entity> elements() {

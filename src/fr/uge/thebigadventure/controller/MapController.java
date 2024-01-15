@@ -1,12 +1,18 @@
 package fr.uge.thebigadventure.controller;
 
 import fr.uge.thebigadventure.model.GameMap;
+import fr.uge.thebigadventure.model.entity.Entity;
+import fr.uge.thebigadventure.model.entity.inventory.Box;
 import fr.uge.thebigadventure.model.entity.inventory.InventoryItem;
 import fr.uge.thebigadventure.model.entity.inventory.weapon.WeaponInterface;
 import fr.uge.thebigadventure.model.entity.personage.Ally;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
+import fr.uge.thebigadventure.model.entity.personage.Ghost;
+import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
+import fr.uge.thebigadventure.model.type.entity.ObstacleType;
 import fr.uge.thebigadventure.model.type.util.Direction;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.view.MapView;
 import fr.uge.thebigadventure.view.entity.NPCView;
 import fr.umlv.zen5.ScreenInfo;
@@ -59,16 +65,31 @@ public class MapController {
     }
   }
 
-  private NPC getNPCInFront() {
+  private Coordinates playerTargetPosition() {
     var direction = gameMap.getPlayer().getDirection();
     if (direction == null) {
       return null;
     }
-    var targetPosition = gameMap.getPlayer().position().move(direction);
+    return gameMap.getPlayer().position().move(direction);
+  }
+
+  private NPC getNPCInFront() {
+    var targetPosition = playerTargetPosition();
+    if (targetPosition == null) {
+      return null;
+    }
     return gameMap.getNpcs().stream()
         .filter(npc -> npc.position().equals(targetPosition))
         .findFirst()
         .orElse(null);
+  }
+
+  private Entity getElementInFront() {
+    var targetPosition = playerTargetPosition();
+    if (targetPosition == null) {
+      return null;
+    }
+    return gameMap.elements().get(targetPosition);
   }
 
   private void actionOnEnemy(Enemy enemy) {
@@ -105,11 +126,21 @@ public class MapController {
   }
 
   public void action() {
-    switch (getNPCInFront()) {
-      case Enemy enemy -> actionOnEnemy(enemy);
-      case Ally ally -> actionOnAlly(ally);
-      case null, default -> playerController.eatMainHand();
+    var npc = getNPCInFront();
+    if (npc != null) {
+      switch (npc) {
+        case Enemy enemy -> actionOnEnemy(enemy);
+        case Ally ally -> actionOnAlly(ally);
+        case Ghost ghost -> {/* DO NOTHING */}
+      }
+      return;
     }
+    var element = getElementInFront();
+    if (element != null && element.skin() == ObstacleType.TREE
+        && gameMap.getPlayer().inventory().mainHand().skin() == InventoryItemRawType.SWORD) {
+      gameMap.putElement(playerTargetPosition(), new Box(null, playerTargetPosition(), null));
+    }
+    playerController.eatMainHand();
   }
 
   public void movePlayer(Direction direction) {

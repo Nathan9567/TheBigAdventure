@@ -96,6 +96,8 @@ public class InventoryView {
     var sideMargin = cellSize * 0.05;
     drawInventory(graphics2D, size, startCoordinates, (int) sideMargin);
     drawCursor(graphics2D, cursor, (int) sideMargin);
-    drawItemName(graphics2D, cursor, (int) sideMargin);
+    if (inventory.items()[cursor.y()][cursor.x()] != null
+        && inventory.items()[cursor.y()][cursor.x()].name() != null)
+      drawItemName(graphics2D, cursor, (int) sideMargin);
   }
 }

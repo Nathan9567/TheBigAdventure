@@ -32,7 +32,7 @@
   Q             S                                                 E
   Q                                                               E
   Q                                                      H        E
-  E                                  IH                  II       E
+  ET                                 IH                  II       E
   WWWG                              IH                            E
   W  F                                 I                          E
   W  F                                                            E
@@ -83,6 +83,26 @@
   zone: (38, 24) (10 x 8)
   behavior: stroll
   damage: 5
+
+[element]
+  name: jacque
+  skin: CRAB
+  position: (10, 10)
+  kind: enemy
+  health: 30
+  zone: (2, 2) (20 x 20)
+  behavior: AGGRESSIVE
+  damage: 2
+
+[element]
+  name: cheminade
+  skin: CRAB
+  position: (13, 14)
+  kind: enemy
+  health: 26
+  zone: (2, 2) (20 x 20)
+  behavior: AGGRESSIVE
+  damage: 3
 
 [element]
   name: piano
@@ -222,30 +242,3 @@
     skin: CASH
     position: (7,5)
     kind: item
-
-[element]
-skin: TREE
-position: (1,27)
-kind: obstacle
-
-[element]
-    name: michel
-    skin: BEE
-    position: (8,5)
-    kind: friend
-    text: """
-    Salut, mon nom est michel.
-    Veux-tu m'aider à retrouver mon ami waldo ?
-    """
-    trade: CASH -> PIZZA waldo, CASH -> SWORD pete, CASH -> KEY cle, SWORD -> CASH epee, KEY -> CASH cle
-
-[element]
-    name: waldo
-    skin: CRAB
-    position: (9,4)
-    kind: friend
-    text: """
-    Salut, mon nom est waldo.
-    Je suis perdu, peux-tu m'aider à retrouver mon ami michel ?
-    Il doit être dans le coin.
-    """
