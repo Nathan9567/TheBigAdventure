@@ -1,9 +1,9 @@
 package fr.uge.thebigadventure.view;
 
-import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.GameMap;
 import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.type.entity.EntityType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.view.entity.EntityView;
 
 import java.awt.*;
@@ -23,7 +23,8 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
         coordinates.y() - northWestCornerY);
   }
 
-  private void coordinatesAccordingToPlayer() {
+  private static void coordinatesAccordingToPlayer(GameMap gameMap, int nbCellsWidth,
+                                                   int nbCellsHeight) {
     var playerPosition = gameMap.getPlayer().position();
     northWestCornerX = playerPosition.x() - nbCellsWidth / 2;
     northWestCornerY = playerPosition.y() - nbCellsHeight / 2;
@@ -79,9 +80,11 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
 
   public void drawCenteredMap(Graphics2D graphics2D) throws IOException {
     Objects.requireNonNull(graphics2D, "You need a graphics2D to draw the map in.");
-    coordinatesAccordingToPlayer();
+    coordinatesAccordingToPlayer(gameMap, nbCellsWidth, nbCellsHeight);
     drawPlayerCenteredData(gameMap.data(), graphics2D);
     drawPlayerCenteredElements(gameMap.elements(), graphics2D);
   }
+
+  // TODO 000 : Add a method to draw the GameOver screen
 
 }
