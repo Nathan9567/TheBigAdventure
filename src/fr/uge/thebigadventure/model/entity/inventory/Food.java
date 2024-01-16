@@ -26,12 +26,11 @@ public class Food implements InventoryItem {
 
   public Food(PersonageType skin, int foodSupply, String name, Coordinates position) {
     Objects.requireNonNull(skin, "You need a skin for the food");
-    Stream.of(PersonageType.BUNNY, PersonageType.CRAB, PersonageType.FISH, PersonageType.FROG, PersonageType.SNAIL)
+    this.skin = Stream.of(PersonageType.BUNNY, PersonageType.CRAB, PersonageType.FISH, PersonageType.FROG, PersonageType.SNAIL)
         .filter(personageType -> personageType.equals(skin))
         .findFirst()
-        .orElseThrow(() -> new IllegalArgumentException(skin.name() + " is not a food"));
+        .orElseThrow(() -> new IllegalArgumentException("You need a valid skin for the food"));
     this.name = name;
-    this.skin = skin;
     this.position = position;
     this.isCooked = false;
     this.foodSupply = foodSupply;

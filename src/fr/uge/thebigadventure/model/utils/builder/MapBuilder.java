@@ -126,10 +126,10 @@ public class MapBuilder {
 
     var elements = entities.stream()
         .filter(entity -> entity.position() != null)
-        .collect(Collectors.toMap(Entity::position, element -> element));
-    // TODO : On ne peut pas avoir deux éléments au même endroit ici
-    // java.lang.IllegalStateException: Duplicate key Coordinates
-    // comment on gère ça ?
+        .collect(Collectors.toMap(Entity::position, element -> element, (e1, e2) -> {
+          System.err.println("Warning: 2 elements at the same position: " + e1 + " and " + e2);
+          return e1;
+        }));
 
     var personages = elements.values().stream().filter(Personage.class::isInstance)
         .map(Personage.class::cast).toList();

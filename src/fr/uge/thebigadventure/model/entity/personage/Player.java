@@ -1,13 +1,13 @@
 package fr.uge.thebigadventure.model.entity.personage;
 
-import java.util.Arrays;
-import java.util.Objects;
-
-import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.entity.inventory.Inventory;
 import fr.uge.thebigadventure.model.type.entity.PersonageType;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.model.type.util.PlayerSkinType;
+import fr.uge.thebigadventure.model.utils.Coordinates;
+
+import java.util.Arrays;
+import java.util.Objects;
 
 public final class Player implements Personage {
 
@@ -26,8 +26,11 @@ public final class Player implements Personage {
     if (!isPlayerSkin) {
       throw new IllegalArgumentException("Skin must be a valid PlayerSkinType");
     }
-    this.skin = skin;
     Objects.requireNonNull(position, "Position cannot be null");
+    if (health < 1) {
+      throw new IllegalArgumentException("Health must be greater than 0");
+    }
+    this.skin = skin;
     this.name = name;
     this.position = position;
     this.maxHealth = health;

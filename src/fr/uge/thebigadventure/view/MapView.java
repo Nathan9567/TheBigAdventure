@@ -85,6 +85,17 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
     drawPlayerCenteredElements(gameMap.elements(), graphics2D);
   }
 
-  // TODO 000 : Add a method to draw the GameOver screen
+  public void drawGameOver(Graphics2D graphics2D) {
+    Objects.requireNonNull(graphics2D, "You need a graphics2D to draw the map in.");
+    // Draw centered text in the middle of the screen
+    String gameOverText = "GAME OVER";
+    graphics2D.setFont(new Font("TimesRoman", Font.PLAIN, 50));
+    FontMetrics fontMetrics = graphics2D.getFontMetrics();
+    fontMetrics.stringWidth(gameOverText);
+    graphics2D.setColor(Color.RED);
+    graphics2D.drawString("GAME OVER",
+        nbCellsWidth * cellSize / 2 - fontMetrics.stringWidth(gameOverText) / 2,
+        (nbCellsHeight + 1) * cellSize / 2);
+  }
 
 }

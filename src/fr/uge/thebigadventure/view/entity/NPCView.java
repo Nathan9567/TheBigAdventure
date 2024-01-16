@@ -1,9 +1,9 @@
 package fr.uge.thebigadventure.view.entity;
 
-import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.entity.personage.Ally;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
+import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.view.MapView;
 
 import java.awt.*;
@@ -115,7 +115,7 @@ public record NPCView(NPC npc, int cellSize) {
                            Coordinates position) throws IOException {
     var x = position.x() * cellSize;
     var y = position.y() * cellSize - cellSize / 4;
-    Utils.renderHealthBar(graphics2D, x, y, cellSize, cellSize / 4,
+    entityView.renderHealthBar(graphics2D, x, y, cellSize, cellSize / 4,
         enemy.getHealth(), enemy.maxHealth());
     entityView.drawEntityTileInMap(graphics2D,
         enemy.skin(), position, cellSize);

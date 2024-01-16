@@ -4,7 +4,6 @@ package fr.uge.thebigadventure.model.entity.personage;
 import fr.uge.thebigadventure.model.type.entity.InventoryItemType;
 import fr.uge.thebigadventure.model.type.entity.PersonageType;
 import fr.uge.thebigadventure.model.type.util.Behavior;
-import fr.uge.thebigadventure.model.type.util.Kind;
 import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.utils.Zone;
 
@@ -15,7 +14,6 @@ public final class Enemy implements NPC {
 
   private final PersonageType skin;
   private final String name;
-  private final Kind kind;
   private final Zone zone;
   private final Behavior behavior;
   private final int damage;
@@ -24,12 +22,11 @@ public final class Enemy implements NPC {
   private int health;
   private Coordinates position;
 
-  public Enemy(PersonageType skin, String name, Coordinates position, Kind kind,
+  public Enemy(PersonageType skin, String name, Coordinates position,
                int health, Behavior behavior, int damage, Zone zone,
                List<InventoryItemType> stealableItems) {
     Objects.requireNonNull(skin, "Skin cannot be null");
     Objects.requireNonNull(position, "Position cannot be null");
-    Objects.requireNonNull(kind, "Kind cannot be null");
     Objects.requireNonNull(behavior, "Behavior cannot be null");
     if (health <= 0) {
       throw new IllegalArgumentException("Health must be positive");
@@ -37,7 +34,6 @@ public final class Enemy implements NPC {
     this.skin = skin;
     this.name = name;
     this.position = position;
-    this.kind = kind;
     this.health = health;
     this.maxHealth = health;
     this.behavior = behavior;
@@ -61,12 +57,9 @@ public final class Enemy implements NPC {
     return position;
   }
 
+  @Override
   public void setPosition(Coordinates position) {
     this.position = position;
-  }
-
-  public Kind getKind() {
-    return kind;
   }
 
   public int getHealth() {
@@ -77,6 +70,7 @@ public final class Enemy implements NPC {
     this.health = health;
   }
 
+  @Override
   public Zone getZone() {
     return zone;
   }

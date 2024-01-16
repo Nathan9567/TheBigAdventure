@@ -1,8 +1,11 @@
 package fr.uge.thebigadventure.model.entity.other;
 
 import fr.uge.thebigadventure.model.type.entity.OtherType;
+import fr.uge.thebigadventure.model.type.util.Direction;
+import fr.uge.thebigadventure.model.utils.Zone;
 
-public class Wind implements SpecialEntity {
+public record Wind(Zone zone, Direction flow) implements SpecialEntity {
+
   @Override
   public String name() {
     return null;
@@ -10,6 +13,6 @@ public class Wind implements SpecialEntity {
 
   @Override
   public OtherType skin() {
-    return null;
+    return OtherType.WIND;
   }
 }

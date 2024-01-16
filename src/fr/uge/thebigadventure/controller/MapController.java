@@ -7,13 +7,13 @@ import fr.uge.thebigadventure.model.entity.inventory.InventoryItem;
 import fr.uge.thebigadventure.model.entity.inventory.weapon.WeaponInterface;
 import fr.uge.thebigadventure.model.entity.personage.Ally;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;
-import fr.uge.thebigadventure.model.entity.personage.Ghost;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.type.entity.InventoryItemRawType;
 import fr.uge.thebigadventure.model.type.entity.ObstacleType;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.view.MapView;
+import fr.uge.thebigadventure.view.TradeView;
 import fr.uge.thebigadventure.view.entity.NPCView;
 import fr.umlv.zen5.ScreenInfo;
 
@@ -26,20 +26,21 @@ public class MapController {
 
   private static final int NB_TILES_WIDTH = 30;
   private static TradeController tradeController = null;
+  private final int nbTilesHeight;
   private final PlayerController playerController;
   private final List<NPCController> npcControllers;
   private final MapView mapView;
   private final int cellSize;
   private final GameMap gameMap;
   private final boolean dryRunActive;
+  private boolean currentlySpeaking;
 
   public MapController(GameMap gameMap, ScreenInfo screenInfo, boolean dryRun) {
     Objects.requireNonNull(gameMap, "Game map cannot be null");
     Objects.requireNonNull(screenInfo, "Screen info cannot be null");
     this.gameMap = gameMap;
     this.cellSize = (int) (screenInfo.getWidth() / NB_TILES_WIDTH);
-    int nbTilesHeight = (int) (screenInfo.getHeight() / cellSize);
-    // Here is the problem (PlayerView must be init in controller)
+    nbTilesHeight = (int) (screenInfo.getHeight() / cellSize);
     this.playerController = new PlayerController(gameMap.getPlayer(), gameMap, cellSize, screenInfo);
     this.npcControllers = gameMap.getNpcs().stream().map(npc ->
         new NPCController(npc, new NPCView(npc, cellSize))).toList();
@@ -117,11 +118,13 @@ public class MapController {
           .findFirst()
           .ifPresent(NPCController::startDialog);
     }
+    currentlySpeaking = true;
     if (ally.getTradeTable() == null) {
       return;
     }
     tradeController = new TradeController(ally.getTradeTable(),
-        playerController.getInventoryController(), cellSize);
+        new TradeView(List.copyOf(ally.getTradeTable()), cellSize, nbTilesHeight),
+        playerController.getInventoryController());
     tradeController.toggleTradeInventory();
   }
 
@@ -131,7 +134,6 @@ public class MapController {
       switch (npc) {
         case Enemy enemy -> actionOnEnemy(enemy);
         case Ally ally -> actionOnAlly(ally);
-        case Ghost ignored -> {/* DO NOTHING */}
       }
       return;
     }
@@ -145,10 +147,12 @@ public class MapController {
 
   public void movePlayer(Direction direction) {
     playerController.movePlayer(direction);
+    currentlySpeaking = false;
   }
 
   public void toggleInventory() {
     playerController.toggleInventory();
+    currentlySpeaking = false;
   }
 
   private void updateInventoryController(KeyboardController keyboardController) {
@@ -156,7 +160,8 @@ public class MapController {
   }
 
   private void updateTradeController(KeyboardController keyboardController) {
-    keyboardController.handleTradeControl(tradeController);
+    if (keyboardController.handleTradeControl(tradeController))
+      currentlySpeaking = false;
   }
 
   public void updateMapController(KeyboardController keyboardController) {
@@ -178,7 +183,9 @@ public class MapController {
     playerController.updateView(graphics2D);
     for (var npcController : npcControllers) {
       if (npcController.isAlive()) {
-        npcController.updateView(graphics2D, tradeController != null && tradeController.isTradeOpen());
+        npcController.updateView(graphics2D, currentlySpeaking);
+        if (!currentlySpeaking)
+          npcController.cancelDialog();
       }
     }
     if (playerController.isInventoryOpen()) {
@@ -196,5 +203,9 @@ public class MapController {
    */
   public boolean isPlayerDead() {
     return gameMap.getPlayer().health() <= 0;
+  }
+
+  public void renderDeathMessage(Graphics2D graphics2D) {
+    mapView.drawGameOver(graphics2D);
   }
 }

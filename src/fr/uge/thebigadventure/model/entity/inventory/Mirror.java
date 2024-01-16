@@ -18,12 +18,11 @@ public class Mirror implements InventoryItem {
 
   @Override
   public InventoryItemRawType skin() {
-    return InventoryItemRawType.MIRROR;
+    return item.skin();
   }
 
   @Override
   public Coordinates position() {
     return item.position();
   }
-
 }

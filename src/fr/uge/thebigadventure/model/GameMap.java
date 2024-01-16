@@ -1,6 +1,7 @@
 package fr.uge.thebigadventure.model;
 
 import fr.uge.thebigadventure.model.entity.Entity;
+import fr.uge.thebigadventure.model.entity.personage.Ghost;
 import fr.uge.thebigadventure.model.entity.personage.NPC;
 import fr.uge.thebigadventure.model.entity.personage.Personage;
 import fr.uge.thebigadventure.model.entity.personage.Player;
@@ -58,6 +59,9 @@ public class GameMap {
       switch (personage) {
         case NPC personageNpc -> npcs.add(personageNpc);
         case Player personagePlayer -> player = personagePlayer;
+        case Ghost ignored -> {
+          // Currently, ghosts are not used in the game
+        }
       }
     }
   }

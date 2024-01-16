@@ -64,15 +64,33 @@ public class GameInitializer {
       boolean update = true;
 
       ScreenInfo screenInfo = context.getScreenInfo();
-      
+
       // Create map controller
       MapController mapController = new MapController(gameMap, screenInfo, dryRun);
 
       while (!mapController.isPlayerDead()) {
         update = handleEvent(context, mapController, update);
       }
+      context.renderFrame(mapController::renderDeathMessage);
+      handleEventAfterDeath(context);
       context.exit(0);
     });
+  }
+
+  /**
+   * Handles events after the player's death.
+   * This method is responsible for waiting for the player to press a key before exiting the game.
+   * This method is called after the player's death.
+   *
+   * @param context the application context.
+   */
+  private void handleEventAfterDeath(ApplicationContext context) {
+    while (true) {
+      var event = context.pollOrWaitEvent(100);
+      if (event != null && event.getAction() == Action.KEY_PRESSED) {
+        break;
+      }
+    }
   }
 
   /**

@@ -14,17 +14,29 @@ public record KeyboardController(KeyboardKey keyboardKey) {
     return false;
   }
 
-  public void handleTradeControl(TradeController tradeController) {
+  public boolean handleTradeControl(TradeController tradeController) {
     switch (keyboardKey) {
-      case UP -> tradeController.moveTradeCursor(Direction.NORTH);
-      case DOWN -> tradeController.moveTradeCursor(Direction.SOUTH);
-      case SPACE -> {
-        if (tradeController.trade())
-          tradeController.toggleTradeInventory();
+      case UP -> {
+        tradeController.moveTradeCursor(Direction.NORTH);
+        return false;
       }
-      case I -> tradeController.toggleTradeInventory();
+      case DOWN -> {
+        tradeController.moveTradeCursor(Direction.SOUTH);
+        return false;
+      }
+      case SPACE -> {
+        if (tradeController.trade()) {
+          tradeController.toggleTradeInventory();
+          return true;
+        }
+        return false;
+      }
+      case I -> {
+        tradeController.toggleTradeInventory();
+        return true;
+      }
       default -> {
-        // Do nothing
+        return false;
       }
     }
   }

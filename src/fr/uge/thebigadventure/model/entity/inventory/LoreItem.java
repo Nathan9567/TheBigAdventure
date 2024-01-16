@@ -9,8 +9,9 @@ public class LoreItem implements InventoryItem {
   private final String text;
 
   public LoreItem(InventoryItemRawType skin, String name,
-                  String text,
-                  Coordinates position) {
+                  String text, Coordinates position) {
+    if (skin != InventoryItemRawType.BOOK && skin != InventoryItemRawType.PAPER)
+      throw new IllegalArgumentException("skin must be BOOK or PAPER");
     this.item = new BasicItem(skin, name, position);
     this.text = text;
   }
@@ -22,7 +23,7 @@ public class LoreItem implements InventoryItem {
 
   @Override
   public InventoryItemRawType skin() {
-    return InventoryItemRawType.BOOK;
+    return item.skin();
   }
 
   @Override

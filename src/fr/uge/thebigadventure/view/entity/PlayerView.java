@@ -21,7 +21,7 @@ public class PlayerView {
   public void showPlayerHealth(Graphics2D graphics2D, Coordinates position) {
     var x = position.x() * cellSize;
     var y = position.y() * cellSize - cellSize / 4;
-    Utils.renderHealthBar(graphics2D, x, y, cellSize, cellSize / 4, player.health(), player.maxHealth());
+    entityView.renderHealthBar(graphics2D, x, y, cellSize, cellSize / 4, player.health(), player.maxHealth());
   }
 
   public void showPlayerName(Graphics2D graphics2D, Coordinates position) {

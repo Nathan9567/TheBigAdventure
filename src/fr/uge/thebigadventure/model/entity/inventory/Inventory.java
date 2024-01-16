@@ -62,11 +62,11 @@ public class Inventory {
   /**
    * Remove an item from the inventory by its reference.
    * This method is useful when you want to remove an item from the inventory
-   * but you don't have the item itself but only its reference.
-   * For example, when you want to remove an item from the inventory
-   * but you only have the item's name.
+   * by its reference.
+   * For example, when you want to remove an item from the inventory,
+   * but you only have the skin.
    * In this case, you can use this method to remove the item from the inventory
-   * by its name.
+   * by its skin independent of its position and name in the inventory.
    *
    * @param item the item to remove by its reference
    * @return true if the item was removed, false otherwise

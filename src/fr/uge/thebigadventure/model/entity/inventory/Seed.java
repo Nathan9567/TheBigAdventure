@@ -13,7 +13,7 @@ public class Seed implements InventoryItem {
 
   @Override
   public InventoryItemRawType skin() {
-    return InventoryItemRawType.SEED;
+    return item.skin();
   }
 
   @Override

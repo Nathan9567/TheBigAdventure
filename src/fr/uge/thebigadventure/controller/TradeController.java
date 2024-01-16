@@ -16,10 +16,10 @@ public class TradeController {
   private int cursorPosition = 0;
   private boolean isTradeOpen = false;
 
-  public TradeController(List<Trade> tradeTable, InventoryController inventoryController, int cellSize) {
+  public TradeController(List<Trade> tradeTable, TradeView tradeView, InventoryController inventoryController) {
     this.inventoryController = inventoryController;
     this.tradeTable = tradeTable;
-    this.tradeView = new TradeView(List.copyOf(tradeTable), cellSize);
+    this.tradeView = tradeView;
   }
 
   public boolean trade() {

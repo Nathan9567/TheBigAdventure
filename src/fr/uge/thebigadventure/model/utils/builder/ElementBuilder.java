@@ -7,9 +7,12 @@ import fr.uge.thebigadventure.model.entity.inventory.weapon.Shovel;
 import fr.uge.thebigadventure.model.entity.inventory.weapon.Stick;
 import fr.uge.thebigadventure.model.entity.inventory.weapon.Sword;
 import fr.uge.thebigadventure.model.entity.obstacle.Obstacle;
+import fr.uge.thebigadventure.model.entity.other.Bucket;
+import fr.uge.thebigadventure.model.entity.other.Fire;
+import fr.uge.thebigadventure.model.entity.other.Lever;
+import fr.uge.thebigadventure.model.entity.other.Wind;
 import fr.uge.thebigadventure.model.entity.personage.Ally;
 import fr.uge.thebigadventure.model.entity.personage.Enemy;
-import fr.uge.thebigadventure.model.entity.personage.Ghost;
 import fr.uge.thebigadventure.model.entity.personage.Player;
 import fr.uge.thebigadventure.model.type.entity.*;
 import fr.uge.thebigadventure.model.type.util.Behavior;
@@ -212,17 +215,15 @@ public class ElementBuilder {
   }
 
   private Entity toPersonageEntity(PersonageType personageType) {
-    if (skin.name().equals("GHOST"))
-      return new Ghost();
     if (player)
       return new Player(personageType, name, position, health);
     if (kind == Kind.ENEMY)
-      return new Enemy(personageType, name, position, kind, health, behavior, damage, zone, steal);
+      return new Enemy(personageType, name, position, health, behavior, damage, zone, steal);
     if (kind == Kind.FRIEND)
       return new Ally(personageType, name, position, zone, text, trades);
     if (kind == Kind.ITEM)
       return new Food(personageType, health, name, position);
-    throw new IllegalStateException("Can't find which PersonageEntity is this"); // TODO custom exception
+    throw new IllegalStateException("Can't find which PersonageEntity is this");
   }
 
   private Obstacle toObstacleEntity(ObstacleType obstacleType) {
@@ -238,7 +239,7 @@ public class ElementBuilder {
       case STICK -> new Stick(name, position, damage);
       case SWORD -> new Sword(name, position, damage);
       default ->
-          throw new IllegalStateException("Can't find which WeaponEntity is this"); // TODO custom exception
+          throw new IllegalStateException("Can't find which WeaponEntity is this");
     };
   }
 
@@ -250,7 +251,6 @@ public class ElementBuilder {
    */
   public InventoryItem toItemEntity(InventoryItemRawType item) {
     return switch (item) {
-      // TODO: direction for box
       case BOLT, SHOVEL, STICK, SWORD -> toWeaponEntity();
       case BOX -> new Box(name, position, null);
       case KEY -> new Key(name, position);
@@ -261,8 +261,26 @@ public class ElementBuilder {
     };
   }
 
+  /**
+   * Create a food entity from the current state of the element builder.
+   *
+   * @param foodType the food type.
+   * @return the entity.
+   */
   public Food toFoodEntity(FoodType foodType) {
     return new Food(foodType, health, name, position);
+  }
+
+  private Entity toOtherEntity(OtherType otherType) {
+    return switch (otherType) {
+      case BUCKET -> new Bucket(name, position);
+      case LEVER -> new Lever(name, position);
+      // Strange case, but it's actually the only way to create a fire
+      case FIRE -> new Fire(name, position);
+      case WIND -> new Wind(zone, flow);
+      default ->
+          throw new IllegalStateException("Can't find which OtherEntity is this");
+    };
   }
 
   /**
@@ -277,10 +295,9 @@ public class ElementBuilder {
           toItemEntity(inventoryItemRawType);
       case PersonageType personageType -> toPersonageEntity(personageType);
       case FoodType foodType -> toFoodEntity(foodType);
-      case null ->
-          throw new IllegalStateException("No skin provided !"); // TODO custom exception
-      default ->
-          throw new IllegalStateException("Unexpected value: " + skin); // TODO custom exception
+      case OtherType otherType -> toOtherEntity(otherType);
+      case null -> throw new IllegalStateException("No skin provided !");
+      default -> throw new IllegalStateException("Unexpected value: " + skin);
     };
   }
 }
