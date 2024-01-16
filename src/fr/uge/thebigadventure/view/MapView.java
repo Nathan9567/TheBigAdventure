@@ -62,7 +62,7 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
     }
   }
 
-  private void drawPlayerCenteredElements(Map<Coordinates,
+  private void drawPlayerCenteredEntities(Map<Coordinates,
       Entity> element, Graphics2D graphics2D) throws IOException {
     for (var entity : element.values()) {
       Coordinates coordinates = entity.position();
@@ -82,7 +82,7 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
     Objects.requireNonNull(graphics2D, "You need a graphics2D to draw the map in.");
     coordinatesAccordingToPlayer(gameMap, nbCellsWidth, nbCellsHeight);
     drawPlayerCenteredData(gameMap.data(), graphics2D);
-    drawPlayerCenteredElements(gameMap.elements(), graphics2D);
+    drawPlayerCenteredEntities(gameMap.entities(), graphics2D);
   }
 
   public void drawGameOver(Graphics2D graphics2D) {

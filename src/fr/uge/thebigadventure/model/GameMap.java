@@ -22,12 +22,13 @@ public class GameMap {
   private final List<Personage> personages;
   private final Size size;
   private final Map<Coordinates, EntityType> data;
-  private final Map<Coordinates, Entity> elements;
+  private final Map<Coordinates, Entity> entities;
+  private final List<Entity> coldEntities;
   private Player player;
 
   public GameMap(Size size, Map<Coordinates, EntityType> data,
-                 Map<Coordinates, Entity> elements,
-                 List<Personage> personages) {
+                 Map<Coordinates, Entity> entities,
+                 List<Personage> personages, List<Entity> coldEntities) {
     Objects.requireNonNull(size, "Size cannot be null");
     if (size.width() <= 0 || size.height() <= 0) {
       throw new IllegalArgumentException("Invalid map size");
@@ -36,7 +37,8 @@ public class GameMap {
     this.personages = List.copyOf(personages);
     this.size = size;
     this.data = data;
-    this.elements = new HashMap<>(elements);
+    this.entities = new HashMap<>(entities);
+    this.coldEntities = coldEntities;
     splitPersonages();
     if (player == null) {
       throw new IllegalArgumentException("No player found in map");
@@ -83,15 +85,19 @@ public class GameMap {
   }
 
   public void putElement(Coordinates coords, Entity element) {
-    elements.put(coords, element);
+    entities.put(coords, element);
   }
 
   public void removeElement(Coordinates coords) {
-    elements.remove(coords);
+    entities.remove(coords);
   }
 
-  public Map<Coordinates, Entity> elements() {
-    return Map.copyOf(elements);
+  public Map<Coordinates, Entity> entities() {
+    return Map.copyOf(entities);
+  }
+
+  public List<Entity> coldEntities() {
+    return List.copyOf(coldEntities);
   }
 
   public Size size() {

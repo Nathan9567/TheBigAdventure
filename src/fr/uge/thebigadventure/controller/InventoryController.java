@@ -2,6 +2,7 @@ package fr.uge.thebigadventure.controller;
 
 import fr.uge.thebigadventure.model.entity.inventory.Food;
 import fr.uge.thebigadventure.model.entity.inventory.Inventory;
+import fr.uge.thebigadventure.model.entity.inventory.InventoryItem;
 import fr.uge.thebigadventure.model.type.util.Direction;
 import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.utils.ElementRef;
@@ -67,5 +68,9 @@ public class InventoryController {
 
   public void add(ElementRef wanted) {
     inventory.addItem(wanted.toItem());
+  }
+
+  public void add(InventoryItem item) {
+    inventory.addItem(item);
   }
 }

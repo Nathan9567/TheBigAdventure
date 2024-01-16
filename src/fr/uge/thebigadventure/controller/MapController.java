@@ -59,7 +59,7 @@ public class MapController {
 
   private void pickupItem() {
     var playerPosition = gameMap.getPlayer().position();
-    var element = gameMap.elements().get(playerPosition);
+    var element = gameMap.entities().get(playerPosition);
     if (element instanceof InventoryItem inventoryItem) {
       if (gameMap.getPlayer().inventory().addItem(inventoryItem))
         gameMap.removeElement(playerPosition);
@@ -90,7 +90,7 @@ public class MapController {
     if (targetPosition == null) {
       return null;
     }
-    return gameMap.elements().get(targetPosition);
+    return gameMap.entities().get(targetPosition);
   }
 
   private void actionOnEnemy(Enemy enemy) {
@@ -124,7 +124,7 @@ public class MapController {
     }
     tradeController = new TradeController(ally.getTradeTable(),
         new TradeView(List.copyOf(ally.getTradeTable()), cellSize, nbTilesHeight),
-        playerController.getInventoryController());
+        playerController.getInventoryController(), gameMap.coldEntities());
     tradeController.toggleTradeInventory();
   }
 

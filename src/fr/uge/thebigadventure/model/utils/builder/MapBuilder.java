@@ -127,9 +127,11 @@ public class MapBuilder {
     var elements = entities.stream()
         .filter(entity -> entity.position() != null)
         .collect(Collectors.toMap(Entity::position, element -> element, (e1, e2) -> {
-          System.err.println("Warning: 2 elements at the same position: " + e1 + " and " + e2);
+          System.err.println("Map warning: 2 elements at the same position: " + e1 + " and " + e2);
           return e1;
         }));
+
+    var coldEntities = entities.stream().filter(entity -> entity.position() == null).toList();
 
     var personages = elements.values().stream().filter(Personage.class::isInstance)
         .map(Personage.class::cast).toList();
@@ -137,8 +139,9 @@ public class MapBuilder {
     elements.values().removeAll(personages);
     System.out.println(elements);
     System.out.println(personages);
+    System.out.println(coldEntities);
 
-    return new GameMap(size, mapDataEncoded(), elements, personages);
+    return new GameMap(size, mapDataEncoded(), elements, personages, coldEntities);
   }
 
 }
