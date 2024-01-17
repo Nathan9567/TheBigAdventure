@@ -25,5 +25,7 @@ replay_pid*
 
 .idea/
 out/
+docs/api/
+classes/*
 .classpath
 .project
