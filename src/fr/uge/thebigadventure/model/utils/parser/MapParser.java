@@ -37,7 +37,7 @@ public class MapParser {
   private static final Pattern BOOLEAN_PATTERN =
       Pattern.compile("true|false", Pattern.CASE_INSENSITIVE);
   private static final Pattern LOCK_PATTERN = Pattern.compile("(KEY|LEVER)\\s*(.+)");
-  private static final Pattern TRADE_PATTERN = Pattern.compile("(\\w+)\\s*->\\s*(\\w+)(\\s+(\\w+))?");
+  private static final Pattern TRADE_PATTERN = Pattern.compile("(\\w+)\\s*->\\s*(\\w+)(\\s+(.+))?");
   private static final String UNKNOWN_SKIN = "Unknown skin";
   private final MapBuilder builder = new MapBuilder();
   private final String text;
