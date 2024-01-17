@@ -5,18 +5,42 @@ import fr.uge.thebigadventure.model.utils.ElementRef;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * The inventory of the player. It contains all the items of the player.
+ * The inventory is a 2D array of {@link InventoryItem}.
+ */
 public class Inventory {
 
   private final InventoryItem[][] items = new InventoryItem[4][9];
 
+  /**
+   * Get the items of the inventory.
+   * The first dimension of the array is the row of the inventory.
+   * The second dimension of the array is the column of the inventory.
+   *
+   * @return the items of the inventory
+   */
   public InventoryItem[][] items() {
     return items;
   }
 
+  /**
+   * Get the main hand of the player.
+   * The main hand is the first item of the first row of the inventory.
+   *
+   * @return the main hand of the player
+   */
   public InventoryItem mainHand() {
     return items[0][0];
   }
 
+  /**
+   * Add an item to the inventory at the first free slot.
+   * If there is no free slot, the item is not added to the inventory.
+   *
+   * @param item the item to add to the inventory
+   * @return true if the item was added, false otherwise
+   */
   public boolean addItem(InventoryItem item) {
     Objects.requireNonNull(item, "You need an item to add it to the inventory");
     for (var i = 0; i < items.length; i++) {
@@ -75,7 +99,13 @@ public class Inventory {
     return removeItemOrRef(item);
   }
 
-  public void swapItemWithMainHand(InventoryItem item) {
+  /**
+   * Swap an item from the inventory with the main hand.
+   * If the item is not in the inventory, the item is not swapped.
+   *
+   * @param item the item to swap with the main hand
+   */
+  private void swapItemWithMainHand(InventoryItem item) {
     Objects.requireNonNull(item, "You need an item to swap it from the inventory");
     if (item.equals(mainHand()))
       return;
@@ -97,6 +127,13 @@ public class Inventory {
         '}';
   }
 
+  /**
+   * Set the main hand of the player.
+   * The main hand is the first item of the first row of the inventory.
+   * If the item is not in the inventory, the item is not set as main hand.
+   *
+   * @param item the item to set as main hand
+   */
   public void setMainHand(InventoryItem item) {
     Objects.requireNonNull(item, "You need an item to set it as main hand");
     swapItemWithMainHand(item);
