@@ -29,3 +29,4 @@ docs/api/
 classes/*
 .classpath
 .project
+*.iml
