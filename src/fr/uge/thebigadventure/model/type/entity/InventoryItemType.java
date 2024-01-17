@@ -7,8 +7,19 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Represents the type of inventory item.
+ * This is a sealed interface, meaning that all implementations must be declared in this file.
+ */
 public sealed interface InventoryItemType extends EntityType permits InventoryItemRawType, FoodType {
 
+  /**
+   * Like the {@link Enum#valueOf(Class, String)} method, but for {@link InventoryItemType}.
+   * This method is used to convert a string to an {@link InventoryItemType}.
+   *
+   * @param string the string to convert
+   * @return the corresponding {@link InventoryItemType}
+   */
   static InventoryItemType fromString(String string) {
     Map<String, InventoryItemType> nameToTypeMap =
         new HashMap<>(Stream.of(InventoryItemRawType.values(), FoodType.values())

@@ -1,8 +1,8 @@
 package fr.uge.thebigadventure.view;
 
+import fr.uge.thebigadventure.model.entity.inventory.Inventory;
 import fr.uge.thebigadventure.model.utils.Coordinates;
 import fr.uge.thebigadventure.model.utils.Size;
-import fr.uge.thebigadventure.model.entity.inventory.Inventory;
 import fr.uge.thebigadventure.view.entity.EntityView;
 import fr.umlv.zen5.ScreenInfo;
 
@@ -10,6 +10,9 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * This class is used to render the inventory of the player.
+ */
 public class InventoryView {
 
   private static final EntityView entityView = new EntityView();
@@ -17,6 +20,14 @@ public class InventoryView {
   private final int cellSize;
   private final ScreenInfo screenInfo;
 
+  /**
+   * Constructor of the InventoryView class.
+   * It takes an inventory, a cell size and a screen info.
+   *
+   * @param inventory  the inventory of the player
+   * @param cellSize   the size of a cell
+   * @param screenInfo the screen info
+   */
   public InventoryView(Inventory inventory, int cellSize,
                        ScreenInfo screenInfo) {
     this.inventory = inventory;
@@ -85,6 +96,14 @@ public class InventoryView {
     }
   }
 
+  /**
+   * This method is used to render the inventory of the player.
+   * It takes a graphics 2D and a cursor.
+   *
+   * @param graphics2D the graphics 2D to draw on
+   * @param cursor     the cursor of the inventory
+   * @throws IOException if the image of an item cannot be loaded
+   */
   public void renderInventory(Graphics2D graphics2D, Coordinates cursor) throws IOException {
     Objects.requireNonNull(graphics2D, "graphics2D cannot be null");
     Objects.requireNonNull(cursor, "cursor cannot be null");

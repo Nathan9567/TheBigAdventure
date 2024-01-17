@@ -10,6 +10,9 @@ import fr.uge.thebigadventure.model.utils.Zone;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class representing an enemy.
+ */
 public final class Enemy implements NPC {
 
   private final PersonageType skin;
@@ -22,6 +25,20 @@ public final class Enemy implements NPC {
   private int health;
   private Coordinates position;
 
+  /**
+   * Constructor of an enemy with a default behavior.
+   * The skin of the enemy cannot be null, like the position and the behavior.
+   * The health must be positive too.
+   *
+   * @param skin           the skin of the enemy
+   * @param name           the name of the enemy
+   * @param position       the position of the enemy
+   * @param health         the health of the enemy
+   * @param behavior       the behavior of the enemy
+   * @param damage         the damages of the enemy
+   * @param zone           the zone of the enemy
+   * @param stealableItems the list of stealable items of the enemy
+   */
   public Enemy(PersonageType skin, String name, Coordinates position,
                int health, Behavior behavior, int damage, Zone zone,
                List<InventoryItemType> stealableItems) {
@@ -62,10 +79,21 @@ public final class Enemy implements NPC {
     this.position = position;
   }
 
+  /**
+   * Returns the health of the enemy.
+   *
+   * @return the health of the enemy
+   */
   public int getHealth() {
     return health;
   }
 
+  /**
+   * Sets the health of the enemy.
+   * This method is used to set the health of the enemy when he is attacked.
+   *
+   * @param health the new health of the enemy
+   */
   public void setHealth(int health) {
     this.health = health;
   }
@@ -83,10 +111,22 @@ public final class Enemy implements NPC {
     return damage;
   }
 
+  /**
+   * Returns the list of stealable items of the enemy.
+   *
+   * @return the list of stealable items of the enemy
+   */
   public List<InventoryItemType> getStealableItems() {
-    return stealableItems;
+    return List.copyOf(stealableItems);
   }
 
+  /**
+   * Returns the maximum health of the enemy.
+   * This method is used to know the maximum health of the enemy.
+   * The maximum health cannot be modified.
+   *
+   * @return the maximum health of the enemy
+   */
   public int maxHealth() {
     return maxHealth;
   }

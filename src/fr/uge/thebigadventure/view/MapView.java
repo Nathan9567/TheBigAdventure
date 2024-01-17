@@ -11,6 +11,16 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * This record is used to draw the map in the window.
+ * It contains the game map, the number of cells to draw in width and height,
+ * and the size of a cell.
+ *
+ * @param gameMap       The game map to draw.
+ * @param nbCellsWidth  The number of cells to draw in width.
+ * @param nbCellsHeight The number of cells to draw in height.
+ * @param cellSize      The size of a cell.
+ */
 public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
                       int cellSize) {
 
@@ -18,6 +28,14 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
   private static int northWestCornerX = 0;
   private static int northWestCornerY = 0;
 
+  /**
+   * This method is used to convert the coordinates of the map to the coordinates of the
+   * player centered map.
+   * It used to draw the entities in the map at the right place.
+   *
+   * @param coordinates The coordinates to convert.
+   * @return The converted coordinates.
+   */
   public static Coordinates coordinatesToPlayerCenteredMapCoordinates(Coordinates coordinates) {
     return new Coordinates(coordinates.x() - northWestCornerX,
         coordinates.y() - northWestCornerY);
@@ -73,11 +91,23 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
     }
   }
 
+  /**
+   * This method is used to clear the last view in the graphics2D.
+   * It is used to clear the last view before drawing a new one.
+   *
+   * @param graphics2D The graphics2D to clear the view in.
+   */
   public void clearLastView(Graphics2D graphics2D) {
     Objects.requireNonNull(graphics2D, "You need a graphics2D to clear the view in.");
     graphics2D.clearRect(0, 0, nbCellsWidth * cellSize, (nbCellsHeight + 1) * cellSize);
   }
 
+  /**
+   * This method is used to draw the current view of the map in the graphics2D.
+   *
+   * @param graphics2D The graphics2D to draw the map in.
+   * @throws IOException If the image of an entity cannot be loaded.
+   */
   public void drawCenteredMap(Graphics2D graphics2D) throws IOException {
     Objects.requireNonNull(graphics2D, "You need a graphics2D to draw the map in.");
     coordinatesAccordingToPlayer(gameMap, nbCellsWidth, nbCellsHeight);
@@ -85,6 +115,13 @@ public record MapView(GameMap gameMap, int nbCellsWidth, int nbCellsHeight,
     drawPlayerCenteredEntities(gameMap.entities(), graphics2D);
   }
 
+  /**
+   * This method is used to draw the final screen of the game.
+   * (The screen that is displayed when the player lose the game like the name
+   * pretty much says it).
+   *
+   * @param graphics2D The graphics2D to draw the map in.
+   */
   public void drawGameOver(Graphics2D graphics2D) {
     Objects.requireNonNull(graphics2D, "You need a graphics2D to draw the map in.");
     // Draw centered text in the middle of the screen

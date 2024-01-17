@@ -7,24 +7,34 @@ import fr.uge.thebigadventure.view.MapView;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * This class is used to render a player.
+ * It uses the EntityView class to render the player's skin and health bar.
+ */
 public class PlayerView {
 
   private static final EntityView entityView = new EntityView();
   private final Player player;
   private final int cellSize;
 
+  /**
+   * Constructor of the PlayerView class. It takes a player and a cell size.
+   *
+   * @param player   The player to render.
+   * @param cellSize The size of a cell in the map.
+   */
   public PlayerView(Player player, int cellSize) {
     this.player = player;
     this.cellSize = cellSize;
   }
 
-  public void showPlayerHealth(Graphics2D graphics2D, Coordinates position) {
+  private void showPlayerHealth(Graphics2D graphics2D, Coordinates position) {
     var x = position.x() * cellSize;
     var y = position.y() * cellSize - cellSize / 4;
     entityView.renderHealthBar(graphics2D, x, y, cellSize, cellSize / 4, player.health(), player.maxHealth());
   }
 
-  public void showPlayerName(Graphics2D graphics2D, Coordinates position) {
+  private void showPlayerName(Graphics2D graphics2D, Coordinates position) {
     var x = position.x() * cellSize;
     var y = (position.y() + 1) * cellSize + cellSize / 4;
     Font font = new Font(Font.MONOSPACED, Font.BOLD, cellSize / 4);
@@ -52,6 +62,14 @@ public class PlayerView {
         coordinates, (int) (cellSize * 0.8), angle);
   }
 
+  /**
+   * Renders the player.
+   * It uses the EntityView class to render the player's skin and health bar.
+   * It also shows the player's name and main hand.
+   *
+   * @param graphics2D The graphics to use to render the player.
+   * @throws IOException If the player's skin can't be loaded.
+   */
   public void renderPlayer(Graphics2D graphics2D) throws IOException {
     var playerPositionCentered =
         MapView.coordinatesToPlayerCenteredMapCoordinates(player.position());

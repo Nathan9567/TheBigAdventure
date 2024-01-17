@@ -11,8 +11,20 @@ public sealed interface Personage extends Entity permits Ghost, NPC, Player {
   @Override
   Coordinates position();
 
+  /**
+   * Sets the position of the personage.
+   * This method is used to move the personage.
+   *
+   * @param position the new position of the personage
+   */
   void setPosition(Coordinates position);
 
+  /**
+   * Method used to know if the personage is an enemy.
+   * If the personage is an enemy, it will attack the player.
+   *
+   * @return true if the personage is an enemy, false otherwise
+   */
   default boolean isEnemy() {
     return switch (this) {
       case Ghost ghost -> ghost.getUnderlyingPersonage().isEnemy();

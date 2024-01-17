@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
+/**
+ * This class is used to draw an entity tile on a graphics2D.
+ */
 public class EntityView {
 
   private static final HashMap<String, BufferedImage> images = new HashMap<>();
@@ -156,6 +159,19 @@ public class EntityView {
     return flippedImage;
   }
 
+  /**
+   * Draw the health bar of an entity.
+   * The health bar is drawn on the given graphics2D at the given coordinates.
+   * The health bar is sized to the given width and height.
+   *
+   * @param graphics2D the graphics2D to draw on
+   * @param x          the x coordinate of the health bar
+   * @param y          the y coordinate of the health bar
+   * @param width      the width of the health bar
+   * @param height     the height of the health bar
+   * @param health     the current health of the entity
+   * @param maxHealth  the maximum health of the entity
+   */
   public void renderHealthBar(Graphics2D graphics2D, int x, int y, int width, int height, int health, int maxHealth) {
     graphics2D.setColor(new Color(77, 194, 26));
     graphics2D.fillRect(x, y, width * health / maxHealth, height);

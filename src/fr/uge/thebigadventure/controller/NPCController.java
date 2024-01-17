@@ -12,6 +12,10 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * This class represents the controller of the NPC
+ * It allows to move the NPC and to start a dialog with him
+ */
 public class NPCController {
 
   private static final Random random = new Random();
@@ -22,6 +26,12 @@ public class NPCController {
   private long lastSpeakTime = 0;
   private boolean isDead = false;
 
+  /**
+   * Create a new NPC controller
+   *
+   * @param npc     the NPC
+   * @param npcView the NPC view
+   */
   public NPCController(NPC npc, NPCView npcView) {
     this.npc = npc;
     this.npcView = npcView;

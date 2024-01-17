@@ -14,6 +14,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * The NPC view, used to render the NPC in the map.
+ *
+ * @param npc      the NPC (not null)
+ * @param cellSize the cell size (positive)
+ */
 public record NPCView(NPC npc, int cellSize) {
 
   private static final EntityView entityView = new EntityView();
@@ -122,7 +128,9 @@ public record NPCView(NPC npc, int cellSize) {
   }
 
   /**
-   * Render the NPC in the map.
+   * Render the NPC in the map. If the NPC is an Ally,
+   * it will render the dialog in a bubble.
+   * If the NPC is an Enemy, it will render the health bar.
    *
    * @param graphics2D            the graphics
    * @param currentDialogPosition the current dialog position
@@ -137,8 +145,6 @@ public record NPCView(NPC npc, int cellSize) {
       case Ally ally -> {
         return renderAlly(ally, graphics2D, currentDialogPosition, NPCPositionCentered);
       }
-      default -> entityView.drawEntityTileInMap(graphics2D,
-          npc.skin(), NPCPositionCentered, cellSize);
     }
     return false;
   }
