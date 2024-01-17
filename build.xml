@@ -1,0 +1,45 @@
+<project name="TheBigAdventure" default="jar" basedir=".">
+    <description>
+        The Big Adventure build file.
+    </description>
+    <property name="src" location="src"/>
+    <property name="classes" location="classes"/>
+    <property name="lib" location="lib"/>
+    <property name="resources" location="resources"/>
+    <property name="docs" location="docs"/>
+    <property name="api" location="${docs}/api"/>
+
+    <path id="classpath">
+        <fileset dir="${lib}" includes="**/*.jar"/>
+    </path>
+
+    <target name="compile">
+        <javac srcdir="${src}" destdir="${classes}" classpathref="classpath" includeantruntime="false"/>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar manifest="${resources}/META-INF/MANIFEST.MF" destfile="thebigadventure.jar">
+            <fileset dir="${classes}"/>
+            <fileset dir="${resources}"/>
+            <fileset dir="${lib}" includes="**/*.jar"/>
+            <zipfileset src="${lib}/zen5.jar" includes="**/*.class"/>
+        </jar>
+    </target>
+
+    <target name="javadoc" depends="compile">
+        <mkdir dir="${api}"/>
+        <javadoc sourcepath="${src}" destdir="${api}">
+            <classpath>
+                <pathelement location="${lib}/zen5.jar"/>
+            </classpath>
+        </javadoc>
+    </target>
+
+    <target name="clean">
+        <delete dir="${api}"/>
+        <delete includeemptydirs="true">
+            <fileset dir="${classes}" includes="**/*"/>
+        </delete>
+        <delete file="thebigadventure.jar"/>
+    </target>
+</project>
