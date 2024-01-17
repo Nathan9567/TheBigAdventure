@@ -8,6 +8,13 @@ public sealed interface WeaponInterface extends InventoryItem permits Bolt, Swor
   @Override
   InventoryItemRawType skin();
 
+  /**
+   * Return the weapon damage. Of course if the damage is negative, it can be
+   * considered as a healed weapon... warning, it's not a good idea to heal
+   * someone with a sword.
+   *
+   * @return the weapon damage
+   */
   int damage();
 
   @Override

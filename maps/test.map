@@ -243,7 +243,7 @@ kind: obstacle
     Salut, mon nom est michel.
     Veux-tu m'aider à retrouver mon ami waldo ?
     """
-    trade: CASH -> PIZZA waldo, CASH -> SWORD durendale, CASH -> KEY clé, SWORD -> CASH epee, KEY -> CASH cle
+    trade: CASH -> PIZZA PIZZA_TIME, CASH -> SWORD durendale, CASH -> KEY clé, SWORD -> CASH epee, KEY -> CASH cle
 
 [element]
     name: waldo
@@ -266,3 +266,8 @@ kind: obstacle
     Je suis perdu, peux-tu m'aider à retrouver mon ami michel ?
     Il doit être dans le coin.
     """
+
+[element]
+    name: PIZZA_TIME
+    skin: PIZZA
+    health: 10
