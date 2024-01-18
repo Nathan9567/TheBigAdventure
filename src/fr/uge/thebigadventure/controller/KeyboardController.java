@@ -41,10 +41,11 @@ public record KeyboardController(KeyboardKey keyboardKey) {
         return false;
       }
       case SPACE -> {
-        if (tradeController.trade()) {
+        var isTradeSuccessful = tradeController.trade();
+        if (isTradeSuccessful) {
           tradeController.toggleTradeInventory();
         }
-        return tradeController.trade();
+        return isTradeSuccessful;
       }
       case I -> {
         tradeController.toggleTradeInventory();
