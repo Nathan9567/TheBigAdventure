@@ -49,16 +49,13 @@ public class PlayerController {
     var entityTypeData = map.data().get(newPosition);
     var entityElement = map.entities().get(newPosition);
     var personage = map.getNpcs().stream()
-        .filter(npc -> npc.position().equals(newPosition))
-        .anyMatch(npc -> npc.skin().isObstacle());
-    if (entityTypeData != null && entityTypeData.isObstacle()) {
+        .anyMatch(npc -> npc.position().equals(newPosition) && npc.skin().isObstacle());
+    if ((entityTypeData != null && entityTypeData.isObstacle()) || personage) {
       return false;
     }
-    if (personage) {
-      return false;
-    }
-    if (entityElement != null && entityElement.skin().isObstacle()) {
-      return entityElement instanceof Obstacle obstacle && obstacle.itemToUnlock() != null && obstacle.itemToUnlock().looksLike(player.inventory().mainHand());
+    if (entityElement instanceof Obstacle obstacle) {
+      return obstacle.itemToUnlock() != null &&
+          obstacle.itemToUnlock().looksLike(player.inventory().mainHand());
     }
     return true;
   }

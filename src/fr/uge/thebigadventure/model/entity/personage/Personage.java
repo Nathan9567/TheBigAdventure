@@ -4,6 +4,10 @@ import fr.uge.thebigadventure.model.entity.Entity;
 import fr.uge.thebigadventure.model.type.entity.PersonageType;
 import fr.uge.thebigadventure.model.utils.Coordinates;
 
+/**
+ * Interface representing a personage.
+ * A personage is an entity that can move.
+ */
 public sealed interface Personage extends Entity permits Ghost, NPC, Player {
   @Override
   PersonageType skin();

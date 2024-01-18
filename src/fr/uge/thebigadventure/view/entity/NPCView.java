@@ -25,6 +25,12 @@ public record NPCView(NPC npc, int cellSize) {
   private static final EntityView entityView = new EntityView();
   private static int page = 0;
 
+  /**
+   * Create a new NPC view.
+   *
+   * @param npc      the NPC
+   * @param cellSize the cell size
+   */
   public NPCView {
     Objects.requireNonNull(npc);
     if (cellSize <= 0) {
@@ -32,25 +38,37 @@ public record NPCView(NPC npc, int cellSize) {
     }
   }
 
+  private String[] splitWords(String text) {
+    return text.split("\\s+");
+  }
+
+  private int calculateLineWidth(String word, int currentWidth, FontMetrics fontMetrics) {
+    return currentWidth + fontMetrics.stringWidth(word) + fontMetrics.stringWidth(" ");
+  }
+
+  private void addLine(List<String[]> textLines, StringBuilder currentLine) {
+    if (!currentLine.isEmpty()) {
+      textLines.add(currentLine.toString().split("\\s+"));
+    }
+  }
+
   private List<String[]> splitText(String text, int maxWidth, FontMetrics fontMetrics) {
-    String[] words = text.split("\\s+");
+    String[] words = splitWords(text);
     StringBuilder currentLine = new StringBuilder();
     int currentWidth = 0;
     List<String[]> textLines = new ArrayList<>();
     for (String word : words) {
       int wordWidth = fontMetrics.stringWidth(word);
-      if (currentWidth + wordWidth <= maxWidth) {
+      if (calculateLineWidth(word, currentWidth, fontMetrics) <= maxWidth) {
         currentLine.append(word).append(" ");
         currentWidth += wordWidth + fontMetrics.stringWidth(" ");
       } else {
-        textLines.add(currentLine.toString().split("\\s+"));
+        addLine(textLines, currentLine);
         currentLine = new StringBuilder(word + " ");
         currentWidth = wordWidth + fontMetrics.stringWidth(" ");
       }
     }
-    if (!currentLine.isEmpty()) {
-      textLines.add(currentLine.toString().split("\\s+"));
-    }
+    addLine(textLines, currentLine);
     return textLines;
   }
 

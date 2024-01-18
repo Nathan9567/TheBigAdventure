@@ -103,10 +103,23 @@ public final class Enemy implements NPC {
     return zone;
   }
 
+  /**
+   * Returns the behavior of the enemy.
+   * The behavior is used to know how the enemy will move.
+   * The behavior cannot be modified.
+   *
+   * @return the behavior of the enemy
+   */
   public Behavior getBehavior() {
     return behavior;
   }
 
+  /**
+   * Returns the damages of the enemy. The damages are used to know how much
+   * health the enemy will remove to the player when he attacks him.
+   *
+   * @return the damages of the enemy
+   */
   public int getDamage() {
     return damage;
   }

@@ -19,7 +19,14 @@ import java.util.Objects;
  */
 public record Obstacle(ObstacleType skin, String name, Coordinates position,
                        ElementRef itemToUnlock) implements Entity {
-
+  /**
+   * Create an obstacle. The skin and the position are required.
+   *
+   * @param skin         the skin of the obstacle
+   * @param name         the name of the obstacle
+   * @param position     the position of the obstacle
+   * @param itemToUnlock the item to unlock the obstacle and pass through it
+   */
   public Obstacle {
     Objects.requireNonNull(skin);
     Objects.requireNonNull(position);

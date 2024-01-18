@@ -2,6 +2,9 @@ package fr.uge.thebigadventure.model.entity.personage;
 
 import fr.uge.thebigadventure.model.utils.Zone;
 
+/**
+ * A non-playable character.
+ */
 public sealed interface NPC extends Personage permits Ally, Enemy {
 
   /**
@@ -12,7 +15,7 @@ public sealed interface NPC extends Personage permits Ally, Enemy {
   default Zone getZone() {
     return null;
   }
-  
+
   @Override
   default boolean isEnemy() {
     return switch (this) {

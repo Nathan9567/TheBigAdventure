@@ -11,6 +11,11 @@ import java.util.List;
 
 /**
  * This class is responsible for rendering the trading table.
+ *
+ * @param tradeTable    the list of trades to display
+ *                      (the first trade is displayed at the top of the table)
+ * @param cellSize      the size of a cell in the trading table and in the map
+ * @param nbTilesHeight the number of tiles in the height of the map
  */
 public record TradeView(List<Trade> tradeTable, int cellSize,
                         int nbTilesHeight) {
