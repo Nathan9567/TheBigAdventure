@@ -2,6 +2,9 @@ package fr.uge.thebigadventure.model.utils;
 
 import java.util.Objects;
 
+/**
+ * A zone in a {@link GameMap}, a positionned area.
+ */
 public record Zone(Coordinates position, Size size) {
   public Zone {
     Objects.requireNonNull(position, "Position cannot be null");

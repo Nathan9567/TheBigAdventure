@@ -18,6 +18,9 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * A parser to parse a map from the text of a .map file.
+ */
 public class MapParser {
   private static final Pattern SECTIONS_PATTERN =
       Pattern.compile("\\[(\\w+)](.+?)(?=\\[|\\z)", Pattern.DOTALL);

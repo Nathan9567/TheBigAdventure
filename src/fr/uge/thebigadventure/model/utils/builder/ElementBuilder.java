@@ -28,6 +28,11 @@ import java.util.Objects;
 
 import static fr.uge.thebigadventure.model.type.entity.InventoryItemRawType.*;
 
+/**
+ * A builder to create an entity.
+ * Set attributes with the setters and then call {@link #toEntity()}.
+ * It will throw an exception if the entity is not buildable with the current state.
+ */
 public class ElementBuilder {
   private String name = null;
   private EntityType skin = null;
@@ -43,6 +48,7 @@ public class ElementBuilder {
   private List<Trade> trades = null;
   private ElementRef locked = null;
   private Direction flow = null;
+  /* These two attributes are not yet used in the game. */
   private boolean phantomized = false;
   private String teleport = null;
 

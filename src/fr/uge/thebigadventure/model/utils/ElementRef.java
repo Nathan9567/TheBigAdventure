@@ -9,16 +9,28 @@ import fr.uge.thebigadventure.model.utils.builder.ElementBuilder;
 
 import java.util.Objects;
 
+/**
+ * A pattern to match an element by its type and its name.
+ */
 public record ElementRef(InventoryItemType type, String name) {
   public ElementRef {
     Objects.requireNonNull(type);
     // name can be null
   }
 
+  /**
+   * Check if the given object is an {@link Entity} with the same skin and name.
+   * @param object the object to check
+   * @return true if the object is an entity with the same skin and name
+   */
   public boolean looksLike(Object object) {
     return object instanceof Entity entity && type.equals(entity.skin()) && (name == null || name.equals(entity.name()));
   }
 
+  /**
+   * Return an {@link InventoryItem} that matches the {@link ElementRef}.
+   * @return the inventory item
+   */
   public InventoryItem toItem() {
     var builder = new ElementBuilder();
     builder.setSkin(type);

@@ -10,6 +10,9 @@ import fr.uge.thebigadventure.model.utils.Size;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * A builder to create a game map.
+ */
 public class MapBuilder {
   private final List<Entity> entities = new ArrayList<>();
   /**
@@ -74,10 +77,17 @@ public class MapBuilder {
   /**
    * Create the current element and add it to the list of elements.
    * Reset the element builder.
+   * 
+   * @throws IllegalStateException if the current element cannot be added to the list of the elements of the map.
    */
   public void pushElementBuilder() {
     try {
-      entities.add(elementBuilder.toEntity());
+      var entity = elementBuilder.toEntity();
+      if (entity.position() != null && entities.stream().anyMatch(e -> entity.position().equals(e.position())))
+        throw new IllegalStateException("an entity is already at this position");
+      if (entity.position() == null && entity.name() != null && entities.stream().filter(e -> e.position() == null).anyMatch(e -> entity.name().equals(e.name())))
+        throw new IllegalStateException("an unpositioned entity with the same name already exists");
+      entities.add(entity);
     } finally {
       elementBuilder = new ElementBuilder();
     }
@@ -100,6 +110,9 @@ public class MapBuilder {
     }
     if (!size.equals(effectiveSize)) {
       System.err.println("Grid data does not match the size provided !");
+    }
+    if (entities.stream().anyMatch(entity -> entity.position() != null && entity.position().notInBounds(size))) {
+      System.err.println("An entity is out of bounds.");
     }
   }
 
@@ -126,10 +139,7 @@ public class MapBuilder {
 
     var elements = entities.stream()
         .filter(entity -> entity.position() != null)
-        .collect(Collectors.toMap(Entity::position, element -> element, (e1, e2) -> {
-          System.err.println("Map warning: 2 elements at the same position: " + e1 + " and " + e2);
-          return e1;
-        }));
+        .collect(Collectors.toMap(Entity::position, element -> element));
 
     var coldEntities = entities.stream().filter(entity -> entity.position() == null).toList();
 
@@ -137,9 +147,6 @@ public class MapBuilder {
         .map(Personage.class::cast).toList();
 
     elements.values().removeAll(personages);
-    System.out.println(elements);
-    System.out.println(personages);
-    System.out.println(coldEntities);
 
     return new GameMap(size, mapDataEncoded(), elements, personages, coldEntities);
   }
