@@ -23,7 +23,7 @@ public class CommandLineParser {
   public CommandLineParser(String[] args) {
     if (args.length < 1) {
       System.err.println("""
-          Invalid number of arguments.
+          You must at least provide a map file.
           Use -h or --help to display help message.
           """);
       System.exit(1);
@@ -100,22 +100,29 @@ public class CommandLineParser {
       } else if (arg.endsWith(".map")) {
         setMapPath(arg);
       } else {
-        throw new IllegalArgumentException("Invalid argument: " + arg);
+        System.err.println("Invalid argument: " + arg);
+        System.exit(1);
+        return;
       }
     }
-    checkOptions();
+    if (!checkOptions()) {
+      System.exit(1);
+    }
   }
 
   /**
    * Checks the options and throws an exception if the options are not valid.
    */
-  private void checkOptions() {
+  private boolean checkOptions() {
     if (mapPath == null) {
-      throw new IllegalArgumentException("Missing map file");
+      System.err.println("Missing map file");
+      return false;
     }
     if (validate && dryRun) {
-      throw new IllegalArgumentException("Cannot validate and dry-run at the same time");
+      System.err.println("Cannot validate and dry-run at the same time");
+      return false;
     }
+    return true;
   }
 
   /**

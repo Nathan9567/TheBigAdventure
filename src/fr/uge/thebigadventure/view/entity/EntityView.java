@@ -47,6 +47,9 @@ public class EntityView {
    *                      (the coordinates of the top left corner of the tile)
    * @param tileSize      the size of the tile
    * @param rotationAngle the angle of rotation of the entity
+   * @throws IOException if the image cannot be loaded
+   * @see #drawEntityTileInMap(Graphics2D, EntityType, Coordinates, int, int)
+   * @see #drawEntityTileInMap(Graphics2D, EntityType, Coordinates, int)
    */
   public void drawEntityTile(Graphics2D graphics2D, EntityType skin,
                              Coordinates coordinates, int tileSize,

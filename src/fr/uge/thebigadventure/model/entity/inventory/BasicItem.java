@@ -16,6 +16,13 @@ import java.util.Objects;
 public record BasicItem(InventoryItemRawType skin,
                         String name,
                         Coordinates position) implements InventoryItem {
+  /**
+   * Creates a new {@link BasicItem} with the given parameters.
+   *
+   * @param skin     the skin of the item (cannot be null)
+   * @param name     the name of the item
+   * @param position the position of the item
+   */
   public BasicItem {
     Objects.requireNonNull(skin, "Skin cannot be null");
   }

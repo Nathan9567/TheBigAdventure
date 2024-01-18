@@ -11,8 +11,19 @@ import java.util.Objects;
 
 /**
  * A pattern to match an element by its type and its name.
+ *
+ * @param type the type of the element
+ *             (cannot be null)
+ * @param name the name of the element
+ *             (can be null if the element doesn't have a name)
  */
 public record ElementRef(InventoryItemType type, String name) {
+  /**
+   * Create a new {@link ElementRef} with the given type and name.
+   *
+   * @param type the type of the element
+   * @param name the name of the element
+   */
   public ElementRef {
     Objects.requireNonNull(type);
     // name can be null
@@ -20,6 +31,7 @@ public record ElementRef(InventoryItemType type, String name) {
 
   /**
    * Check if the given object is an {@link Entity} with the same skin and name.
+   *
    * @param object the object to check
    * @return true if the object is an entity with the same skin and name
    */
@@ -29,6 +41,7 @@ public record ElementRef(InventoryItemType type, String name) {
 
   /**
    * Return an {@link InventoryItem} that matches the {@link ElementRef}.
+   *
    * @return the inventory item
    */
   public InventoryItem toItem() {

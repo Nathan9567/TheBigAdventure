@@ -14,6 +14,13 @@ import fr.uge.thebigadventure.model.utils.Coordinates;
 public record Bolt(String name, Coordinates position,
                    int damage) implements WeaponInterface {
 
+  /**
+   * Constructor of the Bolt class.
+   *
+   * @param name     name of the weapon
+   * @param position position of the weapon
+   * @param damage   weapon damage (health points removed to the target)
+   */
   public Bolt {
     new Weapon(InventoryItemRawType.BOLT, name, position, damage);
   }

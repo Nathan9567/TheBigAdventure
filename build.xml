@@ -28,7 +28,7 @@
 
     <target name="javadoc" depends="compile">
         <mkdir dir="${api}"/>
-        <javadoc sourcepath="${src}" destdir="${api}">
+        <javadoc sourcepath="${src}" destdir="${api}" additionalparam="-Xdoclint:none">
             <classpath>
                 <pathelement location="${lib}/zen5.jar"/>
             </classpath>
@@ -40,6 +40,5 @@
         <delete includeemptydirs="true">
             <fileset dir="${classes}" includes="**/*"/>
         </delete>
-        <delete file="thebigadventure.jar"/>
     </target>
 </project>
