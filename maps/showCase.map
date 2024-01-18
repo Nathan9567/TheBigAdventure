@@ -1,0 +1,224 @@
+[grid]
+size: (128 x 13)
+encodings: WALL(W) TILE(t) TREES(y) TREE(Y) GRASS(g) WATER(n) LILY(l)
+data: """
+yyyyyyyyyyyyyWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWnnnnnnnnnnnnnnnnnnnnnnn
+yYYYYYgggggggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W    nnnnnnnnnnnnnnnnnnn
+yYgggggggggggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W     nnnnnnnnnnnnnnnnnn
+yggggggggggggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W    nnnnnnnnnnnnnnnnnnn
+yggggggggggggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W   nnnnnnnnnnnnnnnnnnnn
+yggggggggggggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W     nnnnnnnnnnnnnnnnnn
+ygggggggggggg tttttttttttt tttttttttttttttttttttttttttttttttttttt                                               llllllnnnnnnnnnn
+yggggggggggggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W        nnnnnnnnnnnnnnn
+yYgggggggggggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W      nnnnnnnnnnnnnnnnn
+yyYYYgggYggggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W     nnnnnnnnnnnnnnnnnn
+yyyYyYYyyYgggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W      nnnnnnnnnnnnnnnnn
+yyyyyyyyyyyggWttttttttttttWttttttttttttWttttttttttttWttttttttttttW            W            W            W        nnnnnnnnnnnnnnn
+yyyyyyyyyyyyyWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWnnnnnnnnnnnnnnnnnnnnnnn
+"""
+
+[element]
+skin: BABA
+name: Joueur
+player: true
+health: 20
+position: (2, 6)
+
+[element]
+name: Michel
+skin: BADBAD
+position: (2,2)
+kind: friend
+text: """
+Bienvenue, voyageur.
+Pour commencer votre aventure, vous allez devoir trouver une clé pour ouvrir une porte !
+La porte qui se trouve droit devant vous.
+"""
+health: 100
+
+[element]
+skin: KEY
+name: Clé porte 1
+kind: item
+position: (11, 10)
+
+[element]
+skin: DOOR
+kind: obstacle
+position: (13, 6)
+locked: KEY Clé porte 1
+
+[element]
+name: Un autre Michel
+skin: BAT
+position: (15, 2)
+kind: friend
+text: """
+Eh bien, voyageur, vous avez réussi à ouvrir la première porte !
+En même temps la clé était juste posé là...
+Sachez qu'une clé n'ouvre pas toutes les portes (pour des raisons évidentes de sûreté),
+il vous faudra alors trouver la bonne clé dans votre inventaire grâce à la touche I pour l'ouvrir.
+Utilisez la touche ESPACE pour choisir l'élément de votre inventaire à tenir entre vos mains,
+puis utilisez à nous la touche I pour fermer l'inventaire.
+Oh et d'ailleurs, quand vous en aurez marre de ce jeu, vous pourrez quitter avec la touche Q.
+"""
+
+[element]
+skin: KEY
+name: Clé porte 2
+kind: item
+position: (24, 10)
+
+[element]
+skin: DOOR
+kind: obstacle
+position: (26, 6)
+locked: KEY Clé porte 2
+
+[element]
+name: Encore un Michel
+skin: BEE
+position: (28, 2)
+kind: friend
+text: """
+Toutes les salles ne sont pas résidez par d'adorable abeille comme moi, il vous faudra parfois leur faire tater de votre épée.
+Ceci dit, vous n'avez pas d'épée... et je sais qu'il y a un méchant crabe dans la prochaine pièce...
+Alors on va faire comme ceci. J'ai toujours rêvé de m'enfuir d'ici, alors donnez moi une clé, n'importe laquelle, et je vous donne une épée.
+"""
+trade: KEY -> SWORD Épée normale
+
+[element]
+name: Épée normale
+skin: SWORD
+kind: item
+damage: 2
+
+[element]
+name: Un Michel méchant
+skin: CRAB
+kind: enemy
+health: 6
+behavior: stroll
+damage: 3
+zone: (40, 1) (12 x 11)
+position: (46, 6)
+
+[element]
+name: Toujours Michel
+skin: BIRD
+position: (54, 2)
+kind: friend
+text: """
+Vous avez surement tué le crabe de la salle précédente... bien qu'il était relativement inoffensif... on n'a même pas mis de porte !
+Dans la prochaine pièce, c'est une autre histoire ! Je vous conseille de changer d'arme.
+Oh et d'ailleurs, c'est mon anniversaire aujourd'hui, n'hésitez pas de prendre un part du gateau, ça vous requinquera !
+"""
+
+[element]
+name: Gateau d'anniversaire
+skin: CAKE
+kind: item
+health: 10
+position: (55, 10)
+
+[element]
+name: Épée de fou
+skin: SWORD
+kind: item
+damage: 10
+position: (54, 10)
+
+[element]
+skin: KEY
+name: Clé porte 3 & 4
+kind: item
+position: (56, 10)
+
+[element]
+skin: DOOR
+kind: obstacle
+position: (65, 6)
+locked: KEY Clé porte 3 & 4
+
+[element]
+name: Un Michel très très méchant
+skin: CRAB
+kind: enemy
+health: 50
+behavior: aggressive
+damage: 6
+zone: (66, 1) (12 x 11)
+position: (72, 6)
+
+[element]
+name: Le pote du Michel très très méchant
+skin: SKULL
+kind: enemy
+health: 30
+behavior: aggressive
+damage: 6
+zone: (66, 1) (12 x 11)
+position: (74, 7)
+
+[element]
+skin: DOOR
+kind: obstacle
+position: (78, 6)
+locked: KEY Clé porte 3 & 4
+
+[element]
+name: Ils s'appellent tous Michel
+skin: CAT
+position: (80, 2)
+kind: friend
+text: """
+Vous avez réussi à passer toutes les salles, cool.
+Si vous êtes amoché, rendez les armes et je vous donnerais un peu d'eau de vie.
+Sinon, je vous échange n'importe quelle clé contre celle de la prochaine porte.
+"""
+trade: SWORD -> BOTTLE Eau de vie, KEY -> KEY Clé porte 5
+
+[element]
+name: Eau de vie
+skin: BOTTLE
+health: 20
+
+[element]
+skin: DOOR
+kind: obstacle
+position: (91, 6)
+locked: KEY Clé porte 5
+
+[element]
+name: Michel le chien
+skin: DOG
+position: (93, 2)
+kind: friend
+text: """
+Woof. Woof woof woof. Woof. Rgh. Vous ne parlez pas le chien pardon.
+J'aimerais bien avoir une boiboite pour faire dodo.
+Y'a un arbre juste ici, tu penses pouvoir le couper en boite ?
+Je te donnerais la dernière clé. Et si t'as besoin, je te donne une hache...
+Elle ressemble tout de même fortement à une épée mais ne t'en fais pas.
+"""
+trade: BOX -> KEY Clé porte 6, KEY -> SWORD Vraie Hache
+
+[element]
+skin: TREE
+kind: obstacle
+position: (96, 6)
+
+[element]
+skin: DOOR
+kind: obstacle
+position: (104, 6)
+locked: KEY Clé porte 6
+
+[element]
+name: Oogway
+skin: TURTLE
+kind: friend
+position: (117, 6)
+text: """
+Vous avez réussi, vous avez atteint la fin de cette carte.
+"""
