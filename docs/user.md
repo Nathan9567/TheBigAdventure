@@ -56,6 +56,9 @@ Vous pouvez créer vos propres maps. Il vous suffira de respecter le format text
 Vous trouverez plus d'informations sur le format de la map dans le sujet du projet accessible [ici](https://monge.univ-mlv.fr/ens/Licence/L3/2023-2024/Java/project.php).\
 Vous pouvez également consulter les maps déjà existantes dans le dossier `maps` du projet, vous aurez un bel aperçu du format de la map et des différents éléments disponibles.
 
+Afin de vérifier que les maps que vous créez sont correctes, utilisez l'option `--validate` afin de seulement afficher les erreurs de l'analyse de la map dans la console sans afficher le jeu.
+Aussi, pour vérifier les positions des entités qui bougent et ne pas être embêté par les ennemis, vous pouvez utiliser l'option `--dry-run`.
+
 ## Jouer au Jeu
 
 ### Règles du jeu
@@ -76,6 +79,13 @@ Afin de jouer au jeu, vous aurez besoin des quatres flèches de votre clavier. C
 Pour effectuer une action, comme utiliser son épée, manger sa nourriture ou parler avec un personnage, vous devrez utiliser la barre d'espace.
 Pour ouvrir votre inventaire, utilisez la touche `I`. Une fois dans celui-ci, vous pourrez vous déplacer dedans avec les flèches et sélectionner l'élément que vous souhaitez prendre en main avec la barre d'espace.
 La touche `Q` permet de fermer le jeu (il n'y a pas de sauvegarde).
+
+## Résumé
+
+Vérifiez que vous possédez l'exécutable `java` dans sa version 21.
+Lancez le jeu : `java -jar thebigadventure.jar adventure.map`
+Utilisez les flèches du clavier pour vous déplacer, la barre d'espace pour intéragir et la touche `I` pour ouvrir votre inventaire.
+Utilisez `Q` pour quitter le jeu.
 
 ## Conclusion
 
