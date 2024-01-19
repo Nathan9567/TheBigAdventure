@@ -1,0 +1,278 @@
+[grid]
+size: (200 x 60)
+encodings: PLANK(p) GRASS(G) TREE(E) FLOWER(F) WALL(w)
+  ROCK(R) LILY(L) LADDER(l) WATER(W) TILE(t) BRICK(b) HEDGE(B)
+data: """
+EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEEEEEEEEEEEEE                EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEEEEEEE                         EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEEE                              EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEE                                EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE                         EEE    RRRRWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEE                                   EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE                                     RRRRRWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEE                                   EEEEEEEEEEEEEEEEEEEEEEEEE                 EEEEEEEEEEEEEEEEEEEEE                                      RRRRRRWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEEE                                     EEEEEEEEEEEEEEEE            EEEEEEEEEE                                                            RRRRRRRWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEEEE                                       EEEEE                  EEEEEEEEEEEEE                       EEEEEEEEEEE           EEEEE        RRRRRRRRWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEEEE                                                             EEEEEEEEEEEEEE                   EEEEEEEEEEEEEEEEE        EEEEEE      RRRRRRRRRWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEEE                    EEEEEEE                                   EEEEEEEEEEEEEE               EEEEEEEEEEEEEEEEEEEEEE       EEEEEEEE RRRRRRRRRRRWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+EEEEEEEEEEEEE                   EEEEEEEEEEEEEEE                            EEEEEEEEEEEEEE            EEEEEEEEEEEEEEEEEEEEEEEEEE     EEEEEEEEERRRRRRRRRRRWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEE
+EEEEEEEEEEEEEE                EEEEEEEEEEEEEEEEEEEEEEEEEEEE                 EEEEEEEEEEEEEE         EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERRRRWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEEEEE
+EEEEEEEEEEEEEE                EEEEEEEEEEEEEEEEEEEEEEEEEEEEE                EEEEEEEEEEEEEE        EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEEEEEEEEE
+EEEEEEEEEEEEEE                 EEEEEEEEEEEEEEEEEEEEEEEEEEEE                EEEEEEEEEEEEE      EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEEEEEEEEEEEE
+EEEEEEEEEEEEEE                  EEEEEEEEEEEEEEEEEEEEEEEEEEE               EEEEEEEEEEEEE      EEEEEEEEEEE               EEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEEEEEEEEEEEEEEEEEEEE
+EEEEEEEEEEEEE        EEE         EEEEEEEEEEEEEEEEEEEEEEEEEEE            EEEEEEEEEEEEEEE    EEEEEEEE                         EEEEWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEEEEEEEEEEEEEEEEEEEEEEEE
+EEEEEEEEEEE        EEEEEEEEEE      EEEEEEEEEEEEEEEEEEEEEEEEEEE        EEEEEEEEEEEEEEEE     EEEEEE                           WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEEEEEEEEEEEEE     EEEEEEEEEE
+EEEEEEEEEE       EEEEEEEEEEEEEEE    EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE     EEEEEE                         lllWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEEEEEEEEEEEE          EEEEEEEE
+EEEEEEEE        EEEEEEEEEEEEEEE     EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE      EEEEEEEE           EEEEEEEEE   lllllWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEEEEEEEEEEEEE              EEEEE
+EEEEEEE        EEEEEEEEEEEEEEEE      EEEEEEEEEEEEEE       EEEEEEEEEEEEEEEEEEEEEEEE       EEEEEEEEEE     EEEEEEEEEEEEEEEWWlllllWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWEEEEEEEEEEEEEEE                EEE
+EEEEE          EEEEEEEEEEEEEEEE      EEEEEEEEEEEE                      EEEEEEE           EEEEEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWllllWWWWWWWGGGGGGGGGGGGWWWWWWWWWWWWWWWWWWWEEEEEEEEEEEEEEEE                 EE
+EEEEE         EEEEEEEEEEEEEEEE       EEEEEEEEEEE                                         EEEEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWllllEGGGGGGGGGGGGGGGGGGGGWWWWWWWWWWWWWWWEEEEEEEEEEEEEEEEEE                EE
+EEEE         EEEEEEEEEEEEEEE        EEEEEEEEEEE                EEEEEE                    EEEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWlGGGGGGGGGGGGGGGGGGGGGGGGWWWWWWWWWWWWWGGGGGGGGEEEEEEEEEEEE               EE
+EEEE        EEEEEEEEEEEEEEE        EEEEEEEEEEE            EEEEEEEEEEEEEEEE               EEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWEGGGGGGGGGGGGGGGGGGGGGGGGGGGGWWWWWWWWEGGGGGGGGGREEEEEEEEEEEE               EE
+EEEE        EEEEEEEEEEEE           EEEEEEEEEE             EEEEEEEEEEEEEEEEEE              EEEEEEEEEEEEEEEWWWWWWWWWWWWWWWWWGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGEEEEEEEEEEEEE                EE
+EEEE       EEEEEEEEEEE           EEEEEEEEEEE             EEEEEEEEEEEEEEEEEEEEE            EEEEEEEEEWWWWWWWWWWWWWWWWWWWWWEGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEE                  EE
+EEEE       EEEEEEEEEE            EEEEEEEEEE              EEEEEEEEEEEEEEEEEEEEE               EEEWWWWWWWWWWWWWWWWWWWWWWGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG                                      EE
+EEE        EEEEEEEEE             EEEEEEEEE              EEEEEEEEEEEEEEEEEEEEEE          WWWWWWWWWWWWWWWWWWWWWWWWEEGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG                                          EE
+EEE        EEEEEEEEE             EEEEEEEE              EEEEEEEEEEEEEEEEEEEE          WWWWWWWWWWWWWWWWWWWWWWWRRRRRRRRRRRGGGGGGG                                                                        EE
+EEE        EEEEEEEEE              EEEEEEE             EEEEEEEEEEEEEEEEEEE        WWWWWWWWWWWWWWWWWWWWWWWRRRRRRRRRRRRRRRRRR                                                                            EE
+EEE         EEEEEEEEE                               EEEEEEEEEEEEEEEE           WWWWWWWWWWWWWWWWWWWWWWRRRRRRRRRRRR                                                                                     EE
+EEE          EEEEEEEEEE                         EEEEEEEEEEEEEEEEE           WWWWWWWWWWWWWWWWWWWRRRRRRREE                                                                                              EE
+EEE            EEEEEEEEEE                  EEEEEEEEEEEEEEEEEEE            WWWWWWWWWWWWWWWWWRRRRRRR                                                                                             GGGGGGGGG
+EEEE           EEEEEEEEEE            EEEEEEEEEEEEEEEEEEEEEEEE           WWWWWWWWWWWWWWWRRRRREE                                                                     GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+EEEE            EEEEEEEEEE         EEEEEEEEEEEEEEEEEEEEEEEEE          WWWWWWWWWWWWWWW                                                                GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+EEEEE            EEEEEEEE        EEEEEEEEEEEEEEEEEEEEEEEEEE          WWWWWWWWWWWWW                                             GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+EEEEEE           EEEEEEEE       EEEEEEEEEEEEEEEEEEEEEEEEEEE        WWWWWWWWWWW                                          GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG
+EEEEEEEE        EEEEEEEEE     EEEEEEEEEEEEEEEEEEEEEEEEEEEE       WWWWWWWWWWW                                            wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+EEEEEEEEE     EEEEEEEEEE      EEEEEEEEEEEEEEEEEEEEEEEEEEE      WWWWWWWWWW                                               wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEEEEEEEEEEEEEE      EEEEEEEEEEEEEEEEEEEEEEEEEEE    LLLWWWWWWWW                 BBBB                            wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEEEEEEEEEEEE        EEEEEEEEEEEEEEEEEEEEEEE     WWWWLLLWWWWW                   BBBB                            wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEEEEEEE             EEEEEEEEEEEEEEEEEEEE    WWWWWWWWLLLLLLW                    BBBB                            wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEE                                              WWWWWWWWWWWWLL                       BBBB                            wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEE                                         WWWWWWWWWWWWWWWWWW                        BBBB                             wwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEE                                     WWWWWWWWWWWWWWWWWWW                           BBBB                               tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEE                           WWWWWWWWWWWWWWWWWWWWWWW                              BBBB                               tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEEEEEEEEEEE          WWWWWWWWWWWWWWWWWWWWWWW                                   BBBB                             wwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEEEEEEEEEEEEEE WWWWWWWWWWWWWWWWWWWWWWWEEEEEE                                   BBBB                            wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWEEEEEEEEEEEEEEEEEE                                 BBBB                            wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWEEEEEEEEEEEEEEEEEEEEE                                 EEEEEEEEEEEEE                   wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEEEEEEEWWWWWWWWWWWWWWWEEEEEEEEEEEEEEEEEEEEEEE                                EEEEEEEEEEEEEEEEEEE               wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEEEWWWWWWWWWWWWWWWWWEEEEEEEEEEEEEEEEEEEEEEE                              EEEEEEEEEEEEEEEEEEEEEEEEEEGGGGGGGG    wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEEEEEWWWWWWWWWWWWWWWEEEEEEEEEEE                   bbbbbbbbbbbbb bbbbbbbbbbbbEEEEEEEEEEEEEEGGGGGGGGGGGGGGGGGGGGGGG  wwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEEEEWWWWWWWWWWWWWWWWEEEEEEEE                         bbppppppppppppppppppppppbbEEEEEEEEEFGGGGGGGGFFFFFGGGGGGGGGGGGGGGGwwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+EEEWWWWWWWWWWWWWWWEEEEEEEE                       EEEEEEbbppppppppppppppppppppppbbEEEEEEEEGGGGGGEEEEEEEEGGGGGGEEEEEGGGGGGwwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+WWWWWWWWWWWWWWWWEEEEEEEEE                EEEEEEEEEEEEEEbbppppppppppppppppppppppbbEEEEEEEGGGGGGGFFGGGGGGGFEEEEEEEEEEEEFGGwwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+WWWWWWWWWWWWWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEbbppppppppppppppppppppppbbEEEEEEEEEEEEGGEEEEEEEEEEEEEEEEEEEEEEEEEwwwtttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttww
+WWWWWWWWWWWEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEbbbbbbbbbbbbbbbbbbbbbbbbbbEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwtww
+"""
+
+[element]
+name: fluffy
+player: true
+skin: BABA
+position: (23, 7)
+health: 20
+
+
+[element]
+name: Picabeille
+skin: BEE
+kind: enemy
+behavior: aggressive
+position: (101, 55)
+zone: (89, 54) (23 x 5)
+damage: 6
+health: 10
+
+[element]
+name: Richard
+skin: CRAB
+kind: enemy
+behavior: shy
+position: (144, 8)
+zone: (136, 5) (17 x 9)
+damage: 1
+health: 4
+
+[element]
+name: Grand Méchant Loup
+skin: DOG
+kind: enemy
+behavior: stroll
+position: (67, 16)
+zone: (59, 14) (18 x 7)
+damage: 3
+health: 8
+
+[element]
+name: Escargot apathique
+skin: SNAIL
+kind: enemy
+position: (14, 20)
+zone: (6, 18) (17 x 5)
+behavior: stroll
+damage: 1
+health: 4
+
+[element]
+name: Escargot gentil
+skin: SNAIL
+kind: friend
+position: (9, 23)
+text: """
+Attends ! Ne me tue pas ! Donne-moi une patate, et je te donnerais la clé du temple aux chats.
+"""
+trade: POTATO -> KEY Clé du temple aux chats
+
+[element]
+name: Bâton
+skin: STICK
+kind: item
+damage: 2
+position: (29, 3)
+
+[element]
+skin: SWORD
+kind: item
+position: (11, 38)
+damage: 5
+
+
+[element]
+skin: POTATO
+name: Patate
+kind: item
+position: (95, 10)
+health: 4
+
+[element]
+skin: POTATO
+name: Patate
+kind: item
+position: (95, 11)
+health: 4
+
+[element]
+skin: POTATO
+name: Patate
+kind: item
+position: (95, 12)
+health: 4
+
+[element]
+skin: POTATO
+name: Patate
+kind: item
+position: (96, 10)
+health: 4
+
+[element]
+skin: POTATO
+name: Patate
+kind: item
+position: (96, 11)
+health: 4
+
+[element]
+skin: POTATO
+name: Patate
+kind: item
+position: (96, 12)
+health: 4
+
+[element]
+skin: POTATO
+name: Patate
+kind: item
+position: (97, 10)
+health: 4
+
+[element]
+skin: POTATO
+name: Patate
+kind: item
+position: (97, 11)
+health: 4
+
+[element]
+skin: POTATO
+name: Patate
+kind: item
+position: (97, 12)
+health: 4
+
+
+[element]
+position: (122, 46)
+skin: DOOR
+kind: obstacle
+locked: KEY Clé du temple aux chats
+
+[element]
+position: (122, 47)
+skin: DOOR
+kind: obstacle
+locked: KEY Clé du temple aux chats
+
+
+[element]
+name: Chat Perlipopette
+skin: CAT
+kind: friend
+zone: (124, 41) (75 x 19)
+position: (139, 46)
+
+[element]
+name: Chat Pristi
+skin: CAT
+kind: friend
+zone: (124, 41) (75 x 19)
+position: (162, 53)
+
+[element]
+name: Chat Pristi
+skin: CAT
+kind: friend
+zone: (124, 41) (75 x 19)
+position: (181, 48)
+
+[element]
+name: Chat Thym
+skin: CAT
+kind: friend
+zone: (124, 41) (75 x 19)
+position: (178, 57)
+
+[element]
+name: Chat Soeur
+skin: CAT
+kind: friend
+zone: (124, 41) (75 x 19)
+position: (131, 45)
+
+[element]
+name: Chat Pitre
+skin: CAT
+kind: friend
+zone: (124, 41) (75 x 19)
+position: (175, 58)
+
+[element]
+name: Chat Pellure
+skin: CAT
+kind: friend
+zone: (124, 41) (75 x 19)
+position: (185, 57)
+
+[element]
+name: Chat Malo
+skin: CAT
+kind: friend
+zone: (124, 41) (75 x 19)
+position: (126, 47)
+
+[element]
+name: Chat Tôt
+skin: CAT
+kind: friend
+zone: (124, 41) (75 x 19)
+position: (139, 49)
