@@ -74,9 +74,6 @@ Enfin, nous avons les contrôleurs (package `controller`) qui contient les class
 Vous avez ainsi tous ce qui peut être controller par le joueur. Vous trouverez donc le `KeyboardController` qui permet la gestion des touches du clavier.\
 Vous trouverez aussi les `CommandController` qui permet de gérer les commandes du jeu ou encore `PlayerController` qui permet de gérer le joueur et de le faire interagir avec les éléments du jeu.\
 
-Bien que nous ayons essayé de respecter au mieux l'architecture `MVC`, il est possible que certaines parties du code ne respectent pas complètement l'architecture `MVC`. Cependant, nous avons essayé de nous en rapprocher le plus possible.\
-Je pense notamment au `MapController` qui gère l'intégralité des controllers du jeu.\
-
 ### Difficultés liées à l'architecture
 
 N'ayant jamais utilisé de tels `Design Pattern` auparavant, nous avons eu quelques difficultés à comprendre comment les utiliser.\
@@ -108,11 +105,11 @@ Nous avons décidé de nous répartir le travail dès le début de la manière s
 - Nathan : Développement du moteur de jeu et des contrôleurs
 
 Une fois que nous avons estimé avoir fini nos parties respectives, nous avons commencé à travailler ensemble sur des implémentations plus complexes sur le jeu lui même.\
-Nous avons ainsi pu travailler chacun de notre côté sur des parties différentes du projet, tout en pouvant travailler ensemble sur des parties plus complexes.\
+Nous avons ainsi pu travailler chacun de notre côté sur des parties différentes du projet, tout en travaillant ensemble sur des parties plus complexes.\
 
 ### Difficultés liées au Développement
 
-A de nombreuses reprises, nous avons eu des problèmes d'interpretation du sujet. En effet, certaines parties du sujet étaient assez vagues et nous avons dû faire des choix.\
+À de nombreuses reprises, nous avons eu des problèmes d'interprétation du sujet. En effet, certaines parties du sujet étaient assez vagues et nous avons dû faire des choix.\
 Par exemple, pour un élément `Food`, il ne nous est pas dit comment il devait être représenté. Nous avons donc décidé de lui ajouter un attribut `health` qui représente le nombre de points de vie que le joueur récupère en le mangeant.\
 
 Nous avons aussi préféré utiliser notre propre "Lexer" pour le `Map Parser` plutôt que d'utiliser celui fourni sur le Discord universitaire. Étant donné que nous avions déjà commencé à développer notre propre `Map Parser`, nous avons préféré le terminer plutôt que de l'abandonner pour utiliser le Lexer fourni.\
@@ -129,7 +126,7 @@ Pour plus d'information sur le fonctionnement du jeu, vous pouvez consulter le m
 ### Changements depuis la Soutenance Bêta (Décembre)
 
 Nous avons apporté de nombreuses modifications au projet depuis la soutenance bêta.\
-Mais je pense que ce qui nous intéresse le plus ici, c'est les recommandations que nous avons reçu lors de la soutenance bêta.\
+Mais ce qui nous intéresse le plus ici, c'est les recommandations que nous avons reçu lors de la soutenance bêta.\
 Nous avons avec les conseils de Mme Béal décide de restructurer notre projet pour qu'il soit plus clair et plus facile à comprendre. Nous avons ainsi réduit notre fonction main qui était alors beaucoup trop longue et nous avons déplacé certaines méthodes dans d'autres classes.\
 Nous avons aussi décidé de renommer certaines classes et méthodes pour qu'elles soient plus claires et plus compréhensibles ainsi que des packages pour qu'ils soient plus cohérents.\
 Nous avons aussi documenté notre code pour le rendre plus compréhensible et pouvoir le maintenir plus facilement.\
@@ -176,19 +173,17 @@ L'attribut `teleport`, permettant de charger d'autres map à partir d'une map, n
 On ne peut pas mettre de `:` dans un attribut `text`, sinon l'analyseur le lira comme un attribut.\
 Cela est dû au fait que l'analyseur utilise `:` comme séparateur entre les attributs et leur valeur.\
 Nous nous somme dit que cela n'était pas très grave, car il est peu probable que l'on veuille mettre un `:` dans un attribut `text`.\
+Pour contourner le problème des `:`, il suffit de ne pas en mettre dans les attributs `text`.\
+Cela peut être contraignant et nous nous en excusons.\
 
 Nous avons aussi trouver des problèmes avec les dialogues. Malgré nos efforts, nous avons des soucis d'affichage avec certains dialogues mais nous n'avons pas réussi à trouver d'où cela venait.\
 Les dialogues étant instanciés à chaque fois que l'on parle à un personnage et remis à zéro, cela est très étrange.\
-
-<!-- Solutions temporaires ou conseils pour contourner ces problèmes. -->
-Pour contourner le problème des `:`, il suffit de ne pas en mettre dans les attributs `text`.\
-Cela peut être contraignant et nous nous en excusons.\
 
 ## Conclusion
 
 <!-- Résumé des points clés du manuel de développement. -->
 Vous l'aurez compris, ce projet nous a donné du fil à retordre. Nous avons dû faire face à de nombreux problèmes et nous avons dû faire des choix d'imlémentations.\
-Nous avons aussi dû apprendre à utiliser de nouveaux outils et à travailler ensemble sur un projet de grande envergure.\
+Nous avons aussi dû apprendre à utiliser de nouveaux outils et à travailler ensemble sur un projet d'envergure.\
 Le fait d'avoir un aussi gros projet à réaliser nous a permis de nous rendre compte de l'importance de la documentation et de la structuration du code.\
 Il est tellement plus facile de s'y retrouver lorsque le code utilise un `Design Pattern` et que celui-ci est bien documenté.\
 Nous n'avons pas pu implémenter toutes les fonctionnalités demandées dans le sujet, mais nous avons tout de même réussi à implémenter la plupart des fonctionnalités que nous voulions.\
@@ -198,15 +193,9 @@ Ceci étant dit, nous sommes tout de même assez fiers du résultat obtenu et no
 Nous avons encore beaucoup de choses à améliorer dans notre jeu.\
 Nous aimerions par exemple implémenter les phases 2 et 3 du projet, ainsi que les fonctionnalités manquantes.\
 Nous aimerions aussi améliorer l'interface graphique du jeu et ajouter des animations.\
-Evidemment nous aimerions aussi corriger les bugs que nous avons rencontré et améliorer la stabilité du jeu.\
+Évidemment nous aimerions aussi corriger les bugs que nous avons rencontré et améliorer la stabilité du jeu.\
 Mais cela demande beaucoup de temps et d'énergie. Suivre un projet de cette envergure est très prenant et nous avons d'autres projets à réaliser et d'autres cours à suivre.\
-
-<!-- Remerciements -->
-Nous tenons à remercier M. Forax pour nous avoir proposé ce projet. Nous avons beaucoup appris grâce à lui et nous avons pu découvrir de nouvelles choses.\
-Cependant, je pense qu'il aurait été préférable de nous donner plus de temps pour réaliser ce projet qui est immense pour le temps qui nous a été donné.\
-
-Nous tenons aussi à remercier Mme Béal pour ses conseils et ses recommandations lors de la soutenance bêta.\
-Nous avons pu améliorer notre projet grâce à ses conseils et nous avons pu rendre notre code plus clair et plus compréhensible.\
+Nous regrêtons que ce tout premier projet que nous réalisons en Java soit aussi complexe et imprécis et que nous n'ayons pas eu le temps de créer un programme complet et parachevé.
 
 <!-- Liens vers les autres documents -->
 Vous pouvez retrouver le manuel utilisateur [ici](user.pdf).\
