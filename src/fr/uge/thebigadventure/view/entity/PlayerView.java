@@ -35,12 +35,10 @@ public class PlayerView {
   }
 
   private void showPlayerName(Graphics2D graphics2D, Coordinates position) {
-    var x = position.x() * cellSize;
-    var y = (position.y() + 1) * cellSize + cellSize / 4;
-    Font font = new Font(Font.MONOSPACED, Font.BOLD, cellSize / 4);
-    graphics2D.setFont(font);
-    graphics2D.setColor(Color.WHITE);
-    graphics2D.drawString(player.name(), x, y);
+    if (player.name() == null) {
+      return;
+    }
+    entityView.renderName(graphics2D, player.name(), position, cellSize);
   }
 
   private void showMainHand(Graphics2D graphics2D,

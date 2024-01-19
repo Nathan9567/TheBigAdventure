@@ -123,8 +123,16 @@ public record NPCView(NPC npc, int cellSize) {
     drawTextInBubble(graphics2D, text, bubbleX, bubbleY, bubbleWidth);
   }
 
+  private void showNPCName(Graphics2D graphics2D, Coordinates position) {
+    if (npc.name() == null) {
+      return;
+    }
+    entityView.renderName(graphics2D, npc.name(), position, cellSize);
+  }
+
   private boolean renderAlly(Ally ally, Graphics2D graphics2D, int currentDialogPosition, Coordinates NPCPositionCentered) throws IOException {
     entityView.drawEntityTileInMap(graphics2D, ally.skin(), NPCPositionCentered, cellSize);
+    showNPCName(graphics2D, NPCPositionCentered);
     var text = ally.text();
     if (text == null || text.isEmpty()) {
       return true;
@@ -147,6 +155,7 @@ public record NPCView(NPC npc, int cellSize) {
         enemy.getHealth(), enemy.maxHealth());
     entityView.drawEntityTileInMap(graphics2D,
         enemy.skin(), position, cellSize);
+    showNPCName(graphics2D, position);
   }
 
   /**

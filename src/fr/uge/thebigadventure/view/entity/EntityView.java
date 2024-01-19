@@ -181,4 +181,22 @@ public class EntityView {
     graphics2D.setColor(Color.BLACK);
     graphics2D.drawRect(x, y, width, height);
   }
+
+  /**
+   * Draw the name in the center of a cell.
+   * It's use for show player and npc name.
+   *
+   * @param graphics2D the graphics2D to draw on
+   * @param name       the name of the entity
+   * @param position   the position of the entity
+   * @param cellSize   the size of a cell in the map
+   */
+  public void renderName(Graphics2D graphics2D, String name, Coordinates position, int cellSize) {
+    var x = position.x() * cellSize;
+    var y = (position.y() + 1) * cellSize + cellSize / 4;
+    Font font = new Font(Font.MONOSPACED, Font.BOLD, cellSize / 4);
+    graphics2D.setFont(font);
+    graphics2D.setColor(Color.WHITE);
+    graphics2D.drawString(name, x, y);
+  }
 }
