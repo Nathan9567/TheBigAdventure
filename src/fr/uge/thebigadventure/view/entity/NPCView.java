@@ -125,7 +125,11 @@ public record NPCView(NPC npc, int cellSize) {
 
   private boolean renderAlly(Ally ally, Graphics2D graphics2D, int currentDialogPosition, Coordinates NPCPositionCentered) throws IOException {
     entityView.drawEntityTileInMap(graphics2D, ally.skin(), NPCPositionCentered, cellSize);
-    var text = Arrays.stream(ally.text().split(" "))
+    var text = ally.text();
+    if (text == null || text.isEmpty()) {
+      return true;
+    }
+    text = Arrays.stream(text.split(" "))
         .limit(currentDialogPosition + 1).collect(Collectors.joining(" "));
     renderTextBubble(graphics2D, text, NPCPositionCentered);
     if (text.equals(ally.text())) {
