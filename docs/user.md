@@ -27,7 +27,10 @@ Vous pouvez télécharger la dernière version de Java [ici](https://www.java.co
 Pour lancer le jeu, vous devez exécuter le fichier jar `thebigadventure.jar`.\
 Pour cela utilisez la commande `java -jar thebigadventure.jar` dans le répertoire où se trouve le fichier jar.\
 Vous verrez apparaitre un message d'erreur vous indiquant que vous n'avez pas saisi le bon nombre d'arguments.\
-Les voici aussi :
+C'est normal, il vous faut en effet préciser une carte à charger.\
+Pour cela, vous pouvez utiliser l'option `-l` ou `--level` suivit du chemin vers le fichier `.map` de la carte à charger.
+
+Voici aussi les autres options disponibles :
 
 - `-h`, `--help` : Affiche le menu d'aide
 - `-l`, `--level` : Charge une carte à partir d'un fichier .map
@@ -43,15 +46,20 @@ Deux cartes sont mises à votre disposition dans le dossier `maps` du projet. Un
 
 <!-- Explication des principales fonctionnalités -->
 Le but du jeu est de survivre le plus longtemps possible et de s'amuser, bien sûr.\
+Pour cela, vous devrez vous déplacer dans la map, parler avec les personnages, combattre des ennemis et remporter des combats.\
+Vous pourrez également échanger des objets avec les personnages et utiliser des objets pour vous soigner ou attaquer vos ennemis.\
 
-## Chargement de Fichiers map
+## Création de fichiers de carte
 
 <!-- Format attendu du fichier -->
-Vous pouvez créer vos propres maps. Il vous suffira de respecter le format textuel donné et placer la map dans un fichier de texte brut que vous lancerez avec le jeu.
+Vous pouvez créer vos propres maps. Il vous suffira de respecter le format textuel donné et placer la map dans un fichier de texte brut avec l'extension `.map` que vous lancerez avec le jeu.\
+Vous trouverez plus d'informations sur le format de la map dans le sujet du projet accessible [ici](https://monge.univ-mlv.fr/ens/Licence/L3/2023-2024/Java/project.php).\
+Vous pouvez également consulter les maps déjà existantes dans le dossier `maps` du projet, vous aurez un bel aperçu du format de la map et des différents éléments disponibles.
 
 ## Jouer au Jeu
 
-<!-- Règles du jeu -->
+### Règles du jeu
+
 Dans ce jeu, vous pouvez écouter des personnages vous parler, faire des échanges avec eux, passer des portes et combattre des ennemis.
 
 Les ennemis se déplacent périodiquement : les plus aggressifs suivent même votre position. Lorsqu'ils se situent devant vous, ils peuvent vous attaquer et vous infliger des dégâts.
@@ -62,7 +70,8 @@ Des mets vous permettront de regagner de la vie en les mangeant au cours du jeu.
 
 Certain personnages vous laisseront échanger des objets avec eux. Le premier objet correspondant dans votre inventaire sera remplacé par l'objet échangé.
 
-<!-- Contrôles et commandes -->
+### Contrôles et commandes
+
 Afin de jouer au jeu, vous aurez besoin des quatres flèches de votre clavier. Celles-ci permettent de se déplacer dans la carte, dans l'inventaire et dans les échanges.
 Pour effectuer une action, comme utiliser son épée, manger sa nourriture ou parler avec un personnage, vous devrez utiliser la barre d'espace.
 Pour ouvrir votre inventaire, utilisez la touche `I`. Une fois dans celui-ci, vous pourrez vous déplacer dedans avec les flèches et sélectionner l'élément que vous souhaitez prendre en main avec la barre d'espace.

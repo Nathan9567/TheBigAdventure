@@ -238,6 +238,7 @@ kind: obstacle
     name: michel
     skin: BEE
     position: (8,5)
+    zone: (8,5) (3 x 3)
     kind: friend
     text: """
     Salut, mon nom est michel.
@@ -250,22 +251,6 @@ kind: obstacle
     skin: CRAB
     position: (9,4)
     kind: friend
-    text: """
-    Salut, mon nom est waldo.
-    Je suis perdu, peux-tu m'aider à retrouver mon ami michel ?
-    Il doit être dans le coin.
-    """
-
-[element]
-    name: waldo2
-    skin: CRAB
-    position: (9,4)
-    kind: friend
-    text: """
-    Salut, mon nom est waldo.
-    Je suis perdu, peux-tu m'aider à retrouver mon ami michel ?
-    Il doit être dans le coin.
-    """
 
 [element]
     name: PIZZA_TIME
