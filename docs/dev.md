@@ -1,6 +1,36 @@
-# The Big Adventure - Manuel développeur
+# Manuel développeur
 
 --------------------
+
+\
+\
+\
+\
+\
+
+## Table des Matières
+
+- [Table des Matières](#table-des-matières)
+- [Introduction](#introduction)
+- [Contexte du Projet](#contexte-du-projet)
+- [Architecture du Projet](#architecture-du-projet)
+  - [Organisation des répertoires](#organisation-des-répertoires)
+  - [Architecture du code](#architecture-du-code)
+  - [Difficultés liées à l'architecture](#difficultés-liées-à-larchitecture)
+- [Environnement de Développement et Collaboration](#environnement-de-développement-et-collaboration)
+  - [Outils de Développement](#outils-de-développement)
+  - [Collaboration](#collaboration)
+- [Développement du Projet](#développement-du-projet)
+  - [Organisation du Travail](#organisation-du-travail)
+  - [Difficultés liées au Développement](#difficultés-liées-au-développement)
+  - [Phases implémentées](#phases-implémentées)
+  - [Changements depuis la Soutenance Bêta (Décembre)](#changements-depuis-la-soutenance-bêta-décembre)
+  - [Map Parser](#map-parser)
+- [Compilation et Construction avec Ant](#compilation-et-construction-avec-ant)
+- [Problèmes Connus](#problèmes-connus)
+  - [Liste des problèmes non résolus](#liste-des-problèmes-non-résolus)
+- [Conclusion](#conclusion)
+\pagebreak
 
 ## Introduction
 
@@ -25,6 +55,27 @@ Le cahier des charges étant plutôt vague, nous avons dû nous-même définir l
 Il nous a été recommandé de suivre une architecture de projet de type `MVC` (Modèle-Vue-Contrôleur), c'est-à-dire de séparer les différentes parties du code en trois catégories distinctes.\
 Vous retrouverez donc dans le répertoire `src` les trois packages `model`, `view` et `controller`, qui contiennent respectivement les classes du modèle, de la vue et du contrôleur. Ces packages sont précédés par `fr.uge.thebigadventure` qui est le package racine du projet.\
 L'utilisation d'un modèle `MVC` était tout a fait adapté à notre projet comme a beaucoup de projets JAVA. En effet, cela permet de séparer les différentes parties du code et de les rendres indépendantes.\
+
+### Architecture du code
+
+Nous avons donc séparé notre code en trois parties distinctes, le modèle, la vue et le contrôleur.\
+Le modèle contient les classes représentant les différents éléments du jeu, ainsi que les classes permettant de les construire.\
+Vous trouverez donc dans le package `model` des classes tel que `InventoryItem` qui représente un objet de l'inventaire du joueur, ou encore `Entity` qui représente un type d'entité du jeu.\
+Il a aussi des classes tel que `ElementBuilder` qui permet de construire un élément du jeu à partir d'un `ElementBuilder` et `MapBuilder` qui permet de construire une map à partir d'un `MapBuilder`.\
+Ces classes sont utilisées par le `MapParser` pour construire une map à partir d'un fichier `.map`.\
+
+\pagebreak
+Ensuite, nous avons la vue (package `view`) qui contient les classes permettant d'afficher le jeu.\
+Vous trouverez ainsi dans celui-ci des classes tel que `PlayerView` qui affiche le joueur, ou encore `EntityView` qui affiche une entité du jeu.\
+Il y a aussi des classes tel que `InventoryView` qui affiche l'inventaire du joueur ou encore `NPCView` qui affiche un personnage non joueur.\
+Ces classes sont utilisées par le `GameInitializer` pour afficher le jeu.\
+
+Enfin, nous avons les contrôleurs (package `controller`) qui contient les classes permettant de contrôler le jeu.\
+Vous avez ainsi tous ce qui peut être controller par le joueur. Vous trouverez donc le `KeyboardController` qui permet la gestion des touches du clavier.\
+Vous trouverez aussi les `CommandController` qui permet de gérer les commandes du jeu ou encore `PlayerController` qui permet de gérer le joueur et de le faire interagir avec les éléments du jeu.\
+
+Bien que nous ayons essayé de respecter au mieux l'architecture `MVC`, il est possible que certaines parties du code ne respectent pas complètement l'architecture `MVC`. Cependant, nous avons essayé de nous en rapprocher le plus possible.\
+Je pense notamment au `MapController` qui gère l'intégralité des controllers du jeu.\
 
 ### Difficultés liées à l'architecture
 
@@ -120,15 +171,42 @@ L'attribut `phantomized` n'a pas encore été implémenté.
 
 L'attribut `teleport`, permettant de charger d'autres map à partir d'une map, n'a pas été implémenté non plus.
 
-<!-- Liste des problèmes non résolus. -->
-L'affichage de grandes maps est lent.
+### Liste des problèmes non résolus
 
-On ne peut pas mettre de `:` dans un attribut `text`, sinon l'analyseur le lira comme un attribut.
+On ne peut pas mettre de `:` dans un attribut `text`, sinon l'analyseur le lira comme un attribut.\
+Cela est dû au fait que l'analyseur utilise `:` comme séparateur entre les attributs et leur valeur.\
+Nous nous somme dit que cela n'était pas très grave, car il est peu probable que l'on veuille mettre un `:` dans un attribut `text`.\
 
-Les dialogues peuvent parfois mal s'afficher.
+Nous avons aussi trouver des problèmes avec les dialogues. Malgré nos efforts, nous avons des soucis d'affichage avec certains dialogues mais nous n'avons pas réussi à trouver d'où cela venait.\
+Les dialogues étant instanciés à chaque fois que l'on parle à un personnage et remis à zéro, cela est très étrange.\
+
 <!-- Solutions temporaires ou conseils pour contourner ces problèmes. -->
+Pour contourner le problème des `:`, il suffit de ne pas en mettre dans les attributs `text`.\
+Cela peut être contraignant et nous nous en excusons.\
 
 ## Conclusion
 
 <!-- Résumé des points clés du manuel de développement. -->
+Vous l'aurez compris, ce projet nous a donné du fil à retordre. Nous avons dû faire face à de nombreux problèmes et nous avons dû faire des choix d'imlémentations.\
+Nous avons aussi dû apprendre à utiliser de nouveaux outils et à travailler ensemble sur un projet de grande envergure.\
+Le fait d'avoir un aussi gros projet à réaliser nous a permis de nous rendre compte de l'importance de la documentation et de la structuration du code.\
+Il est tellement plus facile de s'y retrouver lorsque le code utilise un `Design Pattern` et que celui-ci est bien documenté.\
+Nous n'avons pas pu implémenter toutes les fonctionnalités demandées dans le sujet, mais nous avons tout de même réussi à implémenter la plupart des fonctionnalités que nous voulions.\
+Ceci étant dit, nous sommes tout de même assez fiers du résultat obtenu et nous espérons que vous apprécierez notre jeu.
+
 <!-- Perspectives d'amélioration continue. -->
+Nous avons encore beaucoup de choses à améliorer dans notre jeu.\
+Nous aimerions par exemple implémenter les phases 2 et 3 du projet, ainsi que les fonctionnalités manquantes.\
+Nous aimerions aussi améliorer l'interface graphique du jeu et ajouter des animations.\
+Evidemment nous aimerions aussi corriger les bugs que nous avons rencontré et améliorer la stabilité du jeu.\
+Mais cela demande beaucoup de temps et d'énergie. Suivre un projet de cette envergure est très prenant et nous avons d'autres projets à réaliser et d'autres cours à suivre.\
+
+<!-- Remerciements -->
+Nous tenons à remercier M. Forax pour nous avoir proposé ce projet. Nous avons beaucoup appris grâce à lui et nous avons pu découvrir de nouvelles choses.\
+Cependant, je pense qu'il aurait été préférable de nous donner plus de temps pour réaliser ce projet qui est immense pour le temps qui nous a été donné.\
+
+Nous tenons aussi à remercier Mme Béal pour ses conseils et ses recommandations lors de la soutenance bêta.\
+Nous avons pu améliorer notre projet grâce à ses conseils et nous avons pu rendre notre code plus clair et plus compréhensible.\
+
+<!-- Liens vers les autres documents -->
+Vous pouvez retrouver le manuel utilisateur [ici](user.pdf).\
