@@ -5,7 +5,7 @@
 ## Introduction
 
 <!-- Présentation brève du projet -->
-Le projet The Big Adventure est un jeu de type aventure en 2D développé en Java. Le joueur incarne un personnage qui doit explorer un monde ouvert (ou presque) et ramasser des objets pour progresser dans le jeu. Il est fortement inspiré du jeu The Legend of Zelda: Breath of the Wild.
+Le projet The Big Adventure est un jeu de type aventure en 2D développé en Java. Le joueur incarne un personnage qui doit explorer un monde ouvert (ou presque) et ramasser des objets pour progresser dans le jeu. <!-- Il est fortement inspiré du jeu The Legend of Zelda: Breath of the Wild. -->
 
 <!-- Objectifs du projet -->
 Le but de ce projet était de nous faire découvrir le développement d'un gros projet en Java (ici un jeu vidéo). Cela nous a forcé à apprendre beaucoup plus que ce qui était enseigné en cours, et nous a permis de réexploiter les connaisances acquises. Le but était aussi d'apprendre a structurer un projet de grande envergure avec un `Design Pattern` ici le `MVC`.
@@ -85,7 +85,11 @@ Nous avons aussi documenté notre code pour le rendre plus compréhensible et po
 
 ### Map Parser
 
-<!-- Explications et détails techniques sur le map parser -->
+Notre `Map Parser` n'est pas réalisé par une analyse syntaxique linéaire. Celui-ci est composé de plusieurs expressions régulières successives appliqué sur tout le texte.
+On découpe d'abord tout notre texte en différentes `sections`, celle-ci sont ensuite divisées en plusieurs `attributs` et enfin le contenu des `attributs` sera analysé.
+Lors de l'analyse, on construit une map avec une classe `MapBuilder`. Lorsque l'on rencontre un élément, on le construit avec un `ElementBuilder` inclut dans le `MapBuilder`.
+Toute erreur de construction d'un nouvel élément renvoyé par l'`ElementBuilder` est récupéré par le MapParser afin d'afficher l'erreur en l'associant à la ligne la plus proche possible de l'erreur.
+Les erreurs d'analyse sont également affichés avec la ligne la plus proche de l'erreur.
 
 ## Compilation et Construction avec Ant
 
@@ -110,7 +114,18 @@ Par exemple, pour compiler le projet, il vous suffit de lancer la commande `ant 
 
 ## Problèmes Connus
 
+Seul la transformation d'un `TREE` en `BOX` avec une `SWORD` a été implémenté. Attention, ce `TREE` doit être un `element` et non simplement positionné dans la toile de fond `grid`.
+
+L'attribut `phantomized` n'a pas encore été implémenté.
+
+L'attribut `teleport`, permettant de charger d'autres map à partir d'une map, n'a pas été implémenté non plus.
+
 <!-- Liste des problèmes non résolus. -->
+L'affichage de grandes maps est lent.
+
+On ne peut pas mettre de `:` dans un attribut `text`, sinon l'analyseur le lira comme un attribut.
+
+Les dialogues peuvent parfois mal s'afficher.
 <!-- Solutions temporaires ou conseils pour contourner ces problèmes. -->
 
 ## Conclusion
