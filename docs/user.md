@@ -1,6 +1,23 @@
-# The Big Adventure - Manuel Utilisateur
+# Manuel Utilisateur
 
 --------------------
+
+## Table des matières
+
+- [Table des matières](#table-des-matières)
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Lancement de l'Application](#lancement-de-lapplication)
+- [Objectif du Jeu](#objectif-du-jeu)
+- [Création de fichiers de carte](#création-de-fichiers-de-carte)
+- [Jouer au Jeu](#jouer-au-jeu)
+  - [Règles du jeu](#règles-du-jeu)
+  - [Contrôles et commandes](#contrôles-et-commandes)
+- [Résumé](#résumé)
+- [Conclusion](#conclusion)
+
+\
+\
 
 ## Introduction
 
@@ -20,6 +37,7 @@ Dans celui-ci vous trouverez un fichier jar `thebigadventure.jar`, c'est ce fich
 
 Ce jeu à été développé en Java 21, il vous faudra donc une version de Java 21 ou supérieure pour pouvoir y jouer.\
 Vous pouvez télécharger la dernière version de Java [ici](https://www.java.com/fr/download/).\
+\pagebreak
 
 ## Lancement de l'Application
 
@@ -58,6 +76,7 @@ Vous pouvez également consulter les maps déjà existantes dans le dossier `map
 
 Afin de vérifier que les maps que vous créez sont correctes, utilisez l'option `--validate` afin de seulement afficher les erreurs de l'analyse de la map dans la console sans afficher le jeu.
 Aussi, pour vérifier les positions des entités qui bougent et ne pas être embêté par les ennemis, vous pouvez utiliser l'option `--dry-run`.
+\pagebreak
 
 ## Jouer au Jeu
 
@@ -82,12 +101,21 @@ La touche `Q` permet de fermer le jeu (il n'y a pas de sauvegarde).
 
 ## Résumé
 
-Vérifiez que vous possédez l'exécutable `java` dans sa version 21.
-Lancez le jeu : `java -jar thebigadventure.jar adventure.map`
+Vérifiez que vous possédez l'exécutable `java` dans sa version 21.\
+Lancez le jeu : `java -jar thebigadventure.jar adventure.map`\
 Utilisez les flèches du clavier pour vous déplacer, la barre d'espace pour intéragir et la touche `I` pour ouvrir votre inventaire.
 Utilisez `Q` pour quitter le jeu.
 
 ## Conclusion
 
 <!-- Résumé des informations clés pour l'utilisateur -->
+Vous l'aurez compris, le jeu **The Big Adventure** est un jeu de type aventure dans lequel vous devrez survivre le plus longtemps possible en combattant des ennemis et en échangeant des objets avec les personnages.
+Vous pouvez créer vos propres maps et les charger dans le jeu afin de jouer sur vos propres cartes.
+
 <!-- Encouragement à fournir des retours -->
+
+Nous espérons que vous apprécierez le jeu et que vous passerez un bon moment à jouer.\
+N'hésitez pas à nous faire des retours sur le jeu, nous sommes ouverts à toutes suggestions d'améliorations.
+
+<!-- Contact -->
+Pour nous contacter, vous trouverez [ici](https://github.com/nathan9567/thebigadventure) le lien vers le dépôt GitHub du projet. Vous pouvez aussi nous contacter par Discord : `florianclume` et `nathanchpln`.
