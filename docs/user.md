@@ -37,7 +37,6 @@ Dans celui-ci vous trouverez un fichier jar `thebigadventure.jar`, c'est ce fich
 
 Ce jeu à été développé en Java 21, il vous faudra donc une version de Java 21 ou supérieure pour pouvoir y jouer.\
 Vous pouvez télécharger la dernière version de Java [ici](https://www.java.com/fr/download/).\
-\pagebreak
 
 ## Lancement de l'Application
 
@@ -76,7 +75,6 @@ Vous pouvez également consulter les maps déjà existantes dans le dossier `map
 
 Afin de vérifier que les maps que vous créez sont correctes, utilisez l'option `--validate` afin de seulement afficher les erreurs de l'analyse de la map dans la console sans afficher le jeu.
 Aussi, pour vérifier les positions des entités qui bougent et ne pas être embêté par les ennemis, vous pouvez utiliser l'option `--dry-run`.
-\pagebreak
 
 ## Jouer au Jeu
 

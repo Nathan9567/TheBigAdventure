@@ -30,7 +30,6 @@
 - [Problèmes Connus](#problèmes-connus)
   - [Liste des problèmes non résolus](#liste-des-problèmes-non-résolus)
 - [Conclusion](#conclusion)
-\pagebreak
 
 ## Introduction
 
@@ -64,7 +63,6 @@ Vous trouverez donc dans le package `model` des classes tel que `InventoryItem` 
 Il a aussi des classes tel que `ElementBuilder` qui permet de construire un élément du jeu à partir d'un `ElementBuilder` et `MapBuilder` qui permet de construire une map à partir d'un `MapBuilder`.\
 Ces classes sont utilisées par le `MapParser` pour construire une map à partir d'un fichier `.map`.\
 
-\pagebreak
 Ensuite, nous avons la vue (package `view`) qui contient les classes permettant d'afficher le jeu.\
 Vous trouverez ainsi dans celui-ci des classes tel que `PlayerView` qui affiche le joueur, ou encore `EntityView` qui affiche une entité du jeu.\
 Il y a aussi des classes tel que `InventoryView` qui affiche l'inventaire du joueur ou encore `NPCView` qui affiche un personnage non joueur.\
@@ -93,7 +91,7 @@ Nous avons aussi utilisé `Ant` pour la compilation et la construction du projet
 Nous avons utilisé `Discord` pour communiquer entre nous de manière fluide et rapide.\
 Nous faisions aussi des petits points régulier sur l'avancement du projet afin de se donner des objectifs à atteindre pour la prochaine fois.\
 Afin de garder une trace des modifications apportées au code et avoir un historique des versions, nous avons utilisé `Git`.\
-Nous avons donc créé un dépôt `Git` sur `GitHub` pour le projet. Vous pourrez d'ailleurs le retrouver [ici](https://github.com/nathan9567/) si vous souhaitez voir l'historique des modifications apportées au code.\
+Nous avons donc créé un dépôt `Git` sur `GitHub` pour le projet. Vous pourrez d'ailleurs le retrouver [ici](https://github.com/nathan9567/thebigadventure) si vous souhaitez voir l'historique des modifications apportées au code.\
 
 ## Développement du Projet
 
