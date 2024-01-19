@@ -17,7 +17,9 @@ import java.nio.file.Path;
  * It parses the command line arguments, loads the game map, and runs the game loop.
  */
 public class GameInitializer {
+  private static final int FRAME_RATE = 144;
   private final String[] args;
+  private long lastFrameTime = 0;
   private GameMap gameMap;
   private boolean dryRun;
 
@@ -107,8 +109,9 @@ public class GameInitializer {
     if (mapController.updateNpcControllers()) {
       update = true;
     }
-    if (update) {
+    if (update && System.currentTimeMillis() - lastFrameTime > 1000 / FRAME_RATE) {
       renderFrame(context, mapController);
+      lastFrameTime = System.currentTimeMillis();
       update = false;
     }
 

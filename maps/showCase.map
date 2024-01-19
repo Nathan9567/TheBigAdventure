@@ -59,8 +59,9 @@ En même temps la clé était juste posé là...
 Sachez qu'une clé n'ouvre pas toutes les portes (pour des raisons évidentes de sûreté),
 il vous faudra alors trouver la bonne clé dans votre inventaire grâce à la touche I pour l'ouvrir.
 Utilisez la touche ESPACE pour choisir l'élément de votre inventaire à tenir entre vos mains,
-puis utilisez à nous la touche I pour fermer l'inventaire.
-Oh et d'ailleurs, quand vous en aurez marre de ce jeu, vous pourrez quitter avec la touche Q.
+puis utilisez à nouveau la touche I pour fermer l'inventaire.
+Oh et d'ailleurs, quand vous en aurez marre de ce jeu, vous pourrez quitter avec la touche Q
+et pourquoi pas charger une autre map.
 """
 
 [element]
